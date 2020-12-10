@@ -1,0 +1,7 @@
+.hero {
+    min-height: 50vh;
+    /* put on top */
+    position: relative;
+    z-index: 1;
+    background-color: yellow;
+}

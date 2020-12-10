@@ -2,16 +2,16 @@ window.onload = function () {
     var boton = document.getElementById("boton");
     var api;
     var users = {
-        "usuarios": [
+        usuarios: [
             { userName: "Manolo", password: "12345", tipo: "1" },
             { userName: "Pepe", password: "12345", tipo: "2" },
             { userName: "Ermengol", password: "12345", tipo: "2" },
-        ]
-    }
+        ],
+    };
 
-    boton.addEventListener('click', function () {
+    boton.addEventListener("click", function () {
         api = login();
-    })
+    });
 
     function login() {
         //boton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><p>Iniciar Sesion</p>'
@@ -37,17 +37,21 @@ window.onload = function () {
        
                    });*/
 
-        for (let i = 0; i < users['usuarios'].length; i++) {
-            if (document.getElementById("user").value == users['usuarios'][i]['userName']) {
-                if (document.getElementById("password").value == users['usuarios'][i]['password']) {
-                    alert("Bienvenido " + users['usuarios'][i]['userName']);
-                    if (users['usuarios'][i]['tipo'] == 1) {
-                        alert("Administrador")
-                    }
-                    else alert("Cliente")
-                }
-                else alert("Login incorrecto");
+        for (let i = 0; i < users["usuarios"].length; i++) {
+            if (
+                document.getElementById("user").value ==
+                users["usuarios"][i]["userName"]
+            ) {
+                if (
+                    document.getElementById("password").value ==
+                    users["usuarios"][i]["password"]
+                ) {
+                    alert("Bienvenido " + users["usuarios"][i]["userName"]);
+                    if (users["usuarios"][i]["tipo"] == 1) {
+                        alert("Administrador");
+                    } else alert("Cliente");
+                } else alert("Login incorrecto");
             }
         }
     }
-}
+};
