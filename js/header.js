@@ -1,13 +1,17 @@
-let myNav = document.querySelector("#header");
+let myNav = document.querySelector(".navbar");
 window.onscroll = function () {
-    var top = window.scrollY;
-    // "use strict";
-    // console.log(top);
-    if (top >= 100) {
+    let top = window.scrollY;
+    // let middle = window.screen.height / 2;
+    let middle = window.innerHeight / 2 - 60;
+    ("use strict");
+    console.log(top);
+    if (top >= middle) {
         myNav.classList.add("nav-colored");
+        myNav.classList.add("shadow");
         myNav.classList.remove("nav-transparent");
     } else {
         myNav.classList.add("nav-transparent");
+        myNav.classList.remove("shadow");
         myNav.classList.remove("nav-colored");
     }
 };
