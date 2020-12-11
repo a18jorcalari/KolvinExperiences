@@ -24,6 +24,7 @@ if($_REQUEST['query']==2){
         "name" => $_REQUEST['newName'],
         "password" => $_REQUEST['newPassword'],
         "type" => $_REQUEST['newType'],
+        "email" => $_REQUEST['newEmail'],
         "oldIdUser" => $_REQUEST['oldIdUser']
     );
     $respuesta=$user->update($updateUser);

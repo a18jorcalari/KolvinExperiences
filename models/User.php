@@ -8,13 +8,14 @@ class User extends DBAbstractModel {
   private $name;
   private $password;
   private $type;
+  private $email;
   
   function __construct() {
     $this->db_name = "a16joeigljim_pr";
     }
   
   function __toString() {
-    return "(" . $this->id_user . ", " . $this->name . ", " . $this->password . ", " . $this->type . ")";
+    return "(" . $this->id_user . ", " . $this->name . ", " . $this->password . ", " . $this->type . ", " . $this->email .")";
   }
   
   /*function __destruct() {
@@ -71,8 +72,10 @@ class User extends DBAbstractModel {
     $type=$edituser['type'];
     $name=$edituser['name'];
     $oldIdUser=$edituser['oldIdUser'];
+    $email=$edituser['email'];
 
-    $this->query = "UPDATE user SET id_user='$id_user', name='$name' ,password='$password', type = $type WHERE id_user='$oldIdUser'";
+
+    $this->query = "UPDATE user SET id_user='$id_user', name='$name' ,password='$password', type = $type, email = '$email' WHERE id_user='$oldIdUser'";
     $this->execute_single_query($this->query);
   }
   
