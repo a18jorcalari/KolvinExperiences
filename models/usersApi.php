@@ -13,17 +13,22 @@ if($_REQUEST['query']==1){
     if ($_REQUEST['password'] == $respuesta[0]["password"]) {
         echo (json_encode($respuesta));
     }else{
-        echo "fail";
+        echo false;
     }
 }
 
 if($_REQUEST['query']==2){
-    $respuesta=$user->selectByUserName($_REQUEST['user']);
-    if ($_REQUEST['password'] == $respuesta[0]["password"]) {
-        echo (json_encode($respuesta));
-    }else{
-        echo "fail";
-    }
+
+    $updateUser= array(
+        "id_user" => $_REQUEST['newIdUser'],
+        "name" => $_REQUEST['newName'],
+        "password" => $_REQUEST['newPassword'],
+        "type" => $_REQUEST['newType'],
+        "oldIdUser" => $_REQUEST['oldIdUser']
+    );
+    $respuesta=$user->update($updateUser);
+
+
 }
 
 

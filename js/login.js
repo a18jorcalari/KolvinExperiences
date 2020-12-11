@@ -1,6 +1,5 @@
 window.onload = function () {
     var loginButton = document.getElementById("login");
-    var modalButton = document.getElementById("modal");
 
     var api;
     var users = {
@@ -10,13 +9,10 @@ window.onload = function () {
             { userName: "Ermengol", password: "12345", tipo: "2" },
         ],
     };
-
-    modalButton.addEventListener('click', function () {
     
         loginButton.addEventListener('click', function () {
             api = login();
         })
-    })
 
     function login() {
                axios.get("models/usersApi.php", {
@@ -28,7 +24,7 @@ window.onload = function () {
                    .then(function (res) {
                        console.log(res);
                        console.log(res.data);
-                        if (res.data=="fail") {
+                        if (res.data==false) {
                             alert("el usuario o la contraseña son incorrectos");
                         }else{
                             alert("username: "+ res.data[0].id_user+ ", name: " +res.data[0].name+ ", type: " + res.data[0].type );

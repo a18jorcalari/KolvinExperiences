@@ -64,10 +64,15 @@ class User extends DBAbstractModel {
   }
   
   public function update ($edituser = array()) {
-    //$type = new type(type::$userData["type"]);
-    foreach ($editUser as $property => $value)
-      $$property = $value;
-    $this->query = "UPDATE User SET name='$name', password= '$password', type = '$type' WHERE id_user='$id_user'";
+    print_r($edituser);
+
+    $id_user=$edituser['id_user'];
+    $password=$edituser['password'];
+    $type=$edituser['type'];
+    $name=$edituser['name'];
+    $oldIdUser=$edituser['oldIdUser'];
+
+    $this->query = "UPDATE user SET id_user='$id_user', name='$name' ,password='$password', type = $type WHERE id_user='$oldIdUser'";
     $this->execute_single_query($this->query);
   }
   
