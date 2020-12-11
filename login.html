@@ -34,6 +34,22 @@
         >
             Log In
         </button>
+        <button
+        id="modal"
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#editaPerfil">
+        Perfil
+        </button>
+        <button
+        id="modal"
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#creaUser">
+        Creeu  compte
+        </button>
 
         <div
             class="modal fade"
@@ -80,6 +96,94 @@
                 </div>
             </div>
         </div>
+        <div
+        class="modal fade"
+        id="editaPerfil"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Editar Perfl</h4>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <form>
+                        <span>Usuari</span>
+                        <input class="form-text" type="text" id="user" />
+                        <span> Nou Password</span>
+                        <input class="form-text" type="text" id="password"/>
+                        <span>Email</span>
+                        <input class="form-text" type="text" id="password"/>
+
+                        <br />
+                        <button
+                            id="login"
+                            class="btn btn-primary"
+                            type="button"
+                            id="boton"
+                        >
+                            <p>Editar perfil</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+    class="modal fade"
+    id="creaUser"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Creeu el vostre usuari</h4>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <span>Usuari</span>
+                    <input class="form-text" type="text" id="user" />
+                    <span>Password</span>
+                    <input class="form-text" type="text" id="password"/>
+                    <span>Email</span>
+                    <input class="form-text" type="text" id="password"/>
+
+                    <br />
+                    <button
+                        id="login"
+                        class="btn btn-primary"
+                        type="button"
+                        id="boton"
+                    >
+                        <p>Registra't</p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div id="usuario" style="visibility: hidden">
             <p id="nombre"></p>
@@ -88,26 +192,7 @@
                 <p>Cerrar Sesion</p>
             </button>
         </div>
-        <div id="registrarDiv" >
-            <label for="">Usuari: </label>
-            <input type="text" name="registrarUsuari" id="registrarUsuari">
-            <label for="">Email: </label>
-            <br>
-            <input type="text" name="registrarEmail" id="registrarEmail">
-            <br>
-            <label for="">Password: </label>
-            <input type="text" name="passwordUser" id="passwordUser">
-        </div>
-        <div id="editarDiv" >
-            <label for="">Usuari: </label>
-            <input type="text" name="editarUsuari" id="editarUsuari">
-            <br>
-            <label for="">Email: </label>
-            <input type="text" name="editarEmail" id="editarEmail">
-            <br>
-            <label for="">Password: </label>
-            <input type="text" name="editarPassword" id="editarPassword">
-        </div>
+       
     
       
     </body>
