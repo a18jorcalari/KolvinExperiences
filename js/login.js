@@ -19,8 +19,7 @@ window.onload = function () {
     })
 
     function login() {
-        //loginButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><p>Iniciar Sesion</p>'
-               axios.get("usersApi.php", {
+               axios.get("models/usersApi.php", {
                 params: {
                     user: document.getElementById("user").value,
                     password: document.getElementById("password").value,
@@ -28,10 +27,11 @@ window.onload = function () {
                 }})
                    .then(function (res) {
                        console.log(res);
-                        if (res.data.length>1) {
-                            alert("username: "+ res.data[0].id_user+ ", name: " +res.data[0].name+ ", type: " + res.data[0].type );
-                        }else{
+                       console.log(res.data);
+                        if (res.data=="fail") {
                             alert("el usuario o la contraseña son incorrectos");
+                        }else{
+                            alert("username: "+ res.data[0].id_user+ ", name: " +res.data[0].name+ ", type: " + res.data[0].type );
                         }
                    }).catch(function (error) {
                        loginButton.innerHTML = '<p>Iniciar Sesion</p>';

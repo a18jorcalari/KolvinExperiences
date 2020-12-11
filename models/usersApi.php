@@ -13,7 +13,7 @@ if($_REQUEST['query']==1){
     if ($_REQUEST['password'] == $respuesta[0]["password"]) {
         echo (json_encode($respuesta));
     }else{
-        echo null;
+        echo "fail";
     }
 }
 
@@ -22,7 +22,7 @@ if($_REQUEST['query']==2){
     if ($_REQUEST['password'] == $respuesta[0]["password"]) {
         echo (json_encode($respuesta));
     }else{
-        echo null;
+        echo "fail";
     }
 }
 
