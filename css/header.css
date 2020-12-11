@@ -1,0 +1,9 @@
+.nav-colored {
+    background-color: black;
+    transition: all 0.4s;
+}
+
+.nav-transparent {
+    background-color: transparent;
+    transition: all 0.5s;
+}

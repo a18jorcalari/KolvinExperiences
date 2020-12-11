@@ -4,12 +4,12 @@ window.onload = function () {
 
     var api;
     var users = {
-        "usuarios": [
+        usuarios: [
             { userName: "Manolo", password: "12345", tipo: "1" },
             { userName: "Pepe", password: "12345", tipo: "2" },
             { userName: "Ermengol", password: "12345", tipo: "2" },
-        ]
-    }
+        ],
+    };
 
     modalButton.addEventListener('click', function () {
     
@@ -42,5 +42,21 @@ window.onload = function () {
        
                    });
 
+        for (let i = 0; i < users["usuarios"].length; i++) {
+            if (
+                document.getElementById("user").value ==
+                users["usuarios"][i]["userName"]
+            ) {
+                if (
+                    document.getElementById("password").value ==
+                    users["usuarios"][i]["password"]
+                ) {
+                    alert("Bienvenido " + users["usuarios"][i]["userName"]);
+                    if (users["usuarios"][i]["tipo"] == 1) {
+                        alert("Administrador");
+                    } else alert("Cliente");
+                } else alert("Login incorrecto");
+            }
+        }
     }
-}
+};

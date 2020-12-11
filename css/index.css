@@ -1,0 +1,17 @@
+.hero {
+    min-height: 50vh;
+    /* put on top */
+    position: relative;
+    z-index: 1;
+    background-color: grey;
+}
+
+.experiencies {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.col {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
