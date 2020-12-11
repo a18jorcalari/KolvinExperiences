@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#miModal">Log In</button>
+    <button id="modal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#miModal">Abrir modal</button>
    
     <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -29,7 +29,7 @@
                         <input class="form-text" type="text" id="user">
                         <span>password</span>
                         <input class="form-text" type="text" id="password"><br>
-                        <button class="btn btn-primary" type="button" id="boton"> <p>Iniciar Sesion</p></button>
+                        <button class="btn btn-primary" type="button" id="login"> <p>Iniciar Sesion</p></button>
                     </form>
                 </div>
             </div>
@@ -37,8 +37,9 @@
     </div>
 
     <div id="usuario" style="visibility: hidden">
-        <p id="nombre"></p>
-        <img src="" alt="">
+        <p id="name"></p>
+        <p id="username"></p>
+        <p id="type"></p>
         <button class="btn btn-primary" type="button"  id="boton1"><p>Cerrar Sesion</p></button>
     </div>
 </body>
