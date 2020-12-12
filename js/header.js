@@ -3,8 +3,6 @@ window.onscroll = function () {
     let top = window.scrollY;
     // let middle = window.screen.height / 2;
     let middle = window.innerHeight / 2 - 60;
-    ("use strict");
-    console.log(top);
     if (top >= middle) {
         myNav.classList.add("nav-colored");
         myNav.classList.add("shadow");
