@@ -7,11 +7,17 @@
 }
 
 .experiencies {
-    margin-top: 50px;
+    margin-top: 25px;
     margin-bottom: 50px;
 }
 
 .col {
     margin-top: 30px;
     margin-bottom: 30px;
+}
+
+.dropdown {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 50px;
 }

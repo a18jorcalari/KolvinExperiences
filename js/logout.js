@@ -11,7 +11,9 @@ $("#nav-options").on("click", "#logout", function () {
         </li>
         `;
 
-    let experiences_boxElement = document.getElementById("experiences-box");
+    let experiences_boxElement = document.getElementById(
+        "cards-tabs-experiences"
+    );
     experiences_boxElement.innerHTML = `
         <div class="container experiencies">
             <div class="card-deck">
