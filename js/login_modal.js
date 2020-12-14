@@ -15,7 +15,7 @@ buttonLogin.addEventListener("click", function () {
             <a class="nav-link" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link">Bienvenido, usuario</span></a>
+            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, usuario</span></a>
         </li>
         <li class="nav-item">
             <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -54,7 +54,6 @@ buttonLogin.addEventListener("click", function () {
     let myexperiences_boxElement = document.getElementById("myexperiences-box");
     myexperiences_boxElement.innerHTML = `
         <div class="experiencies">
-
             <div class="d-flex">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -115,6 +114,29 @@ buttonLogin.addEventListener("click", function () {
     );
     allexperiences_boxElement.innerHTML = `
         <div class="experiencies">
+
+            <div class="d-flex">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdown1">
+                        <button class="dropdown-item" type="button">Action</button>
+                        <button class="dropdown-item" type="button">Another action</button>
+                        <button class="dropdown-item" type="button">Something else here</button>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdown2">
+                        <button class="dropdown-item" type="button">Action</button>
+                        <button class="dropdown-item" type="button">Another action</button>
+                        <button class="dropdown-item" type="button">Something else here</button>
+                    </div>
+                </div>
+            </div>
             <div class="card-deck">
                 <div class="row row-cols-1 row-cols-md-3">
                     <div div class="col">

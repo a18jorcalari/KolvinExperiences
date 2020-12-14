@@ -1,6 +1,7 @@
 // Aqui comprobar si existe usuario logueado con api php.
 
 //Ningun usuario logged:
+
 let cards_tabs_experiencesElement = document.getElementById(
     "cards-tabs-experiences"
 );
@@ -73,7 +74,6 @@ cards_tabs_experiencesElement.innerHTML = `
 //     "cards-tabs-experiences"
 // );
 // tabs_experiencesElement.innerHTML = `
-
 //     <ul class="nav nav-tabs">
 //         <li class="nav-item">
 //             <a href="#myexperiences" class="nav-link active" data-toggle="tab">Mis experiencias</a>
@@ -82,7 +82,6 @@ cards_tabs_experiencesElement.innerHTML = `
 //             <a href="#allexperiences" class="nav-link" data-toggle="tab">Todas las experiencias</a>
 //         </li>
 //     </ul>
-
 //     <div class="tab-content">
 //         <div class="tab-pane fade show active" id="myexperiences">
 //             <div id="myexperiences-box">

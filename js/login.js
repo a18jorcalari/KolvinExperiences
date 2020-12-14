@@ -9,34 +9,44 @@ window.onload = function () {
             { userName: "Ermengol", password: "12345", tipo: "2" },
         ],
     };
-    
-        loginButton.addEventListener('click', function () {
-            api = login();
-        })
+
+    loginButton.addEventListener("click", function () {
+        api = login();
+    });
 
     function login() {
-               axios.get("models/usersApi.php", {
+        axios
+            .get("models/usersApi.php", {
                 params: {
                     user: document.getElementById("user").value,
                     password: document.getElementById("password").value,
-                    query: 1
-                }})
-                   .then(function (res) {
-                       console.log(res);
-                       console.log(res.data);
-                        if (res.data==false) {
-                            alert("el usuario o la contraseña son incorrectos");
-                        }else{
-                            alert("username: "+ res.data[0].id_user+ ", name: " +res.data[0].name+ ", type: " + res.data[0].type );
-                        }
-                   }).catch(function (error) {
-                       loginButton.innerHTML = '<p>Iniciar Sesion</p>';
-       
-                       console.log(error)
-                   }).then(function () {
-                       loginButton.innerHTML = '<p>Iniciar Sesion</p>';
-       
-                   });
+                    query: 1,
+                },
+            })
+            .then(function (res) {
+                console.log(res);
+                console.log(res.data);
+                if (res.data == false) {
+                    alert("el usuario o la contraseña son incorrectos");
+                } else {
+                    alert(
+                        "username: " +
+                            res.data[0].id_user +
+                            ", name: " +
+                            res.data[0].name +
+                            ", type: " +
+                            res.data[0].type
+                    );
+                }
+            })
+            .catch(function (error) {
+                loginButton.innerHTML = "<p>Iniciar Sesion</p>";
+
+                console.log(error);
+            })
+            .then(function () {
+                loginButton.innerHTML = "<p>Iniciar Sesion</p>";
+            });
 
         for (let i = 0; i < users["usuarios"].length; i++) {
             if (
