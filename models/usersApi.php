@@ -28,10 +28,19 @@ if($_REQUEST['query']==2){
         "oldIdUser" => $_REQUEST['oldIdUser']
     );
     $respuesta=$user->update($updateUser);
-
-
 }
 
+if($_REQUEST['query']==3){
+
+    $updateUser= array(
+        "id_user" => $_REQUEST['idUser'],
+        "name" => $_REQUEST['name'],
+        "password" => $_REQUEST['password'],
+        "type" => 1,
+        "email" => $_REQUEST['email'],
+    );
+    $respuesta=$user->insert($updateUser);
+}
 
 
 ?>
