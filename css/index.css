@@ -11,17 +11,12 @@
     margin-bottom: 50px;
 }
 
-.col {
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
 .dropdown {
     margin-top: 10px;
     margin-right: 40px;
     margin-bottom: 40px;
 }
 
-.card {
-    height: 350px;
+.card-container {
+    margin-bottom: 30px;
 }

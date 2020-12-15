@@ -11,57 +11,40 @@ $("#nav-options").on("click", "#logout", function () {
         </li>
         `;
 
-    let experiences_boxElement = document.getElementById(
+    let cards_tabs_experiencesElement = document.getElementById(
         "cards-tabs-experiences"
     );
-    experiences_boxElement.innerHTML = `
-        <div class="container experiencies">
-            <div class="card-deck">
-                <div class="row row-cols-1 row-cols-md-3">
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+
+    axios
+        .get("models/expApi.php", {
+            params: {
+                query: 1,
+            },
+        })
+        .then(function (res) {
+            let htmlText = `
+                    <div class="content-row">
+                        <div class="row">`;
+            for (let i = 0; i < res.data.length; i++) {
+                console.log(res.data[i]);
+                htmlText += `
+                        <div class="col-sm-12 col-lg-4 card-container">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${res.data[i].title}</h5>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
+                        </div>   
+                    `;
+            }
+
+            htmlText += `      
+                        </div> 
+                    </div>`;
+
+            cards_tabs_experiencesElement.innerHTML = htmlText;
+        });
 });
