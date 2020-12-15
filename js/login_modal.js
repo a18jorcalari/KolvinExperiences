@@ -69,7 +69,6 @@ buttonLogin.addEventListener("click", function () {
                 </div>
             </div>
         </div>
-
         `;
 
     //CARDS USER EXPERIENCES
@@ -78,43 +77,25 @@ buttonLogin.addEventListener("click", function () {
     let myexperiences_boxElement = document.getElementById("myexperiences-box");
     myexperiences_boxElement.innerHTML = `
         <div class="experiencies">
-            <div class="card-deck">
-                <div class="row row-cols-1 row-cols-md-3">
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
-                        </div>
+            <div class="card-columns">
+                <div class="card h-100">
+                    <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
                     </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
-                        </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated 3 mins ago</small>
                     </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
+                <div class="card h-100">
+                    <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>      
             </div>
         </div>
         `;
@@ -125,78 +106,183 @@ buttonLogin.addEventListener("click", function () {
     );
     allexperiences_boxElement.innerHTML = `
         <div class="experiencies">
-            <div class="card-deck">
-                <div class="row row-cols-1 row-cols-md-3">
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                <div class="card-columns">
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                    </div>    
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated 3 mins ago</small>
-                            </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
-                    </div>
+                    </div>   
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div> 
+                    <div class="card h-100">
+                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div>        
                 </div>
             </div>
-        </div>
         `;
+    // allexperiences_boxElement.innerHTML = `
+    // <div class="experiencies">
+    //     <div class="card-deck">
+    //         <div class="row row-cols-1 row-cols-md-3">
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col">
+    //                 <div class="card h-100">
+    //                     <div style="width: 100%; height: 200px; background-color: grey;"></div>
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">Card title</h5>
+    //                     </div>
+    //                     <div class="card-footer">
+    //                         <small class="text-muted">Last updated 3 mins ago</small>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </div>
+    // `;
 
     //Alert
     swal({
