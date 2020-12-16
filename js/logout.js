@@ -1,6 +1,11 @@
 //Hay que hacerlo de esta forma para poder crear eventos con elementos dinamicos
 $("#nav-options").on("click", "#logout", function () {
-    console.log("entra");
+    console.log("Boton logout");
+
+    axios.get("models/logoutApi.php");
+
+    console.log("Usuario deslogged");
+
     let nav_optionsElement = document.getElementById("nav-options");
     nav_optionsElement.innerHTML = `
         <li class="nav-item">
