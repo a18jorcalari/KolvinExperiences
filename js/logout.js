@@ -1,6 +1,11 @@
 //Hay que hacerlo de esta forma para poder crear eventos con elementos dinamicos
 $("#nav-options").on("click", "#logout", function () {
-    console.log("entra");
+    console.log("Boton logout");
+
+    axios.get("models/logoutApi.php");
+
+    console.log("Usuario deslogged");
+
     let nav_optionsElement = document.getElementById("nav-options");
     nav_optionsElement.innerHTML = `
         <li class="nav-item">
@@ -11,57 +16,43 @@ $("#nav-options").on("click", "#logout", function () {
         </li>
         `;
 
-    let experiences_boxElement = document.getElementById(
+    let cards_tabs_experiencesElement = document.getElementById(
         "cards-tabs-experiences"
     );
-    experiences_boxElement.innerHTML = `
-        <div class="container experiencies">
-            <div class="card-deck">
-                <div class="row row-cols-1 row-cols-md-3">
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+
+    axios
+        .get("models/expApi.php", {
+            params: {
+                query: 1,
+            },
+        })
+        .then(function (res) {
+            let htmlText = `
+                    <div class="content-row">
+                        <div class="row">`;
+            for (let i = 0; i < res.data.length; i++) {
+                let timeStampJson = res.data[i].created;
+                var d = new Date(Date.parse(timeStampJson));
+                htmlText += `
+                        <div class="col-sm-12 col-lg-4 card-container">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${
+                                        res.data[i].title
+                                    }</h5>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
+                        </div>   
+                        `;
+            }
+
+            htmlText += `      
+                        </div> 
+                    </div>`;
+
+            cards_tabs_experiencesElement.innerHTML = htmlText;
+        });
 });
