@@ -1,6 +1,7 @@
 window.onload = function () {
     var loginButton = document.getElementById("login");
-
+    //Tipo 1: admin
+    //Tipo 2: normal user
     var api;
     var users = {
         usuarios: [
