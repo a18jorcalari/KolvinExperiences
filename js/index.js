@@ -49,7 +49,7 @@ function noLoggedExperiencesRender() {
         });
 }
 
-function loggedExperiencesRender() {
+function loggedExperiencesRender(res) {
     /************ NORMAL USER VIEW ******************/
 
     //Sustituye en navbar a modo user logged
@@ -60,7 +60,7 @@ function loggedExperiencesRender() {
             <a class="nav-link" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, usuario</span></a>
+            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
         </li>
         <li class="nav-item">
             <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -208,7 +208,9 @@ axios.get("models/isloggedApi.php").then(function (res) {
         noLoggedExperiencesRender();
     } else {
         console.log("existe usuario logged");
-        loggedExperiencesRender();
+
+        console.log(res);
+        loggedExperiencesRender(res);
     }
 });
 
@@ -230,7 +232,9 @@ document.getElementById("button_login").addEventListener("click", function () {
                 //Funcion que sirve para esconder el modal con la id login.
                 $("#login").modal("hide");
                 //LoggedRender
-                loggedExperiencesRender();
+                console.log(res);
+
+                loggedExperiencesRender(res);
                 //Alert
                 swal({
                     title: "¡Bien hecho!",
@@ -261,6 +265,7 @@ document
         });
     });
 
+//Update account function
 document.getElementById("button_update").addEventListener("click", function () {
     $("#useraccount").modal("hide");
     //Alert
