@@ -411,6 +411,37 @@
             </div>
         </div>
 
+        <div id="add_experience" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir experiencia</h4>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" placeholder="Titulo" />
+                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            id="button_add_experience"
+                            type="button"
+                            class="btn btn-primary btn-block btn-lg"
+                        >
+                            Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- HERO -->
         <div class="jumbotron jumbotron-fluid hero">
             <!-- <div class="container">
@@ -420,9 +451,15 @@
         <!-- CONTENT -->
         <div id="cards-tabs-experiences" class="container"></div>
 
-        <button id="addExperience">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </button>
+        <div id="">
+            <button
+                id="addExperience"
+                data-toggle="modal"
+                data-target="#add_experience"
+            >
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </div>
 
         <!-- Card experiences no-logged -->
         <!-- <div class="container experiencies no-logged">
