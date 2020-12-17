@@ -17,6 +17,11 @@
     margin-bottom: 40px;
 }
 
-.card-container {
-    margin-bottom: 30px;
+#addExperience {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    border-radius: 100px;
 }
