@@ -4,7 +4,7 @@ function noLoggedExperiencesRender() {
     axios
         .get("models/expApi.php", {
             params: {
-                query: 1,
+                query: 0,
             },
         })
         .then(function (res) {
@@ -124,15 +124,16 @@ function loggedExperiencesRender(res) {
     axios
         .get("models/expApi.php", {
             params: {
+                user: res.data[0].id_user,
                 query: 1,
             },
         })
-        .then(function (res) {
+        .then(function (result) {
             let htmlText = `
             <div class="content-row experiencies">
                 <div class="row">`;
-            for (let i = 0; i < res.data.length; i++) {
-                let timeStampJson = res.data[i].created;
+            for (let i = 0; i < result.data.length; i++) {
+                let timeStampJson = result.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
                 htmlText += `
                         <div class="col-sm-12 col-lg-4 card-container">
@@ -140,7 +141,7 @@ function loggedExperiencesRender(res) {
                                 <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                 <div class="card-body">
                                     <h5 class="card-title">${
-                                        res.data[i].title
+                                        result.data[i].title
                                     }</h5>
                                 </div>
                                 <div class="card-footer">
@@ -165,15 +166,15 @@ function loggedExperiencesRender(res) {
     axios
         .get("models/expApi.php", {
             params: {
-                query: 1,
+                query: 0,
             },
         })
-        .then(function (res) {
+        .then(function (result2) {
             let htmlText2 = `
                 <div class="content-row experiencies">
                     <div class="row">`;
-            for (let i = 0; i < res.data.length; i++) {
-                let timeStampJson = res.data[i].created;
+            for (let i = 0; i < result2.data.length; i++) {
+                let timeStampJson = result2.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
 
                 htmlText2 += `
@@ -182,7 +183,7 @@ function loggedExperiencesRender(res) {
                                 <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                 <div class="card-body">
                                     <h5 class="card-title">${
-                                        res.data[i].title
+                                        result2.data[i].title
                                     }</h5>
                                 </div>
                                 <div class="card-footer">
@@ -223,7 +224,7 @@ document.getElementById("button_login").addEventListener("click", function () {
                     .value,
                 password: document.getElementById("validation_password_login")
                     .value,
-                query: 1,
+                query: 0,
             },
         })
         .then(function (res) {
@@ -257,23 +258,82 @@ document
         //Si el usuario se ha creado correctamente hacer esto:
         $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
 
-        //Alert
-        swal({
-            title: "¡Bien hecho!",
-            text: "Usuario creado satisfactoriamente. Ahora inicia sesión.",
-            icon: "success",
-        });
+        let id_user = document.getElementById("validation_username_register")
+            .value;
+        let name = document.getElementById("validation_name_register").value;
+        let password = document.getElementById("validation_password_register")
+            .value;
+        let email = document.getElementById("validation_email_register").value;
+
+        console.log(id_user);
+        console.log(name);
+        console.log(password);
+        console.log(email);
+
+        axios
+            .get("models/registerUserApi.php", {
+                params: {
+                    query: 3,
+                    id_user: id_user,
+                    name: name,
+                    password: password,
+                    type: 2,
+                    email: email,
+                },
+            })
+            .then(function (res) {
+                if (res.data == "ok") {
+                    //Alert
+                    swal({
+                        title: "¡Bien hecho!",
+                        text:
+                            "Usuario creado satisfactoriamente. Ahora inicia sesión.",
+                        icon: "success",
+                    });
+                } else {
+                    alert("ERROR");
+                }
+            });
     });
 
 //Update account function
 document.getElementById("button_update").addEventListener("click", function () {
     $("#useraccount").modal("hide");
-    //Alert
-    swal({
-        title: "¡Bien hecho!",
-        text: "Has guardado tu información correctamente.",
-        icon: "success",
-    });
+    let newIdUser = document.getElementById("validation_username_account")
+        .value;
+    let newName = document.getElementById("validation_name_account").value;
+    let newPassword = document.getElementById("validation_password_account")
+        .value;
+    let newEmail = document.getElementById("validation_email_account").value;
+
+    console.log(newIdUser);
+    console.log(newName);
+    console.log(newPassword);
+    console.log(newEmail);
+
+    axios
+        .get("models/updateAccountApi.php", {
+            params: {
+                newIdUser: newIdUser,
+                newName: newName,
+                newPassword: newPassword,
+                newType: 2,
+                newEmail: newEmail,
+                query: 1,
+            },
+        })
+        .then(function (result) {
+            if (result.data == "ok") {
+                //Alert
+                swal({
+                    title: "¡Bien hecho!",
+                    text: "Has guardado tu información correctamente.",
+                    icon: "success",
+                });
+            } else {
+                alert("ERROR");
+            }
+        });
 });
 
 //Logout function

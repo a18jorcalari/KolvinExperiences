@@ -5,7 +5,7 @@ header("Content-Type: text/html; charset-utf-8");
 session_start();
 
 
-if ($_REQUEST['query'] == 1) {
+if ($_REQUEST['query'] == 0) {
     //Parte database.
     $respuesta = array(
         array(

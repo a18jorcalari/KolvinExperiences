@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset-utf-8");
 
 //SELECT
-if ($_REQUEST['query'] == 1) {
+if ($_REQUEST['query'] == 0) {
     //AQUI VA EL QUERY SELECT Y RESULTADOS GUARDARLOS EN $respuesta con este formato:
     $respuesta = array(
         array(
@@ -97,6 +97,39 @@ if ($_REQUEST['query'] == 1) {
             "longitud" => "",
             "state" => ""
         ),
+    );
+    echo (json_encode($respuesta));
+}
+
+if ($_REQUEST['query'] == 1) {
+    //AQUI VA EL QUERY SELECT Y RESULTADOS GUARDARLOS EN $respuesta con este formato:
+    $respuesta = array(
+        array(
+            "id_exp" => 1,
+            "title" => "Viaje a las Islas Malvinas",
+            "description" => "Gran viaje",
+            "reported" => false,
+            "created" => "2010-06-09 13:12:01",
+            "id_user" => "admin",
+            "rate_p" => "10",
+            "rate_n" => "10",
+            "latitud" => "",
+            "longitud" => "",
+            "state" => ""
+        ),
+        array(
+            "id_exp" => 2,
+            "title" => "Viaje a Cancún",
+            "description" => "Viaje a Cancún",
+            "reported" => false,
+            "created" => "2010-06-09 13:12:01",
+            "id_user" => "admin",
+            "rate_p" => "50",
+            "rate_n" => "5",
+            "latitud" => "",
+            "longitud" => "",
+            "state" => ""
+        )
     );
     echo (json_encode($respuesta));
 }
