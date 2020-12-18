@@ -4,17 +4,17 @@ function noLoggedExperiencesRender() {
     axios
         .get("models/expApi.php", {
             params: {
-                query: 1,
+                query: 0,
             },
         })
         .then(function (res) {
             let nav_optionsElement = document.getElementById("nav-options");
             nav_optionsElement.innerHTML = `
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="#">Log In</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#login_modal" href="#">Log In</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#register" href="#">Register</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#register_modal" href="#">Register</span></a>
                 </li>
                 `;
 
@@ -55,17 +55,25 @@ function loggedExperiencesRender(res) {
     //Sustituye en navbar a modo user logged
     //Eliminar li de admin para normal user
     let nav_optionsElement = document.getElementById("nav-options");
-    nav_optionsElement.innerHTML = `
+    navOptionHtml = "";
+
+    //Aqui cambiarlo por type de bd
+    if (res.data[0].type == 1) {
+        // if (res.data[0].id_user == "admin") {
+        navOptionHtml += `
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
-        </li>
-        <li class="nav-item">
-            <a id="logout" class="nav-link" href="#">Logout</span></a>
-        </li>
-        `;
+            <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
+        </li>`;
+    }
+    navOptionHtml += `
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
+    </li>
+    <li class="nav-item">
+        <a id="logout" class="nav-link" href="#">Logout</span></a>
+    </li>`;
+
+    nav_optionsElement.innerHTML = navOptionHtml;
 
     //Añade los tabs de mis experiencias o todas las experiencias.
     let tabs_experiencesElement = document.getElementById(
@@ -124,15 +132,16 @@ function loggedExperiencesRender(res) {
     axios
         .get("models/expApi.php", {
             params: {
+                user: res.data[0].id_user,
                 query: 1,
             },
         })
-        .then(function (res) {
+        .then(function (result) {
             let htmlText = `
             <div class="content-row experiencies">
                 <div class="row">`;
-            for (let i = 0; i < res.data.length; i++) {
-                let timeStampJson = res.data[i].created;
+            for (let i = 0; i < result.data.length; i++) {
+                let timeStampJson = result.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
                 htmlText += `
                         <div class="col-sm-12 col-lg-4 card-container">
@@ -140,7 +149,7 @@ function loggedExperiencesRender(res) {
                                 <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                 <div class="card-body">
                                     <h5 class="card-title">${
-                                        res.data[i].title
+                                        result.data[i].title
                                     }</h5>
                                 </div>
                                 <div class="card-footer">
@@ -165,15 +174,15 @@ function loggedExperiencesRender(res) {
     axios
         .get("models/expApi.php", {
             params: {
-                query: 1,
+                query: 0,
             },
         })
-        .then(function (res) {
+        .then(function (result2) {
             let htmlText2 = `
                 <div class="content-row experiencies">
                     <div class="row">`;
-            for (let i = 0; i < res.data.length; i++) {
-                let timeStampJson = res.data[i].created;
+            for (let i = 0; i < result2.data.length; i++) {
+                let timeStampJson = result2.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
 
                 htmlText2 += `
@@ -182,7 +191,7 @@ function loggedExperiencesRender(res) {
                                 <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                 <div class="card-body">
                                     <h5 class="card-title">${
-                                        res.data[i].title
+                                        result2.data[i].title
                                     }</h5>
                                 </div>
                                 <div class="card-footer">
@@ -201,6 +210,23 @@ function loggedExperiencesRender(res) {
         });
 }
 
+function add_button_addExperience_function() {
+    document.getElementById("showModal_addExperience_button_box").innerHTML = `
+        <button
+            id="showModal_addExperience_button"
+            data-toggle="modal"
+            data-target="#add_experience_modal"
+        >
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        `;
+}
+
+function remove_button_addExperience_function() {
+    document.getElementById("showModal_addExperience_button_box").innerHTML =
+        "";
+}
+
 // Comprueba si existe o no usuario logged. Dependiendo mostrará una vista u otra
 axios.get("models/isloggedApi.php").then(function (res) {
     if (res.data == false) {
@@ -208,9 +234,9 @@ axios.get("models/isloggedApi.php").then(function (res) {
         noLoggedExperiencesRender();
     } else {
         console.log("existe usuario logged");
-
         console.log(res);
         loggedExperiencesRender(res);
+        add_button_addExperience_function();
     }
 });
 
@@ -223,18 +249,20 @@ document.getElementById("button_login").addEventListener("click", function () {
                     .value,
                 password: document.getElementById("validation_password_login")
                     .value,
-                query: 1,
+                query: 0,
             },
         })
         .then(function (res) {
             //Si las credenciales son correctas
             if (res.data != false) {
                 //Funcion que sirve para esconder el modal con la id login.
-                $("#login").modal("hide");
+                $("#login_modal").modal("hide");
                 //LoggedRender
                 console.log(res);
 
                 loggedExperiencesRender(res);
+                add_button_addExperience_function();
+
                 //Alert
                 swal({
                     title: "¡Bien hecho!",
@@ -257,31 +285,99 @@ document
         //Si el usuario se ha creado correctamente hacer esto:
         $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
 
-        //Alert
-        swal({
-            title: "¡Bien hecho!",
-            text: "Usuario creado satisfactoriamente. Ahora inicia sesión.",
-            icon: "success",
-        });
+        let id_user = document.getElementById("validation_username_register")
+            .value;
+        let name = document.getElementById("validation_name_register").value;
+        let password = document.getElementById("validation_password_register")
+            .value;
+        let email = document.getElementById("validation_email_register").value;
+
+        console.log(id_user);
+        console.log(name);
+        console.log(password);
+        console.log(email);
+
+        axios
+            .get("models/registerUserApi.php", {
+                params: {
+                    query: 3,
+                    id_user: id_user,
+                    name: name,
+                    password: password,
+                    type: 2,
+                    email: email,
+                },
+            })
+            .then(function (res) {
+                if (res.data == "ok") {
+                    //Alert
+                    swal({
+                        title: "¡Bien hecho!",
+                        text:
+                            "Usuario creado satisfactoriamente. Ahora inicia sesión.",
+                        icon: "success",
+                    });
+                } else {
+                    alert("ERROR");
+                }
+            });
     });
 
 //Update account function
 document.getElementById("button_update").addEventListener("click", function () {
     $("#useraccount").modal("hide");
-    //Alert
-    swal({
-        title: "¡Bien hecho!",
-        text: "Has guardado tu información correctamente.",
-        icon: "success",
-    });
+    let newIdUser = document.getElementById("validation_username_account")
+        .value;
+    let newName = document.getElementById("validation_name_account").value;
+    let newPassword = document.getElementById("validation_password_account")
+        .value;
+    let newEmail = document.getElementById("validation_email_account").value;
+
+    console.log(newIdUser);
+    console.log(newName);
+    console.log(newPassword);
+    console.log(newEmail);
+
+    axios
+        .get("models/updateAccountApi.php", {
+            params: {
+                newIdUser: newIdUser,
+                newName: newName,
+                newPassword: newPassword,
+                newType: 2,
+                newEmail: newEmail,
+                query: 1,
+            },
+        })
+        .then(function (result) {
+            if (result.data == "ok") {
+                //Alert
+                swal({
+                    title: "¡Bien hecho!",
+                    text: "Has guardado tu información correctamente.",
+                    icon: "success",
+                });
+            } else {
+                alert("ERROR");
+            }
+        });
 });
+
+//Add experience function
+// $("#nav-showModal_addExperience_button_box").on(
+//     "click",
+//     "#showModal_addExperience_button",
+//     function () {
+//         console.log("click");
+//     }
+// );
 
 //Logout function
 //Hay que hacerlo de esta forma para poder crear eventos con elementos dinamicos
 $("#nav-options").on("click", "#logout", function () {
     console.log("Boton logout");
     axios.get("models/logoutApi.php");
-    console.log("Usuario deslogged");
+    console.log("Usuario logout");
     //Alert
     swal({
         title: "¡Bien hecho!",
@@ -289,4 +385,5 @@ $("#nav-options").on("click", "#logout", function () {
         icon: "success",
     });
     noLoggedExperiencesRender();
+    remove_button_addExperience_function();
 });
