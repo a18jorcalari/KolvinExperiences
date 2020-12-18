@@ -3,9 +3,9 @@
 
 abstract class DBAbstractModel {
  
-  private static $db_host = "localhost:3306";
-  private static $db_user = "root";
-  private static $db_pass = "Ausias12*";
+  private static $db_host = "labs.iam.cat";
+  private static $db_user = "a16joeigljim_pr";
+  private static $db_pass = "12345";
   //const DBPASS = "r44t";
 
   protected $db_name;
@@ -20,6 +20,7 @@ abstract class DBAbstractModel {
   abstract protected function insert();
   abstract protected function update();
   abstract protected function delete();
+  
 
   private function open_connection() {
     $this->conn = new mysqli (self::$db_host, self::$db_user, self::$db_pass, $this->db_name);
