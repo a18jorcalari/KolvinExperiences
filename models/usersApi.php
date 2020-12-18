@@ -53,8 +53,6 @@ if($_REQUEST['query']==3){
     }
 }
 
-<<<<<<< Updated upstream
-=======
 if($_REQUEST['query']==4){
     $deleteUser= array(
         "id_user" => $_REQUEST['idUser'],
@@ -72,6 +70,5 @@ if($_REQUEST['query']==4){
 
 }
 
->>>>>>> Stashed changes
 
 ?>
