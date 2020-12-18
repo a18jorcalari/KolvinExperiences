@@ -162,5 +162,3 @@ class Experience extends DBAbstractModel {
   
     
 }
-
-?>

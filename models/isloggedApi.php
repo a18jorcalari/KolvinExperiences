@@ -8,8 +8,7 @@ if (!isset($_SESSION["id_user"])) {
     //Hacer select en BBDD.
     $respuesta = array(
         array(
-            "id_user" => "admin",
-            "password" => "admin"
+            "id_user" => $id_userLogged,
         )
     );
     echo (json_encode($respuesta));

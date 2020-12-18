@@ -23,7 +23,7 @@ else if($_REQUEST['query']==1){
         if($value==1) "Ya existe una categoria con ese nombre";
         else {$category->update($_REQUEST['name'], $_REQUEST['id_category']); echo "Categoria modificada correctamente";}
     }
-}
+} 
 
 else if($_REQUEST['query']==2){
 
@@ -40,7 +40,3 @@ else if($_REQUEST['query']==3){
 
     echo json_encode($category -> selectById($_REQUEST['id_category']));
 }
-
-
-
-?>

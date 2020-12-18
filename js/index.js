@@ -2,7 +2,7 @@ function noLoggedExperiencesRender() {
     //Ningun usuario logged:
 
     axios
-        .get("models/expApi.php", {
+        .get("models/ExperienceApi.php", {
             params: {
                 query: 0,
             },
@@ -58,8 +58,7 @@ function loggedExperiencesRender(res) {
     navOptionHtml = "";
 
     //Aqui cambiarlo por type de bd
-    if (res.data[0].type == 1) {
-        // if (res.data[0].id_user == "admin") {
+    if (res.data[0].type == 2) {
         navOptionHtml += `
         <li class="nav-item">
             <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
@@ -130,7 +129,7 @@ function loggedExperiencesRender(res) {
     let myexperiences_boxElement = document.getElementById("myexperiences-box");
 
     axios
-        .get("models/expApi.php", {
+        .get("models/ExperienceApi.php", {
             params: {
                 user: res.data[0].id_user,
                 query: 1,
@@ -172,7 +171,7 @@ function loggedExperiencesRender(res) {
         "allexperiences-box"
     );
     axios
-        .get("models/expApi.php", {
+        .get("models/ExperienceApi.php", {
             params: {
                 query: 0,
             },
@@ -186,20 +185,20 @@ function loggedExperiencesRender(res) {
                 var d = new Date(Date.parse(timeStampJson));
 
                 htmlText2 += `
-                        <div class="col-sm-12 col-lg-4 card-container">
-                            <div class="card h-100">
-                                <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">${
-                                        result2.data[i].title
-                                    }</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                </div>
+                    <div class="col-sm-12 col-lg-4 card-container">
+                        <div class="card h-100">
+                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                            <div class="card-body">
+                                <h5 class="card-title">${
+                                    result2.data[i].title
+                                }</h5>
                             </div>
-                        </div>   
-                        `;
+                            <div class="card-footer">
+                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                            </div>
+                        </div>
+                    </div>   
+                    `;
             }
 
             htmlText2 += `      
@@ -240,25 +239,26 @@ axios.get("models/isloggedApi.php").then(function (res) {
     }
 });
 
-//Al hacer click a button login comprabar en api si es correcta, entonces si es cierta que renderice la vista del user logged.
+//LOGIN FUNCTION
 document.getElementById("button_login").addEventListener("click", function () {
     axios
-        .get("models/loginApi.php", {
+        .get("models/usersApi.php", {
             params: {
                 user: document.getElementById("validation_username_login")
                     .value,
                 password: document.getElementById("validation_password_login")
                     .value,
-                query: 0,
+                query: 1,
             },
         })
         .then(function (res) {
+            console.log(res);
+
             //Si las credenciales son correctas
             if (res.data != false) {
                 //Funcion que sirve para esconder el modal con la id login.
                 $("#login_modal").modal("hide");
                 //LoggedRender
-                console.log(res);
 
                 loggedExperiencesRender(res);
                 add_button_addExperience_function();
@@ -298,10 +298,10 @@ document
         console.log(email);
 
         axios
-            .get("models/registerUserApi.php", {
+            .get("models/usersApi.php", {
                 params: {
                     query: 3,
-                    id_user: id_user,
+                    idUser: id_user,
                     name: name,
                     password: password,
                     type: 2,
@@ -309,7 +309,7 @@ document
                 },
             })
             .then(function (res) {
-                if (res.data == "ok") {
+                if (res.data == "Usuario registrado correctamente") {
                     //Alert
                     swal({
                         title: "¡Bien hecho!",
@@ -318,7 +318,7 @@ document
                         icon: "success",
                     });
                 } else {
-                    alert("ERROR");
+                    alert(res.data);
                 }
             });
     });
@@ -339,7 +339,7 @@ document.getElementById("button_update").addEventListener("click", function () {
     console.log(newEmail);
 
     axios
-        .get("models/updateAccountApi.php", {
+        .get("models/usersApi.php", {
             params: {
                 newIdUser: newIdUser,
                 newName: newName,
@@ -358,7 +358,7 @@ document.getElementById("button_update").addEventListener("click", function () {
                     icon: "success",
                 });
             } else {
-                alert("ERROR");
+                alert(result.data);
             }
         });
 });
