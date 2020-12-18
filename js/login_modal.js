@@ -12,13 +12,13 @@ buttonLogin.addEventListener("click", function () {
     let nav_optionsElement = document.getElementById("nav-options");
     nav_optionsElement.innerHTML = `
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
+            <a class="nav-link" id="navadmin1" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, usuario</span></a>
+            <a class="nav-link"  id="navadmin2" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, usuario</span></a>
         </li>
         <li class="nav-item">
-            <a id="logout" class="nav-link" href="#">Logout</span></a>
+            <a id="logout" class="nav-link"  href="#">Logout</span></a>
         </li>
         `;
 
@@ -81,7 +81,9 @@ buttonLogin.addEventListener("click", function () {
                 <div class="row row-cols-1 row-cols-md-3">
                     <div class="col">
                         <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                            <div class="img-hover-zoom">
+                                <img class="imgRezice" src="https://picsum.photos/330/200?random=1">
+                            </div>
                             <div class="card-body">
                                 <h5 class="card-title">Card title</h5>
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
@@ -93,7 +95,10 @@ buttonLogin.addEventListener("click", function () {
                     </div>
                     <div class="col">
                         <div class="card h-100">
-                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                            <div class="img-hover-zoom">
+                             <img class="imgRezice" src="https://picsum.photos/330/200?random=1">
+                            </div>
+                            
                             <div class="card-body">
                                 <h5 class="card-title">Card title</h5>
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>

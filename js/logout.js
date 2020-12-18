@@ -4,7 +4,7 @@ $("#nav-options").on("click", "#logout", function () {
     let nav_optionsElement = document.getElementById("nav-options");
     nav_optionsElement.innerHTML = `
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#login" href="#">Log In</span></a>
+            <a class="nav-link"  data-toggle="modal" data-target="#login" href="#">Log In</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="modal" data-target="#register" href="#">Register</span></a>
