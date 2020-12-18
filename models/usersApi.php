@@ -11,15 +11,17 @@ session_start();
 $user = new User();
 
 //SELECT
+//Necesito saber si respuesta tiene la estructura correcta.
+//Puede devolver un error.
 if ($_REQUEST['query'] == 1) {
     $respuesta = $user->selectByUserName($_REQUEST['user']);
-    echo json_encode($respuesta);
-    // if ($_REQUEST['password'] == $respuesta[0]["password"]) {
-    //     $_SESSION["id_user"] = $respuesta[0]["id_user"];
-    //     echo (json_encode($respuesta));
-    // } else {
-    //     echo false;
-    // }
+    // echo json_encode($respuesta);
+    if ($_REQUEST['user'] == $respuesta[0]["id_user"] && $_REQUEST['password'] == $respuesta[0]["password"]) {
+        $_SESSION["id_user"] = $respuesta[0]["id_user"];
+        echo (json_encode($respuesta));
+    } else {
+        echo json_encode(false);
+    }
 }
 
 //UPDATE
@@ -37,8 +39,12 @@ if ($_REQUEST['query'] == 2) {
     $user->update($updateUser);
 
     foreach ($user->selectExistsUsers($updateUser) as $value) {
-        if ($value == 1) echo "ok";
-        else echo "fail";
+        if ($value == 1) {
+            $_SESSION["id_user"] = $_REQUEST['newIdUser'];
+            echo json_encode("ok");
+        } else {
+            echo json_encode("fail");
+        }
     }
 }
 
@@ -53,10 +59,10 @@ if ($_REQUEST['query'] == 3) {
         "query" => $_REQUEST['query']
     );
     foreach ($user->selectExistsUsers($insertUser) as $value) {
-        if ($value == 1) echo "El usuario con esa id ya existe";
+        if ($value == 1) echo json_encode("El usuario con esa id ya existe");
         else {
             $user->insert($insertUser);
-            echo "Usuario registrado correctamente";
+            echo json_encode("Usuario registrado correctamente");
         }
     }
 }

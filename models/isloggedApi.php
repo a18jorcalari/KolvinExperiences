@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION["id_user"])) {
-    echo false;
+    echo json_encode(false);
 } else {
     $id_userLogged = $_SESSION["id_user"];
     //Hacer select en BBDD.

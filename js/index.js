@@ -8,6 +8,7 @@ function noLoggedExperiencesRender() {
             },
         })
         .then(function (res) {
+            console.log(res.data);
             let nav_optionsElement = document.getElementById("nav-options");
             nav_optionsElement.innerHTML = `
                 <li class="nav-item">
@@ -64,6 +65,7 @@ function loggedExperiencesRender(res) {
             <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
         </li>`;
     }
+
     navOptionHtml += `
     <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
@@ -228,6 +230,7 @@ function remove_button_addExperience_function() {
 
 // Comprueba si existe o no usuario logged. Dependiendo mostrará una vista u otra
 axios.get("models/isloggedApi.php").then(function (res) {
+    console.log(res.data);
     if (res.data == false) {
         console.log("no existe usuario logged");
         noLoggedExperiencesRender();
@@ -241,13 +244,15 @@ axios.get("models/isloggedApi.php").then(function (res) {
 
 //LOGIN FUNCTION
 document.getElementById("button_login").addEventListener("click", function () {
+    let user_id = document.getElementById("validation_username_login").value;
+    let password = document.getElementById("validation_password_login").value;
+    console.log(user_id);
+    console.log(password);
     axios
         .get("models/usersApi.php", {
             params: {
-                user: document.getElementById("validation_username_login")
-                    .value,
-                password: document.getElementById("validation_password_login")
-                    .value,
+                user: user_id,
+                password: password,
                 query: 1,
             },
         })
@@ -270,11 +275,11 @@ document.getElementById("button_login").addEventListener("click", function () {
                     icon: "success",
                 });
             } else {
-                alert("Error login");
+                alert("Error login1");
             }
         })
         .catch(function (error) {
-            console.log("ERROR");
+            alert("Error login2");
         });
 });
 
@@ -304,12 +309,14 @@ document
                     idUser: id_user,
                     name: name,
                     password: password,
-                    type: 2,
+                    type: 1,
                     email: email,
                 },
             })
             .then(function (res) {
                 if (res.data == "Usuario registrado correctamente") {
+                    $("#register_modal").modal("hide");
+
                     //Alert
                     swal({
                         title: "¡Bien hecho!",
@@ -344,17 +351,22 @@ document.getElementById("button_update").addEventListener("click", function () {
                 newIdUser: newIdUser,
                 newName: newName,
                 newPassword: newPassword,
-                newType: 2,
+                newType: 1,
                 newEmail: newEmail,
-                query: 1,
+                query: 2,
             },
         })
         .then(function (result) {
+            console.log(result);
             if (result.data == "ok") {
+                $("#useraccount_modal").modal("hide");
+
                 //Alert
+                loggedExperiencesRender(result);
+
                 swal({
                     title: "¡Bien hecho!",
-                    text: "Has guardado tu información correctamente.",
+                    text: "Has actualizado tu información correctamente.",
                     icon: "success",
                 });
             } else {
