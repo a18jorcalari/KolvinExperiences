@@ -10,7 +10,9 @@ if ($_REQUEST['query'] == 0) {
     $respuesta = array(
         array(
             "id_user" => "admin",
-            "password" => "admin"
+            "password" => "admin",
+            "type" => 2
+
         )
     );
 

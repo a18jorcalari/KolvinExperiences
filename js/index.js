@@ -11,10 +11,10 @@ function noLoggedExperiencesRender() {
             let nav_optionsElement = document.getElementById("nav-options");
             nav_optionsElement.innerHTML = `
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="#">Log In</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#login_modal" href="#">Log In</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#register" href="#">Register</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#register_modal" href="#">Register</span></a>
                 </li>
                 `;
 
@@ -55,17 +55,25 @@ function loggedExperiencesRender(res) {
     //Sustituye en navbar a modo user logged
     //Eliminar li de admin para normal user
     let nav_optionsElement = document.getElementById("nav-options");
-    nav_optionsElement.innerHTML = `
+    navOptionHtml = "";
+
+    //Aqui cambiarlo por type de bd
+    if (res.data[0].type == 1) {
+        // if (res.data[0].id_user == "admin") {
+        navOptionHtml += `
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#adminpanel" href="#">Panel de administrador</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#useraccount" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
-        </li>
-        <li class="nav-item">
-            <a id="logout" class="nav-link" href="#">Logout</span></a>
-        </li>
-        `;
+            <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
+        </li>`;
+    }
+    navOptionHtml += `
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
+    </li>
+    <li class="nav-item">
+        <a id="logout" class="nav-link" href="#">Logout</span></a>
+    </li>`;
+
+    nav_optionsElement.innerHTML = navOptionHtml;
 
     //Añade los tabs de mis experiencias o todas las experiencias.
     let tabs_experiencesElement = document.getElementById(
@@ -202,6 +210,23 @@ function loggedExperiencesRender(res) {
         });
 }
 
+function add_button_addExperience_function() {
+    document.getElementById("showModal_addExperience_button_box").innerHTML = `
+        <button
+            id="showModal_addExperience_button"
+            data-toggle="modal"
+            data-target="#add_experience_modal"
+        >
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        `;
+}
+
+function remove_button_addExperience_function() {
+    document.getElementById("showModal_addExperience_button_box").innerHTML =
+        "";
+}
+
 // Comprueba si existe o no usuario logged. Dependiendo mostrará una vista u otra
 axios.get("models/isloggedApi.php").then(function (res) {
     if (res.data == false) {
@@ -209,9 +234,9 @@ axios.get("models/isloggedApi.php").then(function (res) {
         noLoggedExperiencesRender();
     } else {
         console.log("existe usuario logged");
-
         console.log(res);
         loggedExperiencesRender(res);
+        add_button_addExperience_function();
     }
 });
 
@@ -231,11 +256,13 @@ document.getElementById("button_login").addEventListener("click", function () {
             //Si las credenciales son correctas
             if (res.data != false) {
                 //Funcion que sirve para esconder el modal con la id login.
-                $("#login").modal("hide");
+                $("#login_modal").modal("hide");
                 //LoggedRender
                 console.log(res);
 
                 loggedExperiencesRender(res);
+                add_button_addExperience_function();
+
                 //Alert
                 swal({
                     title: "¡Bien hecho!",
@@ -336,12 +363,21 @@ document.getElementById("button_update").addEventListener("click", function () {
         });
 });
 
+//Add experience function
+// $("#nav-showModal_addExperience_button_box").on(
+//     "click",
+//     "#showModal_addExperience_button",
+//     function () {
+//         console.log("click");
+//     }
+// );
+
 //Logout function
 //Hay que hacerlo de esta forma para poder crear eventos con elementos dinamicos
 $("#nav-options").on("click", "#logout", function () {
     console.log("Boton logout");
     axios.get("models/logoutApi.php");
-    console.log("Usuario deslogged");
+    console.log("Usuario logout");
     //Alert
     swal({
         title: "¡Bien hecho!",
@@ -349,4 +385,5 @@ $("#nav-options").on("click", "#logout", function () {
         icon: "success",
     });
     noLoggedExperiencesRender();
+    remove_button_addExperience_function();
 });
