@@ -4,11 +4,11 @@ require_once('DBAbstractModel.php');
 //require_once('enums/type.php');
 
 class User extends DBAbstractModel {
-  private $id_user;
-  private $name;
-  private $password;
-  private $type;
-  private $email;
+  public $id_user;
+  public $name;
+  public $password;
+  public $type;
+  public $email;
   
   function __construct() {
     $this->db_name = "a16joeigljim_pr";
@@ -49,34 +49,31 @@ class User extends DBAbstractModel {
   
   //FUNCIONA
   public function insert($userData = array()) {
-   /* if (array_key_exists("name", $userData)) {
-      $this->select($userData["name"]);
-      echo $userData["name"];
-      echo $this->name;
-      if ($userData["name"]!= $this->name) {
-        foreach ($userData as $property => $value)
-          $$property = $value;*/
-          $id_user=$userData['id_user'];
-          $password=$userData['password'];
-          $type=$userData['type'];
-          $name=$userData['name'];
-          $email=$userData['email'];
-        $this->query="INSERT INTO User (id_user, name, password, type, email)
-                      VALUES ('$id_user','$name', '$password', '$type', '$email')";
-        $this->execute_single_query();
-      /*}else
-        echo "Este usuario ya ha sido introducido"; 
-    }*/
-  }
+    $id_user=$userData['id_user'];
+    $password=$userData['password'];
+    $type=$userData['type'];
+    $name=$userData['name'];
+    $email=$userData['email'];
+    $this->query="INSERT INTO User (id_user, name, password, type, email)
+                VALUES ('$id_user','$name', '$password', $type, '$email')";
+    $this->execute_single_query();
+
+   }
+
+  
   
   public function update ($edituser = array()) {
+    print_r($edituser);
+
     $id_user=$edituser['id_user'];
     $password=$edituser['password'];
     $type=$edituser['type'];
     $name=$edituser['name'];
-    $email=$edituser['email'];    $oldIdUser=$edituser['oldIdUser'];
+    $oldIdUser=$edituser['oldIdUser'];
+    $email=$edituser['email'];
 
-    $this->query = "UPDATE user SET id_user='$id_user', name='$name' ,password='$password', type = $type, email = '$email' WHERE id_user='$oldIdUser'";
+
+    $this->query = "UPDATE User SET id_user='$id_user', name='$name' ,password='$password', type = $type, email = '$email' WHERE id_user='$oldIdUser'";
     $this->execute_single_query($this->query);
   }
   
@@ -85,6 +82,27 @@ class User extends DBAbstractModel {
     $this->execute_single_query($this->query);
   }
 
+  public function selectExistsUsers ($edituser = array()) {
+
+    $id_user=$edituser['id_user'];
+
+    if($edituser['query']==2){
+      $password=$edituser['password'];
+      $type=$edituser['type'];
+      $name=$edituser['name'];
+      $email=$edituser['email'];
+      $this->query = "SELECT EXISTS(SELECT * FROM User WHERE id_user ='$id_user' AND password='$password' AND type=$type AND email='$email' AND name='$name') ";
+      $this->get_results_from_query();
+      return $this->rows[0];
+    }
+    else {
+      $this->query = "SELECT EXISTS(SELECT * FROM User WHERE id_user ='$id_user') ";
+      $this->get_results_from_query();
+      return $this->rows[0];
+    }
+  }
+  
+ 
     
 }
 

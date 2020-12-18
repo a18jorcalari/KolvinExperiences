@@ -27,19 +27,47 @@ if ($_REQUEST['query'] == 2) {
         "password" => $_REQUEST['newPassword'],
         "type" => $_REQUEST['newType'],
         "email" => $_REQUEST['newEmail'],
-        "oldIdUser" => $_REQUEST['oldIdUser']
+        "oldIdUser" => $_REQUEST['oldIdUser'],
+        "query" => $_REQUEST['query']
     );
-    $respuesta=$user->update($updateUser);
+    $user->update($updateUser);
+
+    foreach($user->selectExistsUsers($updateUser) as $value){
+        if($value==1) echo "ok";
+        else echo "fail";
+    }
 }
 
 if($_REQUEST['query']==3){
 
-    $updateUser= array(
+    $insertUser= array(
         "id_user" => $_REQUEST['idUser'],
         "name" => $_REQUEST['name'],
         "password" => $_REQUEST['password'],
-        "type" => 1,
+        "type" => $_REQUEST['type'],
         "email" => $_REQUEST['email'],
+        "query" => $_REQUEST['query']
     );
-    $respuesta=$user->insert($updateUser);
+    foreach($user->selectExistsUsers($insertUser) as $value){
+        if($value==1) echo "El usuario con esa id ya existe";
+        else{ $user->insert($insertUser); echo "Usuario registrado correctamente";}
+        
+    }
+}
+
+if($_REQUEST['query']==4){
+    $deleteUser= array(
+        "id_user" => $_REQUEST['idUser'],
+        "query" =>  $_REQUEST['query'],
+        
+    );
+    $user -> delete($_REQUEST['idUser']);
+
+    foreach($user->selectExistsUsers($deleteUser) as $value){
+        if($value==1) echo "Algo ha salido mal";
+        else{ echo "Usuario eliminado correctamente";}
+        
+    }
+
+
 }
