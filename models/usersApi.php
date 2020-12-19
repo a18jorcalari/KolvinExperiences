@@ -10,15 +10,22 @@ session_start();
 
 $user = new User();
 
-//SELECT
-//Necesito saber si respuesta tiene la estructura correcta.
-//Puede devolver un error.
+//Obtener datos de usuario logged
+if ($_REQUEST['query'] == 0) {
+    $respuesta = $user->selectByUserName($_SESSION["id_user"]);
+    echo (json_encode($respuesta));
+}
+
+//SELECT LOGIN
 if ($_REQUEST['query'] == 1) {
     $respuesta = $user->selectByUserName($_REQUEST['user']);
-    // echo json_encode($respuesta);
-    if ($_REQUEST['user'] == $respuesta[0]["id_user"] && $_REQUEST['password'] == $respuesta[0]["password"]) {
-        $_SESSION["id_user"] = $respuesta[0]["id_user"];
-        echo (json_encode($respuesta));
+    if ($respuesta != null) {
+        if ($_REQUEST['user'] == $respuesta[0]["id_user"] && $_REQUEST['password'] == $respuesta[0]["password"]) {
+            $_SESSION["id_user"] = $respuesta[0]["id_user"];
+            echo (json_encode($respuesta));
+        } else {
+            echo json_encode(false);
+        }
     } else {
         echo json_encode(false);
     }
@@ -81,4 +88,9 @@ if ($_REQUEST['query'] == 4) {
             echo "Usuario eliminado correctamente";
         }
     }
+}
+
+if ($_REQUEST['query'] == 5) {
+    $respuesta = $user->selectByUserName($_REQUEST['user']);
+    echo (json_encode($respuesta));
 }

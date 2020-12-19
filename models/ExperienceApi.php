@@ -16,7 +16,7 @@ if ($_REQUEST['query'] == 0) {
 //select por usuario
 else if ($_REQUEST['query'] == 1) {
     $respuesta = $experience->selectByUser($_REQUEST['user']);
-    print_r($respuesta);
+    echo json_encode($respuesta);
 }
 //crear la experiencia
 else if ($_REQUEST['query'] == 2) {

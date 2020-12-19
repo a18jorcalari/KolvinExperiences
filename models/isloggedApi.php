@@ -4,12 +4,5 @@ session_start();
 if (!isset($_SESSION["id_user"])) {
     echo json_encode(false);
 } else {
-    $id_userLogged = $_SESSION["id_user"];
-    //Hacer select en BBDD.
-    $respuesta = array(
-        array(
-            "id_user" => $id_userLogged,
-        )
-    );
-    echo (json_encode($respuesta));
+    echo json_encode(true);
 }

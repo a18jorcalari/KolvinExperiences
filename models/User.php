@@ -20,7 +20,7 @@ class User extends DBAbstractModel {
 
 	/*function __destruct() {
     unset ($this);
-  }*/
+    }*/
 
 	public function select() {
 		$this->query = "SELECT * FROM User";
