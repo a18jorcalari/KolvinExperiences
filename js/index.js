@@ -42,7 +42,7 @@ function noLoggedExperiencesRender() {
                     `;
             }
 
-            htmlText += `      
+            htmlText += `
             </div> 
         </div>`;
 
@@ -125,20 +125,20 @@ function loggedExperiencesRender(res) {
                 let timeStampJson = result.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
                 htmlText += `
-                        <div class="col-sm-12 col-lg-4 card-container">
-                            <div class="card h-100">
-                                <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">${
-                                        result.data[i].title
-                                    }</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                </div>
+                    <div class="col-sm-12 col-lg-4 card-container">
+                        <div class="card h-100">
+                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                            <div class="card-body">
+                                <h5 class="card-title">${
+                                    result.data[i].title
+                                }</h5>
                             </div>
-                        </div>   
-                        `;
+                            <div class="card-footer">
+                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                            </div>
+                        </div>
+                    </div>   
+                    `;
             }
 
             htmlText += `      

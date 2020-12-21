@@ -17,6 +17,7 @@ if ($_REQUEST['query'] == 0) {
 }
 
 //SELECT LOGIN
+//SEPARAR COMPROBAR CREDENCIALES CON SELECT DE USUARIO
 if ($_REQUEST['query'] == 1) {
     $respuesta = $user->selectByUserName($_REQUEST['user']);
     if ($respuesta != null) {
