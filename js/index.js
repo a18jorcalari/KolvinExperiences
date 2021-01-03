@@ -408,7 +408,7 @@ document.getElementById("button_update").addEventListener("click", function () {
 //Logout function
 //Hay que hacerlo de esta forma para poder crear eventos con elementos dinamicos
 $("#nav-options").on("click", "#logout", function () {
-    console.log("Boton logout");
+    +console.log("Boton logout");
     axios.get("models/logoutApi.php");
     console.log("Usuario logout");
     //Alert
