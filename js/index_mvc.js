@@ -3,46 +3,81 @@ $(function () {
         // init: function () {},
 
         userIsLogged: function () {
-            axios.get("models/isloggedApi.php").then(function (res) {
-                return res;
+            return axios.get("models/isloggedApi.php");
+        },
+
+        selectUserLogged: function () {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 0,
+                },
             });
         },
 
-        selectOneUser: function () {
-            axios
-                .get("models/usersApi.php", {
-                    params: {
-                        query: 0,
-                    },
-                })
-                .then(function (res) {
-                    return res;
-                });
-        },
-
         selectAllExperiences: function () {
-            axios
-                .get("models/ExperienceApi.php", {
-                    params: {
-                        query: 0,
-                    },
-                })
-                .then(function (result) {
-                    return result;
-                });
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 0,
+                },
+            });
         },
 
         selectAllExperiencesByUser: function (userResult) {
-            axios
-                .get("models/ExperienceApi.php", {
-                    params: {
-                        user: userResult.data[0].id_user,
-                        query: 1,
-                    },
-                })
-                .then(function (result) {
-                    return result;
-                });
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    user: userResult.data[0].id_user,
+                    query: 1,
+                },
+            });
+        },
+
+        selectUserById: function (newIdUser) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 5,
+                    user: newIdUser,
+                },
+            });
+        },
+
+        selectLogin: function (user_id, password) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    user: user_id,
+                    password: password,
+                    query: 1,
+                },
+            });
+        },
+
+        insertUser: function (id_user, name, password, email) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 3,
+                    idUser: id_user,
+                    name: name,
+                    password: password,
+                    type: 1,
+                    email: email,
+                },
+            });
+        },
+
+        updateUser: function (newIdUser, newName, newPassword, newEmail) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    newIdUser: newIdUser,
+                    newName: newName,
+                    newPassword: newPassword,
+                    newType: 1,
+                    newEmail: newEmail,
+                    query: 2,
+                },
+            });
+        },
+
+        logout: function () {
+            axios.get("models/logoutApi.php");
         },
     };
 
@@ -53,11 +88,60 @@ $(function () {
         },
 
         userIsLogged: function () {
-            if (model.userIsLogged().data) {
-                view.userLogged();
-            } else {
-                view.userNoLogged();
-            }
+            model.userIsLogged().then((result) => {
+                console.log(result, this.userIsLogged.name);
+                if (result.data == true) {
+                    view.userLogged();
+                } else {
+                    view.userNoLogged();
+                }
+            });
+        },
+
+        login: function () {
+            document
+                .getElementById("button_login")
+                .addEventListener("click", function () {
+                    view.login();
+                });
+        },
+
+        logout: function () {
+            $("#nav-options").on("click", "#logout", function () {
+                view.logout();
+            });
+        },
+
+        register: function () {
+            document
+                .getElementById("button_register")
+                .addEventListener("click", function () {
+                    view.register();
+                });
+        },
+
+        editAccount: function () {
+            document
+                .getElementById("button_update")
+                .addEventListener("click", function () {
+                    view.editAccount();
+                });
+        },
+
+        addExperience: function () {
+            $("#nav-showModal_addExperience_button_box").on(
+                "click",
+                "#showModal_addExperience_button",
+                function () {
+                    console.log("click", this.addExperience.name);
+                }
+            );
+        },
+
+        //GETS
+
+        getUserLogged: function () {
+            return model.selectUserLogged();
         },
 
         getAllExperiences: function () {
@@ -67,61 +151,93 @@ $(function () {
         getAllExperiencesByUser: function (userResult) {
             return model.selectAllExperiencesByUser(userResult);
         },
+
+        getUserLogin: function (user_id, password) {
+            return model.selectLogin(user_id, password);
+        },
+
+        getUserById: function (newIdUser) {
+            return model.selectUserById(newIdUser);
+        },
+
+        //SETS
+
+        setNewUser: function (id_user, name, password, email) {
+            return model.insertUser(id_user, name, password, email);
+        },
+
+        setUpdateAccount: function (newIdUser, newName, newPassword, newEmail) {
+            return model.updateUser(newIdUser, newName, newPassword, newEmail);
+        },
+
+        setLogout: function () {
+            model.logout();
+        },
     };
 
     var view = {
         init: function () {
             controller.userIsLogged();
-
-            // login();
-            // register();
-            // editAccount();
-            // addExperience();
-            // logout();
+            controller.login();
+            controller.register();
+            controller.editAccount();
+            controller.addExperience();
+            controller.logout();
         },
 
         userNoLogged: function () {
-            let getAllExperiencesResult = controller.getAllExperiences();
-            console.log(getAllExperiencesResult.data);
-            this.headerNoLogged();
+            // let getAllExperiencesResult = controller.getAllExperiences();
 
-            let cards_tabs_experiencesElement = document.getElementById(
-                "cards-tabs-experiences"
-            );
-            let htmlString = `
-                <div class="content-row experiencies">
-                    <div class="row">`;
-            for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
-                let timeStampJson = getAllExperiencesResult.data[i].created;
-                var d = new Date(Date.parse(timeStampJson));
+            controller.getAllExperiences().then((getAllExperiencesResult) => {
+                console.log(
+                    getAllExperiencesResult.data,
+                    this.userNoLogged.name
+                );
+
+                this.headerNoLogged();
+
+                let cards_tabs_experiencesElement = document.getElementById(
+                    "cards-tabs-experiences"
+                );
+                let htmlString = `
+                    <div class="content-row experiencies">
+                        <div class="row">`;
+                for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
+                    let timeStampJson = getAllExperiencesResult.data[i].created;
+                    var d = new Date(Date.parse(timeStampJson));
+                    htmlString += `
+                            <div class="col-sm-12 col-lg-4 card-container">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${
+                                            getAllExperiencesResult.data[i]
+                                                .title
+                                        }</h5>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                    </div>
+                                </div>
+                            </div>   
+                            `;
+                }
+
                 htmlString += `
-                        <div class="col-sm-12 col-lg-4 card-container">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">${
-                                        getAllExperiencesResult.data[i].title
-                                    }</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                </div>
-                            </div>
-                        </div>   
-                        `;
-            }
+                        </div> 
+                    </div>`;
 
-            htmlString += `
-                    </div> 
-                </div>`;
-
-            cards_tabs_experiencesElement.innerHTML = htmlString;
+                cards_tabs_experiencesElement.innerHTML = htmlString;
+            });
         },
 
         userLogged: function () {
-            let getUserLoggedResult = controller.getUserLogged();
-            console.log(getUserLoggedResult);
-            this.userLoggedRender(getUserLoggedResult);
-            this.add_addExperiences_button();
+            // let getUserLoggedResult = controller.getUserLogged();
+            controller.getUserLogged().then((getUserLoggedResult) => {
+                console.log(getUserLoggedResult, this.userLogged.name);
+
+                this.userLoggedRender(getUserLoggedResult);
+                this.add_addExperiences_button();
+            });
         },
 
         userLoggedRender: function (res) {
@@ -233,30 +349,76 @@ $(function () {
                 "myexperiences-box"
             );
 
-            let getAllExperiencesByUserResult = controller.getAllExperiencesByUser(
-                userResult
+            // let getAllExperiencesByUserResult = controller.getAllExperiencesByUser(
+            //     userResult
+            // );
+            controller
+                .getAllExperiencesByUser(userResult)
+                .then((getAllExperiencesByUserResult) => {
+                    console.log(
+                        getAllExperiencesByUserResult,
+                        this.myExperiences.name
+                    );
+
+                    let htmlText = `
+                            <div class="content-row experiencies">
+                                <div class="row">`;
+                    for (
+                        let i = 0;
+                        i < getAllExperiencesByUserResult.data.length;
+                        i++
+                    ) {
+                        let timeStampJson =
+                            getAllExperiencesByUserResult.data[i].created;
+                        var d = new Date(Date.parse(timeStampJson));
+                        htmlText += `
+                                    <div class="col-sm-12 col-lg-4 card-container">
+                                        <div class="card h-100">
+                                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">${
+                                                    getAllExperiencesByUserResult
+                                                        .data[i].title
+                                                }</h5>
+                                            </div>
+                                            <div class="card-footer">
+                                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                    `;
+                    }
+
+                    htmlText += `      
+                                </div> 
+                            </div>`;
+
+                    myexperiences_boxElement.innerHTML = htmlText;
+                });
+        },
+
+        allExperiences: function () {
+            let allexperiences_boxElement = document.getElementById(
+                "allexperiences-box"
             );
 
-            console.log(getAllExperiencesByUserResult);
-            let htmlText = `
+            // let getAllExperiencesResult = controller.getAllExperiences();
+            controller.getAllExperiences().then((getAllExperiencesResult) => {
+                let htmlString = `
                         <div class="content-row experiencies">
                             <div class="row">`;
-            for (
-                let i = 0;
-                i < getAllExperiencesByUserResult.data.length;
-                i++
-            ) {
-                let timeStampJson =
-                    getAllExperiencesByUserResult.data[i].created;
-                var d = new Date(Date.parse(timeStampJson));
-                htmlText += `
+                for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
+                    let timeStampJson = getAllExperiencesResult.data[i].created;
+                    var d = new Date(Date.parse(timeStampJson));
+
+                    htmlString += `
                                 <div class="col-sm-12 col-lg-4 card-container">
                                     <div class="card h-100">
                                         <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                         <div class="card-body">
                                             <h5 class="card-title">${
-                                                getAllExperiencesByUserResult
-                                                    .data[i].title
+                                                getAllExperiencesResult.data[i]
+                                                    .title
                                             }</h5>
                                         </div>
                                         <div class="card-footer">
@@ -265,243 +427,195 @@ $(function () {
                                     </div>
                                 </div>   
                                 `;
-            }
+                }
 
-            htmlText += `      
+                htmlString += `      
                             </div> 
                         </div>`;
 
-            myexperiences_boxElement.innerHTML = htmlText;
+                allexperiences_boxElement.innerHTML = htmlString;
+            });
         },
 
-        allExperiences: function () {
-            let allexperiences_boxElement = document.getElementById(
-                "allexperiences-box"
+        login: function () {
+            let user_id = document.getElementById("validation_username_login")
+                .value;
+            let password = document.getElementById("validation_password_login")
+                .value;
+
+            console.log(user_id, Object.keys({ user_id })[0], this.login.name);
+
+            console.log(
+                password,
+                Object.keys({ password })[0],
+                this.login.name
             );
 
-            let getAllExperiencesResult = controller.getAllExperiences();
+            // let loginResult = controller.getUserLogin(user_id, password);
+            controller.getUserLogin(user_id, password).then((loginResult) => {
+                console.log(loginResult, this.login.name);
 
-            let htmlString = `
-                <div class="content-row experiencies">
-                    <div class="row">`;
-            for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
-                let timeStampJson = getAllExperiencesResult.data[i].created;
-                var d = new Date(Date.parse(timeStampJson));
+                // Si las credenciales son correctas
+                if (loginResult.data != false) {
+                    //Funcion que sirve para esconder el modal con la id login.
+                    $("#login_modal").modal("hide");
+                    //LoggedRender
 
-                htmlString += `
-                        <div class="col-sm-12 col-lg-4 card-container">
-                            <div class="card h-100">
-                                <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">${
-                                        getAllExperiencesResult.data[i].title
-                                    }</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                </div>
-                            </div>
-                        </div>   
-                        `;
-            }
+                    this.userLoggedRender(loginResult);
+                    this.add_addExperiences_button();
 
-            htmlString += `      
-                    </div> 
-                </div>`;
-
-            allexperiences_boxElement.innerHTML = htmlString;
+                    //Alert
+                    swal({
+                        title: "¡Bien hecho!",
+                        text: "Te has loguedo correctamente",
+                        icon: "success",
+                    });
+                } else {
+                    alert("Error login");
+                }
+            });
         },
 
-        // login: function () {
-        //     document
-        //         .getElementById("button_login")
-        //         .addEventListener("click", function () {
-        //             let user_id = document.getElementById(
-        //                 "validation_username_login"
-        //             ).value;
-        //             let password = document.getElementById(
-        //                 "validation_password_login"
-        //             ).value;
-        //             console.log(user_id);
-        //             console.log(password);
-        //             axios
-        //                 .get("models/usersApi.php", {
-        //                     params: {
-        //                         user: user_id,
-        //                         password: password,
-        //                         query: 1,
-        //                     },
-        //                 })
-        //                 .then(function (res) {
-        //                     console.log(res);
+        register: function () {
+            //Si el usuario se ha creado correctamente hacer esto:
+            $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
 
-        //                     // Si las credenciales son correctas
-        //                     if (res.data != false) {
-        //                         //Funcion que sirve para esconder el modal con la id login.
-        //                         $("#login_modal").modal("hide");
-        //                         //LoggedRender
+            let id_user = document.getElementById(
+                "validation_username_register"
+            ).value;
+            let name = document.getElementById("validation_name_register")
+                .value;
+            let password = document.getElementById(
+                "validation_password_register"
+            ).value;
+            let email = document.getElementById("validation_email_register")
+                .value;
 
-        //                         loggedExperiencesRender(res);
-        //                         add_button_addExperience_function();
+            console.log(
+                id_user,
+                Object.keys({ id_user })[0],
+                this.register.name
+            );
+            console.log(name, Object.keys({ name })[0], this.register.name);
+            console.log(
+                password,
+                Object.keys({ password })[0],
+                this.register.name
+            );
+            console.log(email, Object.keys({ email })[0], this.register.name);
 
-        //                         //Alert
-        //                         swal({
-        //                             title: "¡Bien hecho!",
-        //                             text: "Te has loguedo correctamente",
-        //                             icon: "success",
-        //                         });
-        //                     } else {
-        //                         alert("Error login1");
-        //                     }
-        //                 })
-        //                 .catch(function (error) {
-        //                     alert("Error login2");
-        //                 });
-        //         });
-        // },
-        // register: function () {
-        //     document
-        //         .getElementById("button_register")
-        //         .addEventListener("click", function () {
-        //             //Si el usuario se ha creado correctamente hacer esto:
-        //             $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
+            // let newUserResult = controller.setNewUser(
+            //     id_user,
+            //     name,
+            //     password,
+            //     email
+            // );
 
-        //             let id_user = document.getElementById(
-        //                 "validation_username_register"
-        //             ).value;
-        //             let name = document.getElementById(
-        //                 "validation_name_register"
-        //             ).value;
-        //             let password = document.getElementById(
-        //                 "validation_password_register"
-        //             ).value;
-        //             let email = document.getElementById(
-        //                 "validation_email_register"
-        //             ).value;
+            controller
+                .setNewUser(id_user, name, password, email)
+                .then((newUserResult) => {
+                    console.log(newUserResult, this.register.name);
 
-        //             console.log(id_user);
-        //             console.log(name);
-        //             console.log(password);
-        //             console.log(email);
+                    if (
+                        newUserResult.data == "Usuario registrado correctamente"
+                    ) {
+                        $("#register_modal").modal("hide");
 
-        //             axios
-        //                 .get("models/usersApi.php", {
-        //                     params: {
-        //                         query: 3,
-        //                         idUser: id_user,
-        //                         name: name,
-        //                         password: password,
-        //                         type: 1,
-        //                         email: email,
-        //                     },
-        //                 })
-        //                 .then(function (res) {
-        //                     if (
-        //                         res.data == "Usuario registrado correctamente"
-        //                     ) {
-        //                         $("#register_modal").modal("hide");
+                        //Alert
+                        swal({
+                            title: "¡Bien hecho!",
+                            text:
+                                "Usuario creado satisfactoriamente. Ahora inicia sesión.",
+                            icon: "success",
+                        });
+                    } else {
+                        alert(newUserResult.data);
+                    }
+                });
+        },
 
-        //                         //Alert
-        //                         swal({
-        //                             title: "¡Bien hecho!",
-        //                             text:
-        //                                 "Usuario creado satisfactoriamente. Ahora inicia sesión.",
-        //                             icon: "success",
-        //                         });
-        //                     } else {
-        //                         alert(res.data);
-        //                     }
-        //                 });
-        //         });
-        // },
-        // editAccount: function () {
-        //     document
-        //         .getElementById("button_update")
-        //         .addEventListener("click", function () {
-        //             let newIdUser = document.getElementById(
-        //                 "validation_username_account"
-        //             ).value;
-        //             let newName = document.getElementById(
-        //                 "validation_name_account"
-        //             ).value;
-        //             let newPassword = document.getElementById(
-        //                 "validation_password_account"
-        //             ).value;
-        //             let newEmail = document.getElementById(
-        //                 "validation_email_account"
-        //             ).value;
+        editAccount: function () {
+            let newIdUser = document.getElementById(
+                "validation_username_account"
+            ).value;
+            let newName = document.getElementById("validation_name_account")
+                .value;
+            let newPassword = document.getElementById(
+                "validation_password_account"
+            ).value;
+            let newEmail = document.getElementById("validation_email_account")
+                .value;
 
-        //             console.log(newIdUser);
-        //             console.log(newName);
-        //             console.log(newPassword);
-        //             console.log(newEmail);
+            console.log(
+                newIdUser,
+                Object.keys({ newIdUser })[0],
+                this.editAccount.name
+            );
+            console.log(
+                newName,
+                Object.keys({ newName })[0],
+                this.editAccount.name
+            );
+            console.log(
+                newPassword,
+                Object.keys({ newPassword })[0],
+                this.editAccount.name
+            );
+            console.log(
+                newEmail,
+                Object.keys({ newEmail })[0],
+                this.editAccount.name
+            );
 
-        //             axios
-        //                 .get("models/usersApi.php", {
-        //                     params: {
-        //                         newIdUser: newIdUser,
-        //                         newName: newName,
-        //                         newPassword: newPassword,
-        //                         newType: 1,
-        //                         newEmail: newEmail,
-        //                         query: 2,
-        //                     },
-        //                 })
-        //                 .then(function (result) {
-        //                     console.log(result);
-        //                     if (result.data == "ok") {
-        //                         $("#useraccount_modal").modal("hide");
+            // let updateUserResult = controller.setUpdateAccount(
+            //     newIdUser,
+            //     newName,
+            //     newPassword,
+            //     newEmail
+            // );
+            controller
+                .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
+                .then((updateUserResult) => {
+                    console.log(this.editAccount.name, updateUserResult);
 
-        //                         axios
-        //                             .get("models/usersApi.php", {
-        //                                 params: {
-        //                                     query: 5,
-        //                                     user: newIdUser,
-        //                                 },
-        //                             })
-        //                             .then(function (res) {
-        //                                 console.log(res);
-        //                                 loggedExperiencesRender(res);
-        //                             });
+                    if (updateUserResult.data == "ok") {
+                        $("#useraccount_modal").modal("hide");
 
-        //                         swal({
-        //                             title: "¡Bien hecho!",
-        //                             text:
-        //                                 "Has actualizado tu información correctamente.",
-        //                             icon: "success",
-        //                         });
-        //                     } else {
-        //                         alert(result.data);
-        //                     }
-        //                 });
-        //         });
-        // },
-        // addExperience: function () {
-        //     // $("#nav-showModal_addExperience_button_box").on(
-        //     //     "click",
-        //     //     "#showModal_addExperience_button",
-        //     //     function () {
-        //     //         console.log("click");
-        //     //     }
-        //     // );
-        // },
-        // logout: function () {
-        //     $("#nav-options").on("click", "#logout", function () {
-        //         +console.log("Boton logout");
+                        // let userResult = controller.getUserById(newIdUser);
+                        controller.getUserById(newIdUser).then((userResult) => {
+                            console.log(view.editAccount.name, userResult);
+                            view.userLoggedRender(userResult);
 
-        //         axios.get("models/logoutApi.php");
+                            swal({
+                                title: "¡Bien hecho!",
+                                text:
+                                    "Has actualizado tu información correctamente.",
+                                icon: "success",
+                            });
+                        });
+                    } else {
+                        alert(updateUserResult.data);
+                    }
+                });
+        },
 
-        //         console.log("Usuario logout");
-        //         //Alert
-        //         swal({
-        //             title: "¡Bien hecho!",
-        //             text: "Has guardado cerrado tu sesión correctamente.",
-        //             icon: "success",
-        //         });
-        //         noLoggedExperiencesRender();
-        //         remove_button_addExperience_function();
-        //     });
-        // },
+        addExperience: function () {},
+
+        logout: function () {
+            console.log(this.logout.name, "Boton logout");
+
+            controller.setLogout();
+
+            console.log(this.logout.name, "Usuario logout");
+            //Alert
+            swal({
+                title: "¡Bien hecho!",
+                text: "Has guardado cerrado tu sesión correctamente.",
+                icon: "success",
+            });
+            this.userNoLogged();
+            this.remove_addExperience_button();
+        },
 
         add_addExperiences_button: function () {
             document.getElementById(
