@@ -134,8 +134,16 @@ $(function () {
                 "#showModal_addExperience_button",
                 function () {
                     console.log("click", this.addExperience.name);
+                    $("#add_experience_modal").modal("show");
                 }
             );
+        },
+
+        seeExperienceDetail: function () {
+            $("#cards-tabs-experiences").on("click", "div[expid]", function () {
+                console.log("click", $(this).attr("expid"));
+                $("#detail_modal").modal("show");
+            });
         },
 
         //GETS
@@ -182,12 +190,11 @@ $(function () {
             controller.register();
             controller.editAccount();
             controller.addExperience();
+            controller.seeExperienceDetail();
             controller.logout();
         },
 
         userNoLogged: function () {
-            // let getAllExperiencesResult = controller.getAllExperiences();
-
             controller.getAllExperiences().then((getAllExperiencesResult) => {
                 console.log(
                     getAllExperiencesResult.data,
@@ -231,7 +238,6 @@ $(function () {
         },
 
         userLogged: function () {
-            // let getUserLoggedResult = controller.getUserLogged();
             controller.getUserLogged().then((getUserLoggedResult) => {
                 console.log(getUserLoggedResult, this.userLogged.name);
 
@@ -349,9 +355,6 @@ $(function () {
                 "myexperiences-box"
             );
 
-            // let getAllExperiencesByUserResult = controller.getAllExperiencesByUser(
-            //     userResult
-            // );
             controller
                 .getAllExperiencesByUser(userResult)
                 .then((getAllExperiencesByUserResult) => {
@@ -372,7 +375,10 @@ $(function () {
                             getAllExperiencesByUserResult.data[i].created;
                         var d = new Date(Date.parse(timeStampJson));
                         htmlText += `
-                                    <div class="col-sm-12 col-lg-4 card-container">
+                                    <div class="col-sm-12 col-lg-4 card-container" expid="${
+                                        getAllExperiencesByUserResult.data[i]
+                                            .id_experience
+                                    }">
                                         <div class="card h-100">
                                             <div style="width: 100%; height: 200px; background-color: grey;"></div>
                                             <div class="card-body">
@@ -402,7 +408,6 @@ $(function () {
                 "allexperiences-box"
             );
 
-            // let getAllExperiencesResult = controller.getAllExperiences();
             controller.getAllExperiences().then((getAllExperiencesResult) => {
                 let htmlString = `
                         <div class="content-row experiencies">
@@ -451,7 +456,6 @@ $(function () {
                 this.login.name
             );
 
-            // let loginResult = controller.getUserLogin(user_id, password);
             controller.getUserLogin(user_id, password).then((loginResult) => {
                 console.log(loginResult, this.login.name);
 
@@ -503,13 +507,6 @@ $(function () {
                 this.register.name
             );
             console.log(email, Object.keys({ email })[0], this.register.name);
-
-            // let newUserResult = controller.setNewUser(
-            //     id_user,
-            //     name,
-            //     password,
-            //     email
-            // );
 
             controller
                 .setNewUser(id_user, name, password, email)
@@ -567,12 +564,6 @@ $(function () {
                 this.editAccount.name
             );
 
-            // let updateUserResult = controller.setUpdateAccount(
-            //     newIdUser,
-            //     newName,
-            //     newPassword,
-            //     newEmail
-            // );
             controller
                 .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
                 .then((updateUserResult) => {
@@ -600,6 +591,8 @@ $(function () {
         },
 
         addExperience: function () {},
+
+        seeExperienceDetail: function () {},
 
         logout: function () {
             console.log(this.logout.name, "Boton logout");
