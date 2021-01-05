@@ -22,23 +22,30 @@ else if ($_REQUEST['query'] == 1) {
 else if ($_REQUEST['query'] == 2) {
 
     $insertExperience = array(
+        "query" => $_REQUEST['query'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-        "created" => $_REQUEST['created'],
-        "id_user" => $_REQUEST['id_user'],
-        "state" => $_REQUEST['state'],
-        "id_category" => $_REQUEST['id_category'],
-        "query" => $_REQUEST['query'],
-        "location" => $_REQUEST['location'],
-        "image" => $_REQUEST['image']
+        // "created" => $_REQUEST['created'],
+        // "id_user" => $_REQUEST['id_user'],
+        // "state" => $_REQUEST['state'],
+        // "id_category" => $_REQUEST['id_category'],
+        // "location" => $_REQUEST['location'],
+        // "image" => $_REQUEST['image']
+
+        "created" => "asd",
+        "id_user" => "asd",
+        "state" => "asd",
+        "id_category" => "asd",
+        "location" => "asd",
+        "image" => "asd"
 
 
     );
     foreach ($experience->selectExistsExperience($insertExperience) as $value) {
-        if ($value == 1) echo "No se pueden repetir las experiencias";
+        if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
         else {
             $experience->insert($insertExperience);
-            echo "Experiencia subida correctamente";
+            echo json_encode("Experiencia subida correctamente");
         }
     }
 }
@@ -108,4 +115,9 @@ else if ($_REQUEST['query'] == 7) {
         if ($value == 1)  echo "Algo ha slido mal";
         else echo "Se ha eliminado correctamente";
     }
+}
+//Select experience by id
+else if ($_REQUEST['query'] == 8) {
+    $respuesta = $experience->selectById($_REQUEST['id_experience']);
+    echo json_encode($respuesta);
 }

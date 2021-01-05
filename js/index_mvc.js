@@ -1,7 +1,5 @@
 $(function () {
     var model = {
-        // init: function () {},
-
         userIsLogged: function () {
             return axios.get("models/isloggedApi.php");
         },
@@ -76,6 +74,25 @@ $(function () {
             });
         },
 
+        selectExperienceById: function (expId) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 8,
+                    id_experience: expId,
+                },
+            });
+        },
+
+        insertExperience: function (title, description) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 2,
+                    title: title,
+                    description: description,
+                },
+            });
+        },
+
         logout: function () {
             axios.get("models/logoutApi.php");
         },
@@ -83,13 +100,12 @@ $(function () {
 
     var controller = {
         init: function () {
-            // model.init();
             view.init();
         },
 
-        userIsLogged: function () {
+        decideUserView: function () {
             model.userIsLogged().then((result) => {
-                console.log(result, this.userIsLogged.name);
+                console.log(result, this.decideUserView.name);
                 if (result.data == true) {
                     view.userLogged();
                 } else {
@@ -129,19 +145,17 @@ $(function () {
         },
 
         addExperience: function () {
-            $("#nav-showModal_addExperience_button_box").on(
-                "click",
-                "#showModal_addExperience_button",
-                function () {
-                    console.log("click", this.addExperience.name);
-                    $("#add_experience_modal").modal("show");
-                }
-            );
+            document
+                .getElementById("button_add_experience")
+                .addEventListener("click", function () {
+                    view.addExperience();
+                });
         },
 
         seeExperienceDetail: function () {
             $("#cards-tabs-experiences").on("click", "div[expid]", function () {
                 console.log("click", $(this).attr("expid"));
+                view.seeExperienceDetail($(this).attr("expid"));
                 $("#detail_modal").modal("show");
             });
         },
@@ -168,6 +182,10 @@ $(function () {
             return model.selectUserById(newIdUser);
         },
 
+        getExperienceById: function (expId) {
+            return model.selectExperienceById(expId);
+        },
+
         //SETS
 
         setNewUser: function (id_user, name, password, email) {
@@ -181,11 +199,15 @@ $(function () {
         setLogout: function () {
             model.logout();
         },
+
+        setNewExperience: function (title, description) {
+            return model.insertExperience(title, description);
+        },
     };
 
     var view = {
         init: function () {
-            controller.userIsLogged();
+            controller.decideUserView();
             controller.login();
             controller.register();
             controller.editAccount();
@@ -242,34 +264,36 @@ $(function () {
                 console.log(getUserLoggedResult, this.userLogged.name);
 
                 this.userLoggedRender(getUserLoggedResult);
-                this.add_addExperiences_button();
             });
         },
 
-        userLoggedRender: function (res) {
+        userLoggedRender: function (result) {
             /************ NORMAL USER VIEW ******************/
 
-            this.headerLogged(res);
+            this.headerLogged(result);
 
             this.addTabExperiences();
 
             //CARDS USER EXPERIENCES
 
             //My experiences
-            this.myExperiences(res);
+            this.myExperiences(result);
 
             //All experiences
             this.allExperiences();
+
+            //Boton de añadir experiencia
+            this.add_addExperiences_button();
         },
 
-        headerLogged: function (res) {
+        headerLogged: function (result) {
             //Sustituye en navbar a modo user logged
             //Eliminar li de admin para normal user
             let nav_optionsElement = document.getElementById("nav-options");
             navOptionHtml = "";
 
             //Aqui cambiarlo por type de bd
-            if (res.data[0].type == 2) {
+            if (result.data[0].type == 2) {
                 navOptionHtml += `
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
@@ -278,7 +302,7 @@ $(function () {
 
             navOptionHtml += `
             <li class="nav-item">
-                <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${res.data[0].id_user}</span></a>
+                <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
             </li>
             <li class="nav-item">
                 <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -363,43 +387,9 @@ $(function () {
                         this.myExperiences.name
                     );
 
-                    let htmlText = `
-                            <div class="content-row experiencies">
-                                <div class="row">`;
-                    for (
-                        let i = 0;
-                        i < getAllExperiencesByUserResult.data.length;
-                        i++
-                    ) {
-                        let timeStampJson =
-                            getAllExperiencesByUserResult.data[i].created;
-                        var d = new Date(Date.parse(timeStampJson));
-                        htmlText += `
-                                    <div class="col-sm-12 col-lg-4 card-container" expid="${
-                                        getAllExperiencesByUserResult.data[i]
-                                            .id_experience
-                                    }">
-                                        <div class="card h-100">
-                                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                                            <div class="card-body">
-                                                <h5 class="card-title">${
-                                                    getAllExperiencesByUserResult
-                                                        .data[i].title
-                                                }</h5>
-                                            </div>
-                                            <div class="card-footer">
-                                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                            </div>
-                                        </div>
-                                    </div>   
-                                    `;
-                    }
-
-                    htmlText += `      
-                                </div> 
-                            </div>`;
-
-                    myexperiences_boxElement.innerHTML = htmlText;
+                    myexperiences_boxElement.innerHTML = this.experiences(
+                        getAllExperiencesByUserResult
+                    );
                 });
         },
 
@@ -409,37 +399,43 @@ $(function () {
             );
 
             controller.getAllExperiences().then((getAllExperiencesResult) => {
-                let htmlString = `
-                        <div class="content-row experiencies">
-                            <div class="row">`;
-                for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
-                    let timeStampJson = getAllExperiencesResult.data[i].created;
-                    var d = new Date(Date.parse(timeStampJson));
-
-                    htmlString += `
-                                <div class="col-sm-12 col-lg-4 card-container">
-                                    <div class="card h-100">
-                                        <div style="width: 100%; height: 200px; background-color: grey;"></div>
-                                        <div class="card-body">
-                                            <h5 class="card-title">${
-                                                getAllExperiencesResult.data[i]
-                                                    .title
-                                            }</h5>
-                                        </div>
-                                        <div class="card-footer">
-                                            <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                        </div>
-                                    </div>
-                                </div>   
-                                `;
-                }
-
-                htmlString += `      
-                            </div> 
-                        </div>`;
-
-                allexperiences_boxElement.innerHTML = htmlString;
+                allexperiences_boxElement.innerHTML = this.experiences(
+                    getAllExperiencesResult
+                );
             });
+        },
+
+        experiences: function (experiencesResult) {
+            let htmlString = `
+            <div class="content-row experiencies">
+                <div class="row">`;
+            for (let i = 0; i < experiencesResult.data.length; i++) {
+                let timeStampJson = experiencesResult.data[i].created;
+                var d = new Date(Date.parse(timeStampJson));
+                htmlString += `
+                    <div class="col-sm-12 col-lg-4 card-container" expid="${
+                        experiencesResult.data[i].id_experience
+                    }">
+                        <div class="card h-100">
+                            <div style="width: 100%; height: 200px; background-color: grey;"></div>
+                            <div class="card-body">
+                                <h5 class="card-title">${
+                                    experiencesResult.data[i].title
+                                }</h5>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                            </div>
+                        </div>
+                    </div>   
+                    `;
+            }
+
+            htmlString += `      
+                </div> 
+            </div>`;
+
+            return htmlString;
         },
 
         login: function () {
@@ -590,9 +586,33 @@ $(function () {
                 });
         },
 
-        addExperience: function () {},
+        addExperience: function () {
+            let title = document.getElementById("title_add_experience").value;
+            let description = document.getElementById("desc_add_experience")
+                .value;
+            console.log(title, description);
 
-        seeExperienceDetail: function () {},
+            controller.setNewExperience(title, description).then((result) => {
+                console.log(result);
+                if (result.data == "Experiencia subida correctamente") {
+                    alert("Añadido");
+                    view.userLogged();
+                } else {
+                    alert("No añadido");
+                }
+            });
+        },
+
+        seeExperienceDetail: function (expId) {
+            controller.getExperienceById(expId).then((experienceResult) => {
+                console.log(this.seeExperienceDetail, experienceResult);
+                let detail_body = document.getElementById("detail-body");
+                detail_body.getElementsByTagName("h4")[0].innerHTML =
+                    experienceResult.data.title;
+                detail_body.getElementsByTagName("p")[0].innerHTML =
+                    experienceResult.data.description;
+            });
+        },
 
         logout: function () {
             console.log(this.logout.name, "Boton logout");

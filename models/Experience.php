@@ -46,6 +46,8 @@ class Experience extends DBAbstractModel {
     }
   }
 
+  // public function selectById
+
   //FUNCIONA
   public function insert($experience = array()) {
     $title = $experience['title'];
@@ -59,6 +61,8 @@ class Experience extends DBAbstractModel {
 
     $this->query = "INSERT INTO Experience (title, description, created, id_category, id_user, state, location, image)
                 VALUES ('$title','$description', '$created', $id_category, '$id_user', '$state', '$location' , '$image')";
+    // $this->query = "INSERT INTO Experience (title, description)
+    //             VALUES ('$title','$description')";
     $this->execute_single_query();
   }
 
@@ -136,13 +140,15 @@ class Experience extends DBAbstractModel {
 
     if ($experience['query'] == 2) {
       $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_user ='$id_user' AND state ='$state' AND title='$title' AND description='$description' AND id_category='$id_category' AND location='$location') ";
+      // $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE  description='$description')";
       $this->get_results_from_query();
     }
     return $this->rows[0];
   }
 
   public function selectById($id_Experience = "") {
-    $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_Experience') ";
+    // $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_Experience') ";
+    $this->query = "SELECT * FROM Experience WHERE id_experience ='$id_Experience'";
     $this->get_results_from_query();
     return $this->rows[0];
   }
