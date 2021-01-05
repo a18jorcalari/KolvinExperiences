@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset-utf-8");
 error_reporting(-1);
 ini_set('display_errors', 'On');
-
+session_start();
 require_once('Experience.php');
 
 $experience = new Experience();
@@ -21,10 +21,13 @@ else if ($_REQUEST['query'] == 1) {
 //crear la experiencia
 else if ($_REQUEST['query'] == 2) {
 
+    //He modficado esto para que funcione sin unos datos. 
+
     $insertExperience = array(
         "query" => $_REQUEST['query'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
+
         // "created" => $_REQUEST['created'],
         // "id_user" => $_REQUEST['id_user'],
         // "state" => $_REQUEST['state'],
@@ -32,22 +35,26 @@ else if ($_REQUEST['query'] == 2) {
         // "location" => $_REQUEST['location'],
         // "image" => $_REQUEST['image']
 
-        "created" => "asd",
-        "id_user" => "asd",
-        "state" => "asd",
-        "id_category" => "asd",
-        "location" => "asd",
-        "image" => "asd"
+        //Esta es la version que funciona
+
+        //Created borrado
+        "id_user" => $_SESSION["id_user"],
+        "state" => "publicada",
+        "id_category" => 1,
+        "location" => "asdasd1",
+        "image" => "asdasdasd2"
 
 
     );
-    foreach ($experience->selectExistsExperience($insertExperience) as $value) {
-        if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
-        else {
-            $experience->insert($insertExperience);
-            echo json_encode("Experiencia subida correctamente");
-        }
-    }
+    //Esto comentado porque no es necesario comprobar que está repetido.
+
+    // foreach ($experience->selectExistsExperience($insertExperience) as $value) {
+    // if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
+    // else {
+    $experience->insert($insertExperience);
+    echo json_encode("Experiencia subida correctamente");
+    // }
+    // }
 }
 //modificar la experiencia
 else if ($_REQUEST['query'] == 3) {

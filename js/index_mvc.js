@@ -413,10 +413,10 @@ $(function () {
                 let timeStampJson = experiencesResult.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
                 htmlString += `
-                    <div class="col-sm-12 col-lg-4 card-container" expid="${
-                        experiencesResult.data[i].id_experience
-                    }">
-                        <div class="card h-100">
+                    <div class="col-sm-12 col-lg-4 card-container">
+                        <div class="card h-100" expid="${
+                            experiencesResult.data[i].id_experience
+                        }">
                             <div style="width: 100%; height: 200px; background-color: grey;"></div>
                             <div class="card-body">
                                 <h5 class="card-title">${
@@ -595,7 +595,13 @@ $(function () {
             controller.setNewExperience(title, description).then((result) => {
                 console.log(result);
                 if (result.data == "Experiencia subida correctamente") {
-                    alert("Añadido");
+                    // alert("Añadido");
+                    swal({
+                        title: "¡Bien hecho!",
+                        text: "Has añadido correctamente una experiencia.",
+                        icon: "success",
+                    });
+                    $("#add_experience_modal").modal("hide");
                     view.userLogged();
                 } else {
                     alert("No añadido");
