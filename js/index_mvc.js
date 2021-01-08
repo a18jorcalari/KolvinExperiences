@@ -12,51 +12,12 @@ $(function () {
             });
         },
 
-        selectAllExperiences: function () {
-            return axios.get("models/ExperienceApi.php", {
-                params: {
-                    query: 0,
-                },
-            });
-        },
-
-        selectAllExperiencesByUser: function (userResult) {
-            return axios.get("models/ExperienceApi.php", {
-                params: {
-                    user: userResult.data[0].id_user,
-                    query: 1,
-                },
-            });
-        },
-
-        selectUserById: function (newIdUser) {
-            return axios.get("models/usersApi.php", {
-                params: {
-                    query: 5,
-                    user: newIdUser,
-                },
-            });
-        },
-
         selectLogin: function (user_id, password) {
             return axios.get("models/usersApi.php", {
                 params: {
                     user: user_id,
                     password: password,
                     query: 1,
-                },
-            });
-        },
-
-        insertUser: function (id_user, name, password, email) {
-            return axios.get("models/usersApi.php", {
-                params: {
-                    query: 3,
-                    idUser: id_user,
-                    name: name,
-                    password: password,
-                    type: 1,
-                    email: email,
                 },
             });
         },
@@ -74,11 +35,41 @@ $(function () {
             });
         },
 
-        selectExperienceById: function (expId) {
+        insertUser: function (id_user, name, password, email) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 3,
+                    idUser: id_user,
+                    name: name,
+                    password: password,
+                    type: 1,
+                    email: email,
+                },
+            });
+        },
+
+        selectUserById: function (newIdUser) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 5,
+                    user: newIdUser,
+                },
+            });
+        },
+
+        selectAllExperiences: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 8,
-                    id_experience: expId,
+                    query: 0,
+                },
+            });
+        },
+
+        selectAllExperiencesByUser: function (userResult) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    user: userResult.data[0].id_user,
+                    query: 1,
                 },
             });
         },
@@ -89,6 +80,15 @@ $(function () {
                     query: 2,
                     title: title,
                     description: description,
+                },
+            });
+        },
+
+        selectExperienceById: function (expId) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 8,
+                    id_experience: expId,
                 },
             });
         },
@@ -118,7 +118,7 @@ $(function () {
             document
                 .getElementById("button_login")
                 .addEventListener("click", function () {
-                    view.login();
+                    view.loginModal();
                 });
         },
 
@@ -132,15 +132,15 @@ $(function () {
             document
                 .getElementById("button_register")
                 .addEventListener("click", function () {
-                    view.register();
+                    view.registerModal();
                 });
         },
 
-        editAccount: function () {
+        modifyAccount: function () {
             document
                 .getElementById("button_update")
                 .addEventListener("click", function () {
-                    view.editAccount();
+                    view.modifyAccountModal();
                 });
         },
 
@@ -148,14 +148,14 @@ $(function () {
             document
                 .getElementById("button_add_experience")
                 .addEventListener("click", function () {
-                    view.addExperience();
+                    view.addExperienceModal();
                 });
         },
 
-        seeExperienceDetail: function () {
+        showExperienceDetail: function () {
             $("#cards-tabs-experiences").on("click", "div[expid]", function () {
                 console.log("click", $(this).attr("expid"));
-                view.seeExperienceDetail($(this).attr("expid"));
+                view.experienceDetailModal($(this).attr("expid"));
                 $("#detail_modal").modal("show");
             });
         },
@@ -210,9 +210,9 @@ $(function () {
             controller.decideUserView();
             controller.login();
             controller.register();
-            controller.editAccount();
+            controller.modifyAccount();
             controller.addExperience();
-            controller.seeExperienceDetail();
+            controller.showExperienceDetail();
             controller.logout();
         },
 
@@ -223,7 +223,7 @@ $(function () {
                     this.userNoLogged.name
                 );
 
-                this.headerNoLogged();
+                this.headerUserNoLogged();
 
                 let cards_tabs_experiencesElement = document.getElementById(
                     "cards-tabs-experiences"
@@ -311,7 +311,7 @@ $(function () {
             nav_optionsElement.innerHTML = navOptionHtml;
         },
 
-        headerNoLogged: function () {
+        headerUserNoLogged: function () {
             let nav_optionsElement = document.getElementById("nav-options");
             nav_optionsElement.innerHTML = `
                 <li class="nav-item">
@@ -399,6 +399,7 @@ $(function () {
             );
 
             controller.getAllExperiences().then((getAllExperiencesResult) => {
+                console.log(getAllExperiencesResult, this.allExperiences.name);
                 allexperiences_boxElement.innerHTML = this.experiences(
                     getAllExperiencesResult
                 );
@@ -438,22 +439,28 @@ $(function () {
             return htmlString;
         },
 
-        login: function () {
+        // MODALS
+
+        loginModal: function () {
             let user_id = document.getElementById("validation_username_login")
                 .value;
             let password = document.getElementById("validation_password_login")
                 .value;
 
-            console.log(user_id, Object.keys({ user_id })[0], this.login.name);
+            console.log(
+                user_id,
+                Object.keys({ user_id })[0],
+                this.loginModal.name
+            );
 
             console.log(
                 password,
                 Object.keys({ password })[0],
-                this.login.name
+                this.loginModal.name
             );
 
             controller.getUserLogin(user_id, password).then((loginResult) => {
-                console.log(loginResult, this.login.name);
+                console.log(loginResult, this.loginModal.name);
 
                 // Si las credenciales son correctas
                 if (loginResult.data != false) {
@@ -476,7 +483,7 @@ $(function () {
             });
         },
 
-        register: function () {
+        registerModal: function () {
             //Si el usuario se ha creado correctamente hacer esto:
             $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
 
@@ -494,20 +501,28 @@ $(function () {
             console.log(
                 id_user,
                 Object.keys({ id_user })[0],
-                this.register.name
+                this.registerModal.name
             );
-            console.log(name, Object.keys({ name })[0], this.register.name);
+            console.log(
+                name,
+                Object.keys({ name })[0],
+                this.registerModal.name
+            );
             console.log(
                 password,
                 Object.keys({ password })[0],
-                this.register.name
+                this.registerModal.name
             );
-            console.log(email, Object.keys({ email })[0], this.register.name);
+            console.log(
+                email,
+                Object.keys({ email })[0],
+                this.registerModal.name
+            );
 
             controller
                 .setNewUser(id_user, name, password, email)
                 .then((newUserResult) => {
-                    console.log(newUserResult, this.register.name);
+                    console.log(newUserResult, this.registerModal.name);
 
                     if (
                         newUserResult.data == "Usuario registrado correctamente"
@@ -527,7 +542,7 @@ $(function () {
                 });
         },
 
-        editAccount: function () {
+        modifyAccountModal: function () {
             let newIdUser = document.getElementById(
                 "validation_username_account"
             ).value;
@@ -542,35 +557,38 @@ $(function () {
             console.log(
                 newIdUser,
                 Object.keys({ newIdUser })[0],
-                this.editAccount.name
+                this.modifyAccountModal.name
             );
             console.log(
                 newName,
                 Object.keys({ newName })[0],
-                this.editAccount.name
+                this.modifyAccountModal.name
             );
             console.log(
                 newPassword,
                 Object.keys({ newPassword })[0],
-                this.editAccount.name
+                this.modifyAccountModal.name
             );
             console.log(
                 newEmail,
                 Object.keys({ newEmail })[0],
-                this.editAccount.name
+                this.modifyAccountModal.name
             );
 
             controller
                 .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
                 .then((updateUserResult) => {
-                    console.log(this.editAccount.name, updateUserResult);
+                    console.log(this.modifyAccountModal.name, updateUserResult);
 
                     if (updateUserResult.data == "ok") {
                         $("#useraccount_modal").modal("hide");
 
                         // let userResult = controller.getUserById(newIdUser);
                         controller.getUserById(newIdUser).then((userResult) => {
-                            console.log(view.editAccount.name, userResult);
+                            console.log(
+                                view.modifyAccountModal.name,
+                                userResult
+                            );
                             view.userLoggedRender(userResult);
 
                             swal({
@@ -586,7 +604,7 @@ $(function () {
                 });
         },
 
-        addExperience: function () {
+        addExperienceModal: function () {
             let title = document.getElementById("title_add_experience").value;
             let description = document.getElementById("desc_add_experience")
                 .value;
@@ -609,9 +627,9 @@ $(function () {
             });
         },
 
-        seeExperienceDetail: function (expId) {
+        experienceDetailModal: function (expId) {
             controller.getExperienceById(expId).then((experienceResult) => {
-                console.log(this.seeExperienceDetail, experienceResult);
+                console.log(this.experienceDetailModal, experienceResult);
                 let detail_body = document.getElementById("detail-body");
                 detail_body.getElementsByTagName("h4")[0].innerHTML =
                     experienceResult.data.title;
@@ -635,6 +653,8 @@ $(function () {
             this.userNoLogged();
             this.remove_addExperience_button();
         },
+
+        //BUTTONS
 
         add_addExperiences_button: function () {
             document.getElementById(
