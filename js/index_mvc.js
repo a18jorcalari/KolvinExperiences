@@ -116,7 +116,7 @@ $(function () {
 
         login: function () {
             document
-                .getElementById("button_login")
+                .getElementById("modal-login-button")
                 .addEventListener("click", function () {
                     view.loginModal();
                 });
@@ -130,7 +130,7 @@ $(function () {
 
         register: function () {
             document
-                .getElementById("button_register")
+                .getElementById("modal-register-button")
                 .addEventListener("click", function () {
                     view.registerModal();
                 });
@@ -138,7 +138,7 @@ $(function () {
 
         modifyAccount: function () {
             document
-                .getElementById("button_update")
+                .getElementById("modal-useraccount-button")
                 .addEventListener("click", function () {
                     view.modifyAccountModal();
                 });
@@ -146,7 +146,7 @@ $(function () {
 
         addExperience: function () {
             document
-                .getElementById("button_add_experience")
+                .getElementById("modal-addExperience-button")
                 .addEventListener("click", function () {
                     view.addExperienceModal();
                 });
@@ -156,7 +156,7 @@ $(function () {
             $("#cards-tabs-experiences").on("click", "div[expid]", function () {
                 console.log("click", $(this).attr("expid"));
                 view.experienceDetailModal($(this).attr("expid"));
-                $("#detail_modal").modal("show");
+                $("#modal-detail").modal("show");
             });
         },
 
@@ -296,13 +296,13 @@ $(function () {
             if (result.data[0].type == 2) {
                 navOptionHtml += `
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#adminpanel_modal" href="#">Panel de administrador</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#modal-adminpanel" href="#">Panel de administrador</span></a>
                 </li>`;
             }
 
             navOptionHtml += `
             <li class="nav-item">
-                <a class="nav-link" data-toggle="modal" data-target="#useraccount_modal" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
+                <a class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
             </li>
             <li class="nav-item">
                 <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -315,10 +315,10 @@ $(function () {
             let nav_optionsElement = document.getElementById("nav-options");
             nav_optionsElement.innerHTML = `
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#login_modal" href="#">Log In</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#modal-login" href="#">Log In</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#register_modal" href="#">Register</span></a>
+                    <a class="nav-link" data-toggle="modal" data-target="#modal-register" href="#">Register</span></a>
                 </li>
                 `;
         },
@@ -442,9 +442,8 @@ $(function () {
         // MODALS
 
         loginModal: function () {
-            let user_id = document.getElementById("validation_username_login")
-                .value;
-            let password = document.getElementById("validation_password_login")
+            let user_id = document.getElementById("modal-login-username").value;
+            let password = document.getElementById("modal-login-password")
                 .value;
 
             console.log(
@@ -465,7 +464,7 @@ $(function () {
                 // Si las credenciales son correctas
                 if (loginResult.data != false) {
                     //Funcion que sirve para esconder el modal con la id login.
-                    $("#login_modal").modal("hide");
+                    $("#modal-login").modal("hide");
                     //LoggedRender
 
                     this.userLoggedRender(loginResult);
@@ -485,18 +484,12 @@ $(function () {
 
         registerModal: function () {
             //Si el usuario se ha creado correctamente hacer esto:
-            $("#register").modal("hide"); //Funcion que sirve para esconder el modal con la id Register.
-
-            let id_user = document.getElementById(
-                "validation_username_register"
-            ).value;
-            let name = document.getElementById("validation_name_register")
+            let id_user = document.getElementById("modal-register-username")
                 .value;
-            let password = document.getElementById(
-                "validation_password_register"
-            ).value;
-            let email = document.getElementById("validation_email_register")
+            let name = document.getElementById("modal-register-name").value;
+            let password = document.getElementById("modal-register-password")
                 .value;
+            let email = document.getElementById("modal-register-email").value;
 
             console.log(
                 id_user,
@@ -527,7 +520,7 @@ $(function () {
                     if (
                         newUserResult.data == "Usuario registrado correctamente"
                     ) {
-                        $("#register_modal").modal("hide");
+                        $("#modal-register").modal("hide");
 
                         //Alert
                         swal({
@@ -544,14 +537,14 @@ $(function () {
 
         modifyAccountModal: function () {
             let newIdUser = document.getElementById(
-                "validation_username_account"
+                "modal-useraccount-username"
             ).value;
-            let newName = document.getElementById("validation_name_account")
+            let newName = document.getElementById("modal-useraccount-name")
                 .value;
             let newPassword = document.getElementById(
-                "validation_password_account"
+                "modal-useraccount-password"
             ).value;
-            let newEmail = document.getElementById("validation_email_account")
+            let newEmail = document.getElementById("modal-useraccount-email")
                 .value;
 
             console.log(
@@ -581,7 +574,7 @@ $(function () {
                     console.log(this.modifyAccountModal.name, updateUserResult);
 
                     if (updateUserResult.data == "ok") {
-                        $("#useraccount_modal").modal("hide");
+                        $("#modal-useraccount").modal("hide");
 
                         // let userResult = controller.getUserById(newIdUser);
                         controller.getUserById(newIdUser).then((userResult) => {
@@ -605,9 +598,11 @@ $(function () {
         },
 
         addExperienceModal: function () {
-            let title = document.getElementById("title_add_experience").value;
-            let description = document.getElementById("desc_add_experience")
+            let title = document.getElementById("modal-addExperience-title")
                 .value;
+            let description = document.getElementById(
+                "modal-addExperience-desc"
+            ).value;
             console.log(title, description);
 
             controller.setNewExperience(title, description).then((result) => {
@@ -619,7 +614,7 @@ $(function () {
                         text: "Has añadido correctamente una experiencia.",
                         icon: "success",
                     });
-                    $("#add_experience_modal").modal("hide");
+                    $("#modal-addExperience").modal("hide");
                     view.userLogged();
                 } else {
                     alert("No añadido");
@@ -630,7 +625,7 @@ $(function () {
         experienceDetailModal: function (expId) {
             controller.getExperienceById(expId).then((experienceResult) => {
                 console.log(this.experienceDetailModal, experienceResult);
-                let detail_body = document.getElementById("detail-body");
+                let detail_body = document.getElementById("body-detail");
                 detail_body.getElementsByTagName("h4")[0].innerHTML =
                     experienceResult.data.title;
                 detail_body.getElementsByTagName("p")[0].innerHTML =
@@ -658,12 +653,12 @@ $(function () {
 
         add_addExperiences_button: function () {
             document.getElementById(
-                "showModal_addExperience_button_box"
+                "container-button-addExperience"
             ).innerHTML = `
                 <button
-                    id="showModal_addExperience_button"
+                    id="button-addExperience-showModal"
                     data-toggle="modal"
-                    data-target="#add_experience_modal"
+                    data-target="#modal-addExperience"
                 >
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
@@ -671,7 +666,7 @@ $(function () {
         },
         remove_addExperience_button: function () {
             document.getElementById(
-                "showModal_addExperience_button_box"
+                "container-button-addExperience"
             ).innerHTML = "";
         },
     };

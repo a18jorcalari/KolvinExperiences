@@ -66,11 +66,11 @@
 
     <body>
         <!-- Modal de login -->
-        <div id="login_modal" class="modal fade">
+        <div id="modal-login" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Login</h4>
+                        <h4 class="modal-title">Ingresar</h4>
                         <button
                             type="button"
                             class="close"
@@ -84,12 +84,12 @@
                         <form>
                             <div class="form-group">
                                 <label
-                                    for="validation_username_login"
+                                    for="modal-login-username"
                                     class="col-form-label"
-                                    >Username:</label
+                                    >ID del usuario:</label
                                 >
                                 <input
-                                    id="validation_username_login"
+                                    id="modal-login-username"
                                     type="text"
                                     class="form-control"
                                     placeholder="Username"
@@ -98,12 +98,12 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_password_login"
+                                    for="modal-login-password"
                                     class="col-form-label"
-                                    >Password:</label
+                                    >Contraseña:</label
                                 >
                                 <input
-                                    id="validation_password_login"
+                                    id="modal-login-password"
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
@@ -114,11 +114,11 @@
                     </div>
                     <div class="modal-footer">
                         <button
-                            id="button_login"
+                            id="modal-login-button"
                             type="button"
                             class="btn btn-primary btn-block btn-lg"
                         >
-                            Login
+                            Ingresar
                         </button>
                     </div>
                 </div>
@@ -126,11 +126,11 @@
         </div>
 
         <!-- Register modal -->
-        <div id="register_modal" class="modal fade">
+        <div id="modal-register" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Register</h4>
+                        <h4 class="modal-title">Registro</h4>
                         <button
                             type="button"
                             class="close"
@@ -144,61 +144,61 @@
                         <form>
                             <div class="form-group">
                                 <label
-                                    for="validation_username_register"
+                                    for="modal-register-username"
                                     class="col-form-label"
-                                    >Username:</label
+                                    >ID del usuario:</label
                                 >
                                 <input
-                                    id="validation_username_register"
+                                    id="modal-register-username"
                                     type="text"
                                     class="form-control"
-                                    placeholder="Username"
+                                    placeholder="ID del usuario"
                                     required="required"
                                 />
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_name_register"
+                                    for="modal-register-name"
                                     class="col-form-label"
-                                    >Name:</label
+                                    >Nombre:</label
                                 >
                                 <input
-                                    id="validation_name_register"
+                                    id="modal-register-name"
                                     type="text"
                                     class="form-control"
-                                    placeholder="Name"
+                                    placeholder="Nombre"
                                     required="required"
                                 />
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_email_register"
+                                    for="modal-register-email"
                                     class="col-form-label"
-                                    >Email:</label
+                                    >Correo electrónico:</label
                                 >
                                 <input
-                                    id="validation_email_register"
+                                    id="modal-register-email"
                                     type="text"
                                     class="form-control"
-                                    placeholder="Email"
+                                    placeholder="Correo electrónico"
                                     required="required"
                                 />
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_password_register"
+                                    for="modal-register-password"
                                     class="col-form-label"
-                                    >Password:</label
+                                    >Contraseña:</label
                                 >
                                 <input
-                                    id="validation_password_register"
+                                    id="modal-register-password"
                                     type="password"
                                     class="form-control"
-                                    placeholder="Password"
+                                    placeholder="Contraseña"
                                     required="required"
                                 />
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label
                                     for="validation_password_register2"
                                     class="col-form-label"
@@ -211,16 +211,16 @@
                                     placeholder="Password"
                                     required="required"
                                 />
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button
-                            id="button_register"
+                            id="modal-register-button"
                             type="button"
                             class="btn btn-primary btn-block btn-lg"
                         >
-                            Register
+                            Regsitrarse
                         </button>
                     </div>
                 </div>
@@ -228,7 +228,7 @@
         </div>
 
         <!-- Admin panel modal -->
-        <div id="adminpanel_modal" class="modal fade">
+        <div id="modal-adminpanel" class="modal fade">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -289,7 +289,7 @@
         </div>
 
         <!-- User account modal -->
-        <div id="useraccount_modal" class="modal fade">
+        <div id="modal-useraccount" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -307,12 +307,12 @@
                         <form>
                             <div class="form-group">
                                 <label
-                                    for="validation_username_account"
+                                    for="modal-useraccount-username"
                                     class="col-form-label"
-                                    >Usuari:</label
+                                    >Usuario:</label
                                 >
                                 <input
-                                    id="validation_username_account"
+                                    id="modal-useraccount-username"
                                     type="text"
                                     class="form-control"
                                     placeholder="Username"
@@ -321,12 +321,12 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_name_account"
+                                    for="modal-useraccount-name"
                                     class="col-form-label"
-                                    >Name:</label
+                                    >Nombre:</label
                                 >
                                 <input
-                                    id="validation_name_account"
+                                    id="modal-useraccount-name"
                                     type="text"
                                     class="form-control"
                                     placeholder="Name"
@@ -335,12 +335,12 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_password_account"
+                                    for="modal-useraccount-password"
                                     class="col-form-label"
                                     >Contraseña:</label
                                 >
                                 <input
-                                    id="validation_password_account"
+                                    id="modal-useraccount-password"
                                     type="password"
                                     class="form-control"
                                     placeholder="Contraseña"
@@ -349,12 +349,12 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="validation_email_account"
+                                    for="modal-useraccount-email"
                                     class="col-form-label"
                                     >Email:</label
                                 >
                                 <input
-                                    id="validation_email_account"
+                                    id="modal-useraccount-email"
                                     type="text"
                                     class="form-control"
                                     placeholder="Email"
@@ -365,7 +365,7 @@
                     </div>
                     <div class="modal-footer">
                         <button
-                            id="button_update"
+                            id="modal-useraccount-button"
                             type="button"
                             class="btn btn-primary btn-block btn-lg"
                         >
@@ -377,7 +377,7 @@
         </div>
 
         <!-- Detail modal -->
-        <div id="detail_modal" class="modal fade">
+        <div id="modal-detail" class="modal fade">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -391,7 +391,7 @@
                             &times;
                         </button>
                     </div>
-                    <div id="detail-body" class="modal-body">
+                    <div id="body-detail" class="modal-body">
                         <h4>Titulo</h4>
                         <p>
                             Lorem ipsum dolor, sit amet consectetur adipisicing
@@ -406,7 +406,7 @@
         </div>
 
         <!-- Add experience modal -->
-        <div id="add_experience_modal" class="modal fade">
+        <div id="modal-addExperience" class="modal fade">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -424,32 +424,32 @@
                         <form>
                             <div class="form-group">
                                 <label
-                                    for="title_add_experience"
+                                    for="modal-addExperience-title"
                                     class="col-form-label"
-                                    >Title:</label
+                                    >Titulo:</label
                                 >
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="title_add_experience"
+                                    id="modal-addExperience-title"
                                 />
                             </div>
                             <div class="form-group">
                                 <label
-                                    for="desc_add_experience"
+                                    for="modal-addExperience-desc"
                                     class="col-form-label"
-                                    >Description:</label
+                                    >Descripción:</label
                                 >
                                 <textarea
                                     class="form-control"
-                                    id="desc_add_experience"
+                                    id="modal-addExperience-desc"
                                 ></textarea>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button
-                            id="button_add_experience"
+                            id="modal-addExperience-button"
                             type="button"
                             class="btn btn-primary btn-block btn-lg"
                         >
@@ -497,7 +497,7 @@
         <div id="cards-tabs-experiences" class="container"></div>
 
         <!-- Button to show modal of add experience -->
-        <div id="showModal_addExperience_button_box"></div>
+        <div id="container-button-addExperience"></div>
 
         <footer></footer>
 
