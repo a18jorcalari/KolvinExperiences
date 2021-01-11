@@ -118,9 +118,9 @@ else if ($_REQUEST['query'] == 6) {
 else if ($_REQUEST['query'] == 7) {
     $experience->delete($_REQUEST['id_experience']);
 
-    foreach ($experience->selectById($_REQUEST['id_experience']) as $key => $value) {
-        if ($value == 1)  echo "Algo ha slido mal";
-        else echo "Se ha eliminado correctamente";
+    foreach ($experience->selectById2($_REQUEST['id_experience']) as $key => $value) {
+        if ($value == 1)  echo json_encode("Algo ha salido mal");
+        else echo json_encode("Se ha eliminado correctamente");
     }
 }
 //Select experience by id

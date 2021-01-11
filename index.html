@@ -391,30 +391,42 @@
                             &times;
                         </button>
                     </div>
-                    <div id="body-detail" class="modal-body">
+                    <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-8">
-                                    <h4>Titulo</h4>
+                                <div class="col-md-11" flex-column>
+                                    <h4 id="modal-detail-title">Titulo</h4>
+                                    <p
+                                        id="modal-detail-date"
+                                        class="font-weight-light"
+                                    >
+                                        Fecha
+                                    </p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <button type="button" class="btn">
-                                            Up
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <button type="button" class="btn">
-                                            Down
-                                        </button>
-                                    </div>
+
+                                <div class="col-md-1" flex-column>
+                                    <button
+                                        id="modal-detail-upvote"
+                                        type="button"
+                                        class="btn"
+                                    >
+                                        0
+                                    </button>
+                                    <button
+                                        id="modal-detail-downvote"
+                                        type="button"
+                                        class="btn"
+                                    >
+                                        0
+                                    </button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p>
+                                    <p
+                                        id="modal-detail-description"
+                                        class="text-justify"
+                                    >
                                         Lorem ipsum dolor, sit amet consectetur
                                         adipisicing elit. Incidunt voluptate
                                         sint perferendis doloribus voluptates
@@ -423,7 +435,7 @@
                                         tempore commodi. Id, quos.
                                     </p>
                                 </div>
-                                <div class="col-md-6">
+                                <div id="modal-detail-image" class="col-md-6">
                                     <div
                                         style="
                                             width: 100%;
@@ -433,9 +445,32 @@
                                     ></div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-2 align-self-end">
-                                    <button type="button" class="btn">
+                            <!-- <div class="row"> -->
+                            <div class="d-flex justify-content-end">
+                                <div id="modal-detail-button-delete-container">
+                                    <!-- <button
+                                        id="modal-detreail-button-delete"
+                                        type="button"
+                                        class="btn"
+                                    >
+                                        Eliminar
+                                    </button> -->
+                                </div>
+                                <div id="modal-detail-button-edit-container">
+                                    <!-- <button
+                                        id="modal-detail-button-edit"
+                                        type="button"
+                                        class="btn"
+                                    >
+                                        Editar
+                                    </button> -->
+                                </div>
+                                <div id="modal-detail-button-report-container">
+                                    <button
+                                        id="modal-detail-button-report"
+                                        type="button"
+                                        class="btn"
+                                    >
                                         Reportar
                                     </button>
                                 </div>

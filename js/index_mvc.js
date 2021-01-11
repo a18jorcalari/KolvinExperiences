@@ -83,6 +83,14 @@ $(function () {
                 },
             });
         },
+        deleteExperience: function (id_experience) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 7,
+                    id_experience: id_experience,
+                },
+            });
+        },
 
         selectExperienceById: function (expId) {
             return axios.get("models/ExperienceApi.php", {
@@ -153,12 +161,63 @@ $(function () {
         },
 
         showExperienceDetail: function () {
-            $("#cards-tabs-experiences").on("click", "div[expid]", function () {
-                console.log("click", $(this).attr("expid"));
-                view.experienceDetailModal($(this).attr("expid"));
-                $("#modal-detail").modal("show");
+            controller.getUserLogged().then(function (userLoggedResult) {
+                $("#cards-tabs-experiences").on(
+                    "click",
+                    "div[expid]",
+                    function () {
+                        //Este if sirve para poder mostrar los botones eliminar y editar en la experienciaa
+                        //unicamente al usuario que pertenece
+                        let idUserClick = $(this).attr("userid");
+                        let idExpClick = $(this).attr("expid");
+                        if (idUserClick == userLoggedResult.data[0].id_user) {
+                            view.addEditExperienceButton(idExpClick);
+                            view.addDeleteExperienceButton(idExpClick);
+                        } else {
+                            view.removeEditExperienceButton();
+                            view.removeDeleteExperienceButton();
+                        }
+                        view.addReportExperienceButton(idExpClick);
+                        view.experienceDetailModal(idExpClick);
+                        $("#modal-detail").modal("show");
+                    }
+                );
             });
         },
+
+        deleteAnExperience: function () {
+            $("#modal-detail-button-delete-container").on(
+                "click",
+                "#modal-detail-button-delete",
+                function () {
+                    console.log($(this).attr("expid"));
+                    view.experienceDeleted($(this).attr("expid"));
+                }
+            );
+        },
+
+        reportExperience: function () {
+            $("#modal-detail-button-report-container").on(
+                "click",
+                "#modal-detail-button-report",
+                function () {
+                    console.log($(this).attr("expid"));
+                    // view.experienceDeleted($(this).attr("expid"));
+                }
+            );
+        },
+        modifyExperience: function () {
+            $("#modal-detail-button-edit-container").on(
+                "click",
+                "#modal-detail-button-edit",
+                function () {
+                    console.log($(this).attr("expid"));
+                    // view.experienceDeleted($(this).attr("expid"));
+                }
+            );
+        },
+
+        voteExperience: function () {},
 
         //GETS
 
@@ -203,6 +262,10 @@ $(function () {
         setNewExperience: function (title, description) {
             return model.insertExperience(title, description);
         },
+
+        setDeleteExperience: function (id_experience) {
+            return model.deleteExperience(id_experience);
+        },
     };
 
     var view = {
@@ -213,6 +276,10 @@ $(function () {
             controller.modifyAccount();
             controller.addExperience();
             controller.showExperienceDetail();
+            controller.deleteAnExperience();
+            controller.reportExperience();
+            controller.modifyExperience();
+            controller.voteExperience();
             controller.logout();
         },
 
@@ -388,7 +455,8 @@ $(function () {
                     );
 
                     myexperiences_boxElement.innerHTML = this.experiences(
-                        getAllExperiencesByUserResult
+                        getAllExperiencesByUserResult,
+                        true
                     );
                 });
         },
@@ -406,18 +474,19 @@ $(function () {
             });
         },
 
-        experiences: function (experiencesResult) {
+        experiences: function (experiencesResult, ownExperience = false) {
             let htmlString = `
             <div class="content-row experiencies">
                 <div class="row">`;
             for (let i = 0; i < experiencesResult.data.length; i++) {
                 let timeStampJson = experiencesResult.data[i].created;
                 var d = new Date(Date.parse(timeStampJson));
+
                 htmlString += `
                     <div class="col-sm-12 col-lg-4 card-container">
                         <div class="card h-100" expid="${
                             experiencesResult.data[i].id_experience
-                        }">
+                        }" userid="${experiencesResult.data[i].id_user}">
                             <div style="width: 100%; height: 200px; background-color: grey;"></div>
                             <div class="card-body">
                                 <h5 class="card-title">${
@@ -625,11 +694,37 @@ $(function () {
         experienceDetailModal: function (expId) {
             controller.getExperienceById(expId).then((experienceResult) => {
                 console.log(this.experienceDetailModal, experienceResult);
-                let detail_body = document.getElementById("body-detail");
-                detail_body.getElementsByTagName("h4")[0].innerHTML =
-                    experienceResult.data.title;
-                detail_body.getElementsByTagName("p")[0].innerHTML =
-                    experienceResult.data.description;
+
+                let titulo = document.getElementById("modal-detail-title");
+                titulo.innerHTML = experienceResult.data.title;
+                let fecha = document.getElementById("modal-detail-date");
+                fecha.innerHTML = experienceResult.data.created;
+                let upvote = document.getElementById("modal-detail-upvote");
+                upvote.innerHTML = experienceResult.data.rate_p;
+                let downvote = document.getElementById("modal-detail-downvote");
+                downvote.innerHTML = experienceResult.data.rate_n;
+                let description = document.getElementById(
+                    "modal-detail-description"
+                );
+                description.innerHTML = experienceResult.data.description;
+                let image = document.getElementById("modal-detail-image");
+            });
+        },
+
+        experienceDeleted: function (expId) {
+            controller.setDeleteExperience(expId).then((result) => {
+                console.log(result);
+                if (result.data == "Se ha eliminado correctamente") {
+                    view.userLogged();
+                    $("#modal-detail").modal("hide");
+                    swal({
+                        title: "¡Bien hecho!",
+                        text: "Has eliminado correctamente una experiencia.",
+                        icon: "success",
+                    });
+                } else {
+                    alert("ERROR");
+                }
             });
         },
 
@@ -668,6 +763,56 @@ $(function () {
             document.getElementById(
                 "container-button-addExperience"
             ).innerHTML = "";
+        },
+
+        addDeleteExperienceButton: function (idExp) {
+            document.getElementById(
+                "modal-detail-button-delete-container"
+            ).innerHTML = `<button
+                                id="modal-detail-button-delete"
+                                type="button"
+                                class="btn"
+                                expid="${idExp}"
+                            >
+                                Eliminar
+                            </button>`;
+        },
+
+        removeDeleteExperienceButton: function () {
+            document.getElementById(
+                "modal-detail-button-delete-container"
+            ).innerHTML = "";
+        },
+
+        addEditExperienceButton: function (idExp) {
+            document.getElementById(
+                "modal-detail-button-edit-container"
+            ).innerHTML = `<button
+                                id="modal-detail-button-edit"
+                                type="button"
+                                class="btn"
+                                expid="${idExp}"
+                            >
+                                Editar
+                            </button>`;
+        },
+        removeEditExperienceButton: function () {
+            document.getElementById(
+                "modal-detail-button-edit-container"
+            ).innerHTML = "";
+        },
+
+        addReportExperienceButton: function (idExp) {
+            document.getElementById(
+                "modal-detail-button-report-container"
+            ).innerHTML = `<button
+                                id="modal-detail-button-report"
+                                type="button"
+                                class="btn"
+                                expid="${idExp}"
+                            >
+                                Reportar
+                            </button>`;
         },
     };
 

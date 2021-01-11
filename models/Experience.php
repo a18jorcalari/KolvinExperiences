@@ -46,8 +46,6 @@ class Experience extends DBAbstractModel {
 		}
 	}
 
-	// public function selectById
-
 	//FUNCIONA
 	public function insert($experience = array()) {
 		$title = $experience['title'];
@@ -145,6 +143,12 @@ class Experience extends DBAbstractModel {
 	public function selectById($id_Experience = "") {
 		// $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_Experience') ";
 		$this->query = "SELECT * FROM Experience WHERE id_experience ='$id_Experience'";
+		$this->get_results_from_query();
+		return $this->rows[0];
+	}
+	public function selectById2($id_Experience = "") {
+		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_Experience') ";
+		// $this->query = "SELECT * FROM Experience WHERE id_experience ='$id_Experience'";
 		$this->get_results_from_query();
 		return $this->rows[0];
 	}
