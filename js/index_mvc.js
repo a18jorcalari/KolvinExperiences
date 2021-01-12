@@ -207,6 +207,12 @@ $(function () {
                 });
         },
 
+        openModalModifyAccount: function () {
+            $("#nav-options").on("click", "#useraccount-link", function () {
+                view.setModalModifyAccountInput();
+            });
+        },
+
         modifyAccount: function () {
             document
                 .getElementById("modal-useraccount-button")
@@ -389,6 +395,7 @@ $(function () {
             controller.reportExperience();
             controller.modifyExperience();
             controller.voteExperience();
+            controller.openModalModifyAccount();
             controller.logout();
         },
 
@@ -478,7 +485,7 @@ $(function () {
 
             navOptionHtml += `
             <li class="nav-item">
-                <a class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
+                <a id="useraccount-link" class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
             </li>
             <li class="nav-item">
                 <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -714,82 +721,68 @@ $(function () {
         },
 
         modifyAccountModal: function () {
-            controller.getUserLogged().then((userResult) => {
-                let idUserInput = document.getElementById(
-                    "modal-useraccount-username"
-                );
-                let nameInput = document.getElementById(
-                    "modal-useraccount-name"
-                );
-                let passwordInput = document.getElementById(
-                    "modal-useraccount-password"
-                );
-                let emailInput = document.getElementById(
-                    "modal-useraccount-email"
-                );
-                // idUserInput.value = userResult.data.user_id;
-                // nameInput.value = userResult.data.name;
-                // emailInput.value = userResult.data.email;
+            let idUserInput = document.getElementById(
+                "modal-useraccount-username"
+            );
+            let nameInput = document.getElementById("modal-useraccount-name");
+            let passwordInput = document.getElementById(
+                "modal-useraccount-password"
+            );
+            let emailInput = document.getElementById("modal-useraccount-email");
 
-                let newIdUser = idUserInput.value;
-                let newName = nameInput.value;
-                let newPassword = passwordInput.value;
-                let newEmail = emailInput.value;
+            let newIdUser = idUserInput.value;
+            let newName = nameInput.value;
+            let newPassword = passwordInput.value;
+            let newEmail = emailInput.value;
 
-                console.log(
-                    newIdUser,
-                    Object.keys({ newIdUser })[0],
-                    this.modifyAccountModal.name
-                );
-                console.log(
-                    newName,
-                    Object.keys({ newName })[0],
-                    this.modifyAccountModal.name
-                );
-                console.log(
-                    newPassword,
-                    Object.keys({ newPassword })[0],
-                    this.modifyAccountModal.name
-                );
-                console.log(
-                    newEmail,
-                    Object.keys({ newEmail })[0],
-                    this.modifyAccountModal.name
-                );
+            console.log(
+                newIdUser,
+                Object.keys({ newIdUser })[0],
+                this.modifyAccountModal.name
+            );
+            console.log(
+                newName,
+                Object.keys({ newName })[0],
+                this.modifyAccountModal.name
+            );
+            console.log(
+                newPassword,
+                Object.keys({ newPassword })[0],
+                this.modifyAccountModal.name
+            );
+            console.log(
+                newEmail,
+                Object.keys({ newEmail })[0],
+                this.modifyAccountModal.name
+            );
 
-                controller
-                    .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
-                    .then((updateUserResult) => {
-                        console.log(
-                            this.modifyAccountModal.name,
-                            updateUserResult
-                        );
+            controller
+                .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
+                .then((updateUserResult) => {
+                    console.log(this.modifyAccountModal.name, updateUserResult);
 
-                        if (updateUserResult.data == "ok") {
-                            $("#modal-useraccount").modal("hide");
+                    if (updateUserResult.data == "ok") {
+                        $("#modal-useraccount").modal("hide");
 
-                            // let userResult = controller.getUserById(newIdUser);
-                            controller
-                                .getUserById(newIdUser)
-                                .then((userResult) => {
-                                    console.log(
-                                        view.modifyAccountModal.name,
-                                        userResult
-                                    );
-                                    view.userLoggedRender(userResult);
+                        // let userResult = controller.getUserById(newIdUser);
+                        controller.getUserById(newIdUser).then((userResult) => {
+                            console.log(
+                                view.modifyAccountModal.name,
+                                userResult
+                            );
+                            view.userLoggedRender(userResult);
 
-                                    swal({
-                                        title: "¡Bien hecho!",
-                                        text:
-                                            "Has actualizado tu información correctamente.",
-                                        icon: "success",
-                                    });
-                                });
-                        } else {
-                            alert(updateUserResult.data);
-                        }
-                    });
-            });
+                            swal({
+                                title: "¡Bien hecho!",
+                                text:
+                                    "Has actualizado tu información correctamente.",
+                                icon: "success",
+                            });
+                        });
+                    } else {
+                        alert(updateUserResult.data);
+                    }
+                });
         },
 
         addExperienceModal: function () {
@@ -951,6 +944,27 @@ $(function () {
                             }
                         });
                 });
+        },
+
+        setModalModifyAccountInput: function () {
+            controller.getUserLogged().then((userResult) => {
+                console.log(userResult);
+                let idUserInput = document.getElementById(
+                    "modal-useraccount-username"
+                );
+                let nameInput = document.getElementById(
+                    "modal-useraccount-name"
+                );
+                let passwordInput = document.getElementById(
+                    "modal-useraccount-password"
+                );
+                let emailInput = document.getElementById(
+                    "modal-useraccount-email"
+                );
+                idUserInput.value = userResult.data[0].id_user;
+                nameInput.value = userResult.data[0].name;
+                emailInput.value = userResult.data[0].email;
+            });
         },
 
         logout: function () {
