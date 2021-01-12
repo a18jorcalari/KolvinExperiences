@@ -71,7 +71,7 @@ else if ($_REQUEST['query'] == 3) {
         "image" => $_REQUEST['image']
     );
     foreach ($experience->update($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha slido mal";
+        if ($value == 1)  echo "Algo ha salido mal";
         else echo "Estado modificado correctamente";
     }
 }
@@ -83,7 +83,7 @@ else if ($_REQUEST['query'] == 4) {
         "state" => $_REQUEST['state']
     );
     foreach ($experience->updateState($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha slido mal";
+        if ($value == 1)  echo "Algo ha salido mal";
         else echo "Estado modificado correctamente";
     }
 }
@@ -96,9 +96,9 @@ else if ($_REQUEST['query'] == 5) {
         "rate_n" => $_REQUEST['rate_n']
     );
 
-    foreach ($experience->$experience->updateRate($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha slido mal";
-        else echo "Se ha valorado correctamente";
+    foreach ($experience->updateRate($updateExperience) as $key => $value) {
+        if ($value == 1)  echo json_encode("Se ha valorado correctamente");
+        else echo json_encode("Algo ha salido mal");
     }
 }
 //reportar
@@ -109,9 +109,9 @@ else if ($_REQUEST['query'] == 6) {
         "reported" => $_REQUEST['reported'],
     );
 
-    foreach ($experience->$experience->updateReport($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha slido mal";
-        else echo "Se ha reportado correctamente";
+    foreach ($experience->updateReport($updateExperience) as $key => $value) {
+        if ($value == 1)  echo json_encode("Se ha reportado correctamente");
+        else echo json_encode("Algo ha salido mal");
     }
 }
 //eliminar

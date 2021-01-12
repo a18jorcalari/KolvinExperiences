@@ -1,8 +1,11 @@
 $(function () {
     var model = {
+        //IS LOGGED
         userIsLogged: function () {
             return axios.get("models/isloggedApi.php");
         },
+
+        //USER
 
         selectUserLogged: function () {
             return axios.get("models/usersApi.php", {
@@ -57,6 +60,8 @@ $(function () {
             });
         },
 
+        //EXPERIENCES
+
         selectAllExperiences: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -83,6 +88,38 @@ $(function () {
                 },
             });
         },
+
+        updateState: function (id_experience, state) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 4,
+                    id_experience: id_experience,
+                    state: state,
+                },
+            });
+        },
+
+        updateRate: function (id_experience, rate_p, rate_n) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 5,
+                    id_experience: id_experience,
+                    rate_p: rate_p,
+                    rate_n: rate_n,
+                },
+            });
+        },
+
+        updateReport: function (id_experience, reported) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 6,
+                    id_experience: id_experience,
+                    reported: reported,
+                },
+            });
+        },
+
         deleteExperience: function (id_experience) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -101,6 +138,32 @@ $(function () {
             });
         },
 
+        updateExperience: function (
+            id_experience,
+            title,
+            description,
+            created,
+            state,
+            id_category,
+            location,
+            image
+        ) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 3,
+                    id_experience: id_experience,
+                    title: title,
+                    description: description,
+                    created: created,
+                    state: state,
+                    id_category: id_category,
+                    location: location,
+                    image: image,
+                },
+            });
+        },
+
+        //LOGOUT
         logout: function () {
             axios.get("models/logoutApi.php");
         },
@@ -170,19 +233,36 @@ $(function () {
                         //unicamente al usuario que pertenece
                         let idUserClick = $(this).attr("userid");
                         let idExpClick = $(this).attr("expid");
-                        if (idUserClick == userLoggedResult.data[0].id_user) {
-                            view.addEditExperienceButton(idExpClick);
-                            view.addDeleteExperienceButton(idExpClick);
-                        } else {
-                            view.removeEditExperienceButton();
-                            view.removeDeleteExperienceButton();
-                        }
-                        view.addReportExperienceButton(idExpClick);
+
+                        controller.setAttributesExperienceDetail(
+                            idUserClick,
+                            idExpClick,
+                            userLoggedResult
+                        );
+
                         view.experienceDetailModal(idExpClick);
                         $("#modal-detail").modal("show");
                     }
                 );
             });
+        },
+
+        setAttributesExperienceDetail: function (
+            idUserClick,
+            idExpClick,
+            userLoggedResult
+        ) {
+            if (idUserClick == userLoggedResult.data[0].id_user) {
+                view.addEditExperienceButton(idExpClick);
+                view.addDeleteExperienceButton(idExpClick);
+            } else {
+                view.removeEditExperienceButton();
+                view.removeDeleteExperienceButton();
+            }
+
+            view.addReportExperienceButton(idExpClick);
+
+            view.setAttributeVote(idExpClick);
         },
 
         deleteAnExperience: function () {
@@ -202,7 +282,7 @@ $(function () {
                 "#modal-detail-button-report",
                 function () {
                     console.log($(this).attr("expid"));
-                    // view.experienceDeleted($(this).attr("expid"));
+                    view.experienceReported($(this).attr("expid"));
                 }
             );
         },
@@ -217,7 +297,20 @@ $(function () {
             );
         },
 
-        voteExperience: function () {},
+        voteExperience: function () {
+            document
+                .getElementById("modal-detail-upvote")
+                .addEventListener("click", function () {
+                    let id_experience = $(this).attr("expid");
+                    view.upvote(id_experience);
+                });
+            document
+                .getElementById("modal-detail-downvote")
+                .addEventListener("click", function () {
+                    let id_experience = $(this).attr("expid");
+                    view.downvote(id_experience);
+                });
+        },
 
         //GETS
 
@@ -265,6 +358,22 @@ $(function () {
 
         setDeleteExperience: function (id_experience) {
             return model.deleteExperience(id_experience);
+        },
+
+        setUpdateExperience: function () {
+            return model.updateExperience();
+        },
+
+        setUpdateReport: function (id_experience, reported) {
+            return model.updateReport(id_experience, reported);
+        },
+
+        setUpdateRate: function (id_experience, rate_p, rate_n) {
+            return model.updateRate(id_experience, rate_p, rate_n);
+        },
+
+        setUpdateState: function () {
+            return model.updateState();
         },
     };
 
@@ -605,65 +714,82 @@ $(function () {
         },
 
         modifyAccountModal: function () {
-            let newIdUser = document.getElementById(
-                "modal-useraccount-username"
-            ).value;
-            let newName = document.getElementById("modal-useraccount-name")
-                .value;
-            let newPassword = document.getElementById(
-                "modal-useraccount-password"
-            ).value;
-            let newEmail = document.getElementById("modal-useraccount-email")
-                .value;
+            controller.getUserLogged().then((userResult) => {
+                let idUserInput = document.getElementById(
+                    "modal-useraccount-username"
+                );
+                let nameInput = document.getElementById(
+                    "modal-useraccount-name"
+                );
+                let passwordInput = document.getElementById(
+                    "modal-useraccount-password"
+                );
+                let emailInput = document.getElementById(
+                    "modal-useraccount-email"
+                );
+                // idUserInput.value = userResult.data.user_id;
+                // nameInput.value = userResult.data.name;
+                // emailInput.value = userResult.data.email;
 
-            console.log(
-                newIdUser,
-                Object.keys({ newIdUser })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newName,
-                Object.keys({ newName })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newPassword,
-                Object.keys({ newPassword })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newEmail,
-                Object.keys({ newEmail })[0],
-                this.modifyAccountModal.name
-            );
+                let newIdUser = idUserInput.value;
+                let newName = nameInput.value;
+                let newPassword = passwordInput.value;
+                let newEmail = emailInput.value;
 
-            controller
-                .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
-                .then((updateUserResult) => {
-                    console.log(this.modifyAccountModal.name, updateUserResult);
+                console.log(
+                    newIdUser,
+                    Object.keys({ newIdUser })[0],
+                    this.modifyAccountModal.name
+                );
+                console.log(
+                    newName,
+                    Object.keys({ newName })[0],
+                    this.modifyAccountModal.name
+                );
+                console.log(
+                    newPassword,
+                    Object.keys({ newPassword })[0],
+                    this.modifyAccountModal.name
+                );
+                console.log(
+                    newEmail,
+                    Object.keys({ newEmail })[0],
+                    this.modifyAccountModal.name
+                );
 
-                    if (updateUserResult.data == "ok") {
-                        $("#modal-useraccount").modal("hide");
+                controller
+                    .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
+                    .then((updateUserResult) => {
+                        console.log(
+                            this.modifyAccountModal.name,
+                            updateUserResult
+                        );
 
-                        // let userResult = controller.getUserById(newIdUser);
-                        controller.getUserById(newIdUser).then((userResult) => {
-                            console.log(
-                                view.modifyAccountModal.name,
-                                userResult
-                            );
-                            view.userLoggedRender(userResult);
+                        if (updateUserResult.data == "ok") {
+                            $("#modal-useraccount").modal("hide");
 
-                            swal({
-                                title: "¡Bien hecho!",
-                                text:
-                                    "Has actualizado tu información correctamente.",
-                                icon: "success",
-                            });
-                        });
-                    } else {
-                        alert(updateUserResult.data);
-                    }
-                });
+                            // let userResult = controller.getUserById(newIdUser);
+                            controller
+                                .getUserById(newIdUser)
+                                .then((userResult) => {
+                                    console.log(
+                                        view.modifyAccountModal.name,
+                                        userResult
+                                    );
+                                    view.userLoggedRender(userResult);
+
+                                    swal({
+                                        title: "¡Bien hecho!",
+                                        text:
+                                            "Has actualizado tu información correctamente.",
+                                        icon: "success",
+                                    });
+                                });
+                        } else {
+                            alert(updateUserResult.data);
+                        }
+                    });
+            });
         },
 
         addExperienceModal: function () {
@@ -726,6 +852,105 @@ $(function () {
                     alert("ERROR");
                 }
             });
+        },
+
+        experienceReported: function (id_experience) {
+            controller
+                .getExperienceById(id_experience)
+                .then((experienceResult) => {
+                    console.log(experienceResult.data.reported);
+                    let newReport =
+                        parseInt(experienceResult.data.reported) + 1;
+                    console.log(newReport);
+                    controller
+                        .setUpdateReport(id_experience, newReport)
+                        .then((updateResult) => {
+                            console.log(updateResult);
+                            if (
+                                updateResult.data ==
+                                "Se ha reportado correctamente"
+                            ) {
+                                swal({
+                                    title: "¡Bien hecho!",
+                                    text:
+                                        "Has reportado la experiencia correctamente.",
+                                    icon: "success",
+                                });
+                            } else {
+                                alert("ERROR");
+                            }
+                        });
+                });
+        },
+
+        upvote: function (id_experience) {
+            controller
+                .getExperienceById(id_experience)
+                .then((experienceResult) => {
+                    console.log(experienceResult);
+                    let rateP = parseInt(experienceResult.data.rate_p) + 1;
+                    let rateN = parseInt(experienceResult.data.rate_n);
+
+                    controller
+                        .setUpdateRate(
+                            experienceResult.data.id_experience,
+                            rateP,
+                            rateN
+                        )
+                        .then((updateResult) => {
+                            if (
+                                (updateResult.data =
+                                    "Se ha valorado correctamente")
+                            ) {
+                                document.getElementById(
+                                    "modal-detail-upvote"
+                                ).innerHTML = rateP;
+                                swal({
+                                    title: "¡Bien hecho!",
+                                    text:
+                                        "Has votado la experiencia correctamente.",
+                                    icon: "success",
+                                });
+                            } else {
+                                alert("ERROR");
+                            }
+                        });
+                });
+        },
+
+        downvote: function (id_experience) {
+            controller
+                .getExperienceById(id_experience)
+                .then((experienceResult) => {
+                    console.log(experienceResult);
+                    let rateP = parseInt(experienceResult.data.rate_p);
+                    let rateN = parseInt(experienceResult.data.rate_n) + 1;
+
+                    controller
+                        .setUpdateRate(
+                            experienceResult.data.id_experience,
+                            rateP,
+                            rateN
+                        )
+                        .then((updateResult) => {
+                            if (
+                                (updateResult.data =
+                                    "Se ha valorado correctamente")
+                            ) {
+                                document.getElementById(
+                                    "modal-detail-downvote"
+                                ).innerHTML = rateN;
+                                swal({
+                                    title: "¡Bien hecho!",
+                                    text:
+                                        "Has votado la experiencia correctamente.",
+                                    icon: "success",
+                                });
+                            } else {
+                                alert("ERROR");
+                            }
+                        });
+                });
         },
 
         logout: function () {
@@ -813,6 +1038,15 @@ $(function () {
                             >
                                 Reportar
                             </button>`;
+        },
+
+        setAttributeVote: function (idExpClick) {
+            let upvoteButton = document.getElementById("modal-detail-upvote");
+            upvoteButton.setAttribute("expid", idExpClick);
+            let downvoteButton = document.getElementById(
+                "modal-detail-downvote"
+            );
+            downvoteButton.setAttribute("expid", idExpClick);
         },
     };
 
