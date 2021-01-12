@@ -56,6 +56,8 @@ if ($_REQUEST['query'] == 2) {
     }
 }
 
+//Añadir usuario
+
 if ($_REQUEST['query'] == 3) {
 
     $insertUser = array(
@@ -75,6 +77,7 @@ if ($_REQUEST['query'] == 3) {
     }
 }
 
+//Eliminar usuario
 if ($_REQUEST['query'] == 4) {
     $deleteUser = array(
         "id_user" => $_REQUEST['idUser'],
@@ -91,6 +94,8 @@ if ($_REQUEST['query'] == 4) {
     }
 }
 
+
+//Select by id user
 if ($_REQUEST['query'] == 5) {
     $respuesta = $user->selectByUserName($_REQUEST['user']);
     echo (json_encode($respuesta));
