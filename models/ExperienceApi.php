@@ -60,20 +60,22 @@ else if ($_REQUEST['query'] == 2) {
 else if ($_REQUEST['query'] == 3) {
 
     $updateExperience = array(
+        "query" => $_REQUEST['query'],
         "id_experience" => $_REQUEST['id_experience'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-        "created" => $_REQUEST['created'],
-        "state" => $_REQUEST['state'],
-        "id_category" => $_REQUEST['id_category'],
-        "query" => $_REQUEST['query'],
-        "location" => $_REQUEST['location'],
-        "image" => $_REQUEST['image']
+        // "created" => $_REQUEST['created'],
+        // "state" => $_REQUEST['state'],
+        // "id_category" => $_REQUEST['id_category'],
+        // "location" => $_REQUEST['location'],
+        // "image" => $_REQUEST['image']
     );
-    foreach ($experience->update($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha salido mal";
-        else echo "Estado modificado correctamente";
-    }
+    $experience->update($updateExperience);
+    echo json_encode("Experiencia modificada correctamente");
+    // foreach ($experience->update($updateExperience) as $key => $value) {
+    //     if ($value == 1)  echo "Algo ha salido mal";
+    //     else echo "Estado modificado correctamente";
+    // }
 }
 //cambiar el estado
 else if ($_REQUEST['query'] == 4) {

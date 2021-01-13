@@ -141,12 +141,12 @@ $(function () {
         updateExperience: function (
             id_experience,
             title,
-            description,
-            created,
-            state,
-            id_category,
-            location,
-            image
+            description
+            // created,
+            // state,
+            // id_category,
+            // location,
+            // image
         ) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -154,11 +154,11 @@ $(function () {
                     id_experience: id_experience,
                     title: title,
                     description: description,
-                    created: created,
-                    state: state,
-                    id_category: id_category,
-                    location: location,
-                    image: image,
+                    // created: created,
+                    // state: state,
+                    // id_category: id_category,
+                    // location: location,
+                    // image: image,
                 },
             });
         },
@@ -292,13 +292,26 @@ $(function () {
                 }
             );
         },
-        modifyExperience: function () {
+
+        enableEditExperience: function () {
             $("#modal-detail-button-edit-container").on(
                 "click",
                 "#modal-detail-button-edit",
                 function () {
                     console.log($(this).attr("expid"));
-                    // view.experienceDeleted($(this).attr("expid"));
+
+                    view.experienceModifying($(this).attr("expid"));
+                }
+            );
+        },
+
+        modifyExperience: function () {
+            $("#modal-detail-button-saveEdited-container").on(
+                "click",
+                "#modal-detail-button-saveEdited",
+                function () {
+                    console.log($(this).attr("expid"));
+                    view.experienceModified($(this).attr("expid"));
                 }
             );
         },
@@ -366,8 +379,8 @@ $(function () {
             return model.deleteExperience(id_experience);
         },
 
-        setUpdateExperience: function () {
-            return model.updateExperience();
+        setUpdateExperience: function (id_experience, title, description) {
+            return model.updateExperience(id_experience, title, description);
         },
 
         setUpdateReport: function (id_experience, reported) {
@@ -387,15 +400,22 @@ $(function () {
         init: function () {
             controller.decideUserView();
             controller.login();
+
             controller.register();
+
             controller.modifyAccount();
+            controller.openModalModifyAccount();
+
             controller.addExperience();
+
             controller.showExperienceDetail();
             controller.deleteAnExperience();
             controller.reportExperience();
-            controller.modifyExperience();
             controller.voteExperience();
-            controller.openModalModifyAccount();
+
+            controller.enableEditExperience();
+            controller.modifyExperience();
+
             controller.logout();
         },
 
@@ -505,6 +525,8 @@ $(function () {
                 </li>
                 `;
         },
+
+        //Filtrar por categoria,
 
         addTabExperiences: function () {
             //Añade los tabs de mis experiencias o todas las experiencias.
@@ -830,6 +852,58 @@ $(function () {
             });
         },
 
+        experienceModifying: function (expid) {
+            let titulo = document.getElementById("modal-detail-title");
+            let description = document.getElementById(
+                "modal-detail-description"
+            );
+            titulo.setAttribute("contenteditable", true);
+            description.setAttribute("contenteditable", true);
+
+            view.addSaveEditExperienceButton(expid);
+        },
+
+        experienceModified: function (expId) {
+            let titulo = document.getElementById("modal-detail-title");
+            let description = document.getElementById(
+                "modal-detail-description"
+            );
+
+            controller
+                .setUpdateExperience(
+                    expId,
+                    titulo.innerHTML,
+                    description.innerHTML
+                )
+                .then((updateResult) => {
+                    console.log(updateResult);
+                    if (
+                        updateResult.data ==
+                        "Experiencia modificada correctamente"
+                    ) {
+                        swal({
+                            title: "¡Bien hecho!",
+                            text:
+                                "Has modifacado correctamente una experiencia.",
+                            icon: "success",
+                        });
+                        let titulo = document.getElementById(
+                            "modal-detail-title"
+                        );
+                        let description = document.getElementById(
+                            "modal-detail-description"
+                        );
+                        titulo.setAttribute("contenteditable", false);
+                        description.setAttribute("contenteditable", false);
+                        view.removeSaveEditExperienceButton();
+                        view.addEditExperienceButton();
+                        view.userLogged();
+                    } else {
+                        alert("ERROR");
+                    }
+                });
+        },
+
         experienceDeleted: function (expId) {
             controller.setDeleteExperience(expId).then((result) => {
                 console.log(result);
@@ -1038,6 +1112,25 @@ $(function () {
         removeEditExperienceButton: function () {
             document.getElementById(
                 "modal-detail-button-edit-container"
+            ).innerHTML = "";
+        },
+
+        addSaveEditExperienceButton: function (expid) {
+            document.getElementById(
+                "modal-detail-button-saveEdited-container"
+            ).innerHTML = `<button
+                                type="button"
+                                class="btn"
+                                id="modal-detail-button-saveEdited"
+                                expid="${expid}"
+                            >
+                                Guardar
+                            </button>`;
+        },
+
+        removeSaveEditExperienceButton: function () {
+            document.getElementById(
+                "modal-detail-button-saveEdited-container"
             ).innerHTML = "";
         },
 
