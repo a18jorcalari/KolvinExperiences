@@ -593,8 +593,7 @@ $(function () {
                     );
 
                     myexperiences_boxElement.innerHTML = this.experiences(
-                        getAllExperiencesByUserResult,
-                        true
+                        getAllExperiencesByUserResult
                     );
                 });
         },
@@ -612,7 +611,7 @@ $(function () {
             });
         },
 
-        experiences: function (experiencesResult, ownExperience = false) {
+        experiences: function (experiencesResult) {
             let htmlString = `
             <div class="content-row experiencies">
                 <div class="row">`;
