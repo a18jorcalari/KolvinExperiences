@@ -605,10 +605,14 @@ $(function () {
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="myexperiences">
                             <div id="myexperiences-box">
+                                <span class="spinner-border"></span>
+
                             </div>
                         </div>
                         <div class="tab-pane fade" id="allexperiences">
                             <div id="allexperiences-box">
+                                <span class="spinner-border"></span>
+
                             </div>
                         </div>
                     </div>
@@ -628,10 +632,22 @@ $(function () {
                         getAllExperiencesByUserResult,
                         this.myExperiencesDefault.name
                     );
-
-                    myexperiences_boxElement.innerHTML = this.experiences(
-                        getAllExperiencesByUserResult
-                    );
+                    if (getAllExperiencesByUserResult.data.length == 0) {
+                        myexperiences_boxElement.innerHTML = `
+                            <div class="content-row experiencies">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>
+                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`;
+                    } else {
+                        myexperiences_boxElement.innerHTML = this.experiences(
+                            getAllExperiencesByUserResult
+                        );
+                    }
                 });
         },
 
@@ -645,9 +661,23 @@ $(function () {
                     getAllExperiencesResult,
                     this.allExperiencesDefault.name
                 );
-                allexperiences_boxElement.innerHTML = this.experiences(
-                    getAllExperiencesResult
-                );
+                if (getAllExperiencesResult.data.length == 0) {
+                    allexperiences_boxElement.innerHTML = `
+                        <div class="content-row experiencies">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>
+                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>`;
+                } else {
+                    allexperiences_boxElement.innerHTML = this.experiences(
+                        getAllExperiencesResult
+                    );
+                }
             });
         },
 
