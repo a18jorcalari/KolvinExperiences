@@ -163,6 +163,15 @@ $(function () {
             });
         },
 
+        //CATEGORIES
+        selectAllCategories: function () {
+            return axios.get("models/CategoryApi.php", {
+                params: {
+                    query: 4,
+                },
+            });
+        },
+
         //LOGOUT
         logout: function () {
             axios.get("models/logoutApi.php");
@@ -357,6 +366,10 @@ $(function () {
             return model.selectExperienceById(expId);
         },
 
+        getAllCategories: function () {
+            return model.selectAllCategories();
+        },
+
         //SETS
 
         setNewUser: function (id_user, name, password, email) {
@@ -475,15 +488,17 @@ $(function () {
 
             this.headerLogged(result);
 
+            this.addDropdowns();
+
             this.addTabExperiences();
 
             //CARDS USER EXPERIENCES
 
             //My experiences
-            this.myExperiences(result);
+            this.myExperiencesDefault(result);
 
             //All experiences
-            this.allExperiences();
+            this.allExperiencesDefault();
 
             //Boton de añadir experiencia
             this.add_addExperiences_button();
@@ -526,60 +541,82 @@ $(function () {
                 `;
         },
 
-        //Filtrar por categoria,
-
-        addTabExperiences: function () {
+        addDropdowns: function () {
             //Añade los tabs de mis experiencias o todas las experiencias.
-            let tabs_experiencesElement = document.getElementById(
-                "cards-tabs-experiences"
-            );
-            tabs_experiencesElement.innerHTML = `
-                <div class="d-flex">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdown1">
-                            <button class="dropdown-item" type="button">Action</button>
-                            <button class="dropdown-item" type="button">Another action</button>
-                            <button class="dropdown-item" type="button">Something else here</button>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdown2">
-                            <button class="dropdown-item" type="button">Action</button>
-                            <button class="dropdown-item" type="button">Another action</button>
-                            <button class="dropdown-item" type="button">Something else here</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a href="#myexperiences" class="nav-link active" data-toggle="tab">Mis experiencias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#allexperiences" class="nav-link" data-toggle="tab">Todas las experiencias</a>
-                    </li>
-                </ul>
+            controller.getAllCategories().then((categoriesResult) => {
+                console.log(categoriesResult);
+                let dropdownContainerElement = document.getElementById(
+                    "dropdowns-experiences"
+                );
 
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="myexperiences">
-                        <div id="myexperiences-box">
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="allexperiences">
-                        <div id="allexperiences-box">
-                        </div>
-                    </div>
-                </div>
-            `;
+                let htmlString = `
+                                <div class="d-flex">
+                
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownCategories" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Categorias
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownCategories">
+                                        `;
+                for (
+                    let index = 0;
+                    index < categoriesResult.data.length;
+                    index++
+                ) {
+                    htmlString += `<button class="dropdown-item" type="button">${categoriesResult.data[index].name}</button>`;
+                }
+
+                htmlString += `
+                                        </div>
+                                    </div>
+                
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Ordenar
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdown2">
+                                            <button class="dropdown-item" type="button">Por fecha ascendente</button>
+                                            <button class="dropdown-item" type="button">Por fecha descendente</button>
+                                            <button class="dropdown-item" type="button">Por votacion ascendente</button>
+                                            <button class="dropdown-item" type="button">Por votacion descendente</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                dropdownContainerElement.innerHTML = htmlString;
+            });
         },
 
-        myExperiences: function (userResult) {
+        addTabExperiences: function () {
+            let dropdownContainerElement = document.getElementById(
+                "cards-tabs-experiences"
+            );
+            let htmlString = `
+                    
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a href="#myexperiences" class="nav-link active" data-toggle="tab">Mis experiencias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#allexperiences" class="nav-link" data-toggle="tab">Todas las experiencias</a>
+                        </li>
+                    </ul>
+    
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="myexperiences">
+                            <div id="myexperiences-box">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="allexperiences">
+                            <div id="allexperiences-box">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            dropdownContainerElement.innerHTML = htmlString;
+        },
+
+        myExperiencesDefault: function (userResult) {
             let myexperiences_boxElement = document.getElementById(
                 "myexperiences-box"
             );
@@ -589,7 +626,7 @@ $(function () {
                 .then((getAllExperiencesByUserResult) => {
                     console.log(
                         getAllExperiencesByUserResult,
-                        this.myExperiences.name
+                        this.myExperiencesDefault.name
                     );
 
                     myexperiences_boxElement.innerHTML = this.experiences(
@@ -598,13 +635,16 @@ $(function () {
                 });
         },
 
-        allExperiences: function () {
+        allExperiencesDefault: function () {
             let allexperiences_boxElement = document.getElementById(
                 "allexperiences-box"
             );
 
             controller.getAllExperiences().then((getAllExperiencesResult) => {
-                console.log(getAllExperiencesResult, this.allExperiences.name);
+                console.log(
+                    getAllExperiencesResult,
+                    this.allExperiencesDefault.name
+                );
                 allexperiences_boxElement.innerHTML = this.experiences(
                     getAllExperiencesResult
                 );
@@ -1053,6 +1093,7 @@ $(function () {
                 icon: "success",
             });
             this.userNoLogged();
+            document.getElementById("dropdowns-experiences").innerHTML = "";
             this.remove_addExperience_button();
         },
 
