@@ -412,12 +412,13 @@ $(function () {
     var view = {
         init: function () {
             controller.decideUserView();
+
             controller.login();
 
             controller.register();
 
-            controller.modifyAccount();
             controller.openModalModifyAccount();
+            controller.modifyAccount();
 
             controller.addExperience();
 
@@ -681,6 +682,73 @@ $(function () {
             });
         },
 
+        myExperiencesFilterCategory: function (idCategory) {
+            let myexperiences_boxElement = document.getElementById(
+                "myexperiences-box"
+            );
+            controller.getUserLogged().then((userResult) => {
+                controller
+                    .getAllExperiencesByUserCategory(userResult, idCategory)
+                    .then((experiencesResult) => {
+                        if (experiencesResult.data.length == 0) {
+                            myexperiences_boxElement.innerHTML = `
+                            <div class="content-row experiencies">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>
+                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        } else {
+                            myexperiences_boxElement.innerHTML = this.experiences(
+                                experiencesResult
+                            );
+                        }
+                    });
+            });
+        },
+
+        allExperiencesFilterCategory: function (idCategory) {
+            let allexperiences_boxElement = document.getElementById(
+                "allexperiences-box"
+            );
+
+            controller
+                .getAllExperiencesByCategory(idCategory)
+                .then((experiencesResult) => {
+                    console.log(
+                        experiencesResult,
+                        this.allExperiencesDefault.name
+                    );
+                    if (experiencesResult.data.length == 0) {
+                        allexperiences_boxElement.innerHTML = `
+                        <div class="content-row experiencies">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>
+                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else {
+                        allexperiences_boxElement.innerHTML = this.experiences(
+                            experiencesResult
+                        );
+                    }
+                });
+        },
+
+        myExperiencesOrderByDate: function (idCategory) {},
+
+        allExperiencesOrderByDate: function () {},
+
+        myExperiencesOrderByVote: function (idCategory) {},
+
+        allExperiencesOrderByVote: function () {},
+
         experiences: function (experiencesResult) {
             let htmlString = `
             <div class="content-row experiencies">
@@ -691,17 +759,13 @@ $(function () {
 
                 htmlString += `
                     <div class="col-sm-12 col-lg-4 card-container">
-                        <div class="card h-100" expid="${
-                            experiencesResult.data[i].id_experience
-                        }" userid="${experiencesResult.data[i].id_user}">
+                        <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}">
                             <div style="width: 100%; height: 200px; background-color: grey;"></div>
                             <div class="card-body">
-                                <h5 class="card-title">${
-                                    experiencesResult.data[i].title
-                                }</h5>
+                                <h5 class="card-title">${experiencesResult.data[i].title}</h5>
                             </div>
                             <div class="card-footer">
-                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                <small class="text-muted">Created ${timeStampJson}</small>
                             </div>
                         </div>
                     </div>   
@@ -1142,6 +1206,7 @@ $(function () {
                 </button>
                 `;
         },
+
         remove_addExperience_button: function () {
             document.getElementById(
                 "container-button-addExperience"
@@ -1179,6 +1244,7 @@ $(function () {
                                 Editar
                             </button>`;
         },
+
         removeEditExperienceButton: function () {
             document.getElementById(
                 "modal-detail-button-edit-container"
