@@ -19,13 +19,13 @@ if ($_REQUEST['query'] == 0) {
         }
     }
 } else if ($_REQUEST['query'] == 1) {
-
-    foreach ($category->selectExistsCategory($_REQUEST['id_category']) as $value) {
-        if ($value == 1) "Ya existe una categoria con ese nombre";
-        else {
-            $category->update($_REQUEST['name'], $_REQUEST['id_category']);
-            echo "Categoria modificada correctamente";
-        }
+    $check=0;
+    foreach ($category->selectExistsCategory($_REQUEST['name']) as $value) {
+        if ($value == 1) {"Ya existe una categoria con ese nombre"; $check=1;}
+    }
+    if($check==0){
+        $category->update($_REQUEST['name'], $_REQUEST['id_category']);
+        echo "Categoria modificada correctamente";
     }
 } else if ($_REQUEST['query'] == 2) {
 

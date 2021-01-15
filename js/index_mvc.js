@@ -221,6 +221,19 @@ $(function () {
             });
         },
 
+        updateCategory: function (
+            id_category,
+            name
+        ) {
+            return axios.get("models/CategoryApi.php", {
+                params: {
+                    query: 1,
+                    name: name,
+                    id_category: id_category,
+                },
+            });
+        },
+
         //CATEGORIES
         selectAllCategories: function () {
             return axios.get("models/CategoryApi.php", {
@@ -509,6 +522,11 @@ $(function () {
         setNewCategory: function (name) {
             return model.insertCategory(name);
         },
+
+        setUpdateCategory: function (id_category, name) {
+            return model.updateCategory(id_category, name);
+        },
+
     };
 
     var view = {
@@ -619,7 +637,7 @@ $(function () {
                 //////CATEGORY///////
                 //creo el input con el boton de crear para añadir nuevas categorias
                 navCategory +=
-                    "<div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='newCategory'>" +
+                    "<label>Crear Categoria</label><div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='newCategory'>" +
                     "<button class='btn btn-secondary' type='button' id='createCategory'>Crear</button></div><div id='categorias'><ul class='list-group'>";
 
                 //aqui se crea la lista de experiencias con el boton de eliminar(no es funcional) y se añade el event listener del boton de crear
@@ -630,10 +648,28 @@ $(function () {
                             getAllCategoriesResult.data[i].id_category +
                             " " +
                             getAllCategoriesResult.data[i].name +
+                            "<div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='"+getAllCategoriesResult.data[i].id_category+"Input'>" +
+                            "<button class='btn btn-secondary updateCategory ' type='button' id='"+getAllCategoriesResult.data[i].id_category+"'>Actualizar</button></div>"
                             "</li>";
                     }
                     document.getElementById("categories").innerHTML =
                         "</ul></div>" + navCategory;
+
+                    let botones = document.getElementsByClassName("updateCategory");
+                    for(i=0; i<botones.length; i++ ){
+                        botones[i].addEventListener("click", function(e){
+                            id=e.target.id;
+                            newName=document.getElementById(`${id}Input`).value;
+                            alert(newName + id);
+                            if(newName!=""){
+                                controller.setUpdateCategory(id, newName).then((setUpdateCategoryResult) => {
+                                    alert(setUpdateCategoryResult.data);
+                                })
+                            }
+                            else{alert("Introduce un nuevo nombre")}
+                        })
+                    }
+
 
                     document
                         .getElementById("createCategory")
@@ -642,7 +678,7 @@ $(function () {
                                 .setNewCategory(
                                     document.getElementById("newCategory").value
                                 )
-                                .then((setNewCategoryResult) => {
+                                .then(() => {
                                     controller
                                         .getAllCategories()
                                         .then((getAllCategoriesResult2) => {

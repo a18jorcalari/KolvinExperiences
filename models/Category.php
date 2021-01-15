@@ -44,7 +44,7 @@ class Category extends DBAbstractModel {
 
 
 	public function update($name = "", $id_category = "") {
-		$this->query = "UPDATE Category name='$name' WHERE id_category='$id_category'";
+		$this->query = "UPDATE SET Category name='$name' WHERE id_category='$id_category'";
 		$this->execute_single_query($this->query);
 	}
 
@@ -53,8 +53,8 @@ class Category extends DBAbstractModel {
 		$this->execute_single_query($this->query);
 	}
 
-	public function selectExistsCategory($id_category = "") {
-		$this->query = "SELECT EXISTS(SELECT * FROM Category WHERE id_category ='$id_category') ";
+	public function selectExistsCategory($name = "") {
+		$this->query = "SELECT EXISTS(SELECT * FROM Category WHERE name ='$name') ";
 		$this->get_results_from_query();
 		return $this->rows[0];
 	}
