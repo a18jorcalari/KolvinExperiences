@@ -42,7 +42,7 @@ else if ($_REQUEST['query'] == 2) {
         "state" => "publicada",
         "id_category" => 1,
         "location" => "asdasd1",
-        "image" => "asdasdasd2"
+        "image" => ""
 
 
     );
@@ -127,6 +127,18 @@ else if ($_REQUEST['query'] == 7) {
 }
 //Select experience by id
 else if ($_REQUEST['query'] == 8) {
-    $respuesta = $experience->selectById($_REQUEST['id_experience']);
+    $respuesta = $experience->selectByUserByCategory($_REQUEST['user'], $_REQUEST['category']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 9) {
+    $respuesta = $experience->selectOrderedByDate();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 10) {
+    $respuesta = $experience->selectByVote();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 11) {
+    $respuesta = $experience->selectByUserByDate($_REQUEST['id_user']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 12) {
+    $respuesta = $experience->selectByUserByVote($_REQUEST['id_user']);
     echo json_encode($respuesta);
 }

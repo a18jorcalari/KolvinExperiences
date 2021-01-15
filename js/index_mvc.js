@@ -82,7 +82,7 @@ $(function () {
         selectAllExperiencesByUserByCategory: function (id_user, id_category) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 1,
+                    query: 8,
                     user: id_user,
                     category: id_category,
                 },
@@ -91,21 +91,21 @@ $(function () {
         selectAllExperiencesOrderedByDate: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 1,
+                    query: 9,
                 },
             });
         },
         selectAllExperiencesOrderedByVote: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 1,
+                    query: 10,
                 },
             });
         },
         selectAllExperiencesByUserOrderedByDate: function (id_user) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 1,
+                    query: 11,
                     user: id_user,
                 },
             });
@@ -113,7 +113,7 @@ $(function () {
         selectAllExperiencesByUserOrderedByVote: function (id_user) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 1,
+                    query: 12,
                     user: id_user,
                 },
             });

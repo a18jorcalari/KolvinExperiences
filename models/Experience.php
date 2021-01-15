@@ -153,4 +153,16 @@ class Experience extends DBAbstractModel {
 		$this->get_results_from_query();
 		return $this->rows[0];
 	}
+
+	public function selectByUserByCategory() {
+	}
+
+	public function selectOrderedByDate() {
+	}
+	public function selectByVote() {
+	}
+	public function selectByUserByDate() {
+	}
+	public function selectByUserByVote() {
+	}
 }
