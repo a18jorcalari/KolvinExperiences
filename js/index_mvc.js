@@ -78,6 +78,47 @@ $(function () {
                 },
             });
         },
+        //FALTA HACER EN PHP
+        selectAllExperiencesByUserByCategory: function (id_user, id_category) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 1,
+                    user: id_user,
+                    category: id_category,
+                },
+            });
+        },
+        selectAllExperiencesOrderedByDate: function () {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 1,
+                },
+            });
+        },
+        selectAllExperiencesOrderedByVote: function () {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 1,
+                },
+            });
+        },
+        selectAllExperiencesByUserOrderedByDate: function (id_user) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 1,
+                    user: id_user,
+                },
+            });
+        },
+        selectAllExperiencesByUserOrderedByVote: function (id_user) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 1,
+                    user: id_user,
+                },
+            });
+        },
+        //HASTA AQUI
 
         insertExperience: function (title, description) {
             return axios.get("models/ExperienceApi.php", {
@@ -352,6 +393,29 @@ $(function () {
 
         getAllExperiencesByUser: function (userResult) {
             return model.selectAllExperiencesByUser(userResult);
+        },
+
+        getAllExperiencesByUserCategory: function (id_user, id_category) {
+            return model.selectAllExperiencesByUserByCategory(
+                id_user,
+                id_category
+            );
+        },
+
+        getAllExperiencesByUserOrderedByDate: function (id_user) {
+            return model.selectAllExperiencesByUserOrderedByDate(id_user);
+        },
+
+        getAllExperiencesByUserOrderedByVote: function (id_user) {
+            return model.selectAllExperiencesByUserOrderedByVote(id_user);
+        },
+
+        getAllExperiencesOrderedByDate: function () {
+            return model.selectAllExperiencesOrderedByDate();
+        },
+
+        getAllExperiencesOrderedByVote: function () {
+            return model.selectAllExperiencesOrderedByVote();
         },
 
         getUserLogin: function (user_id, password) {
@@ -688,7 +752,10 @@ $(function () {
             );
             controller.getUserLogged().then((userResult) => {
                 controller
-                    .getAllExperiencesByUserCategory(userResult, idCategory)
+                    .getAllExperiencesByUserCategory(
+                        userResult[0].data.id_user,
+                        idCategory
+                    )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
                             myexperiences_boxElement.innerHTML = `
@@ -741,13 +808,119 @@ $(function () {
                 });
         },
 
-        myExperiencesOrderByDate: function (idCategory) {},
+        myExperiencesOrderByDate: function (idCategory) {
+            let myexperiences_boxElement = document.getElementById(
+                "myexperiences-box"
+            );
+            controller.getUserLogged().then((userResult) => {
+                controller
+                    .getAllExperiencesByUserOrderedByDate(
+                        userResult[0].id_user,
+                        idCategory
+                    )
+                    .then((experiencesResult) => {
+                        if (experiencesResult.data.length == 0) {
+                            myexperiences_boxElement.innerHTML = `
+                            <div class="content-row experiencies">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>
+                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        } else {
+                            myexperiences_boxElement.innerHTML = this.experiences(
+                                experiencesResult
+                            );
+                        }
+                    });
+            });
+        },
 
-        allExperiencesOrderByDate: function () {},
+        allExperiencesOrderByDate: function () {
+            let allexperiences_boxElement = document.getElementById(
+                "allexperiences-box"
+            );
+            controller
+                .getAllExperiencesOrderedByDate()
+                .then((experiencesResult) => {
+                    if (experiencesResult.data.length == 0) {
+                        allexperiences_boxElement.innerHTML = `
+                    <div class="content-row experiencies">
+                        <div class="row">
+                            <div class="col-12">
+                                <p>
+                                    Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
+                                </p>
+                            </div>
+                        </div>
+                    </div>`;
+                    } else {
+                        allexperiences_boxElement.innerHTML = this.experiences(
+                            experiencesResult
+                        );
+                    }
+                });
+        },
 
-        myExperiencesOrderByVote: function (idCategory) {},
+        myExperiencesOrderByVote: function (idCategory) {
+            let myexperiences_boxElement = document.getElementById(
+                "myexperiences-box"
+            );
+            controller.getUserLogged().then((userResult) => {
+                controller
+                    .getAllExperiencesByUserOrderedByVote(
+                        userResult[0].id_user,
+                        idCategory
+                    )
+                    .then((experiencesResult) => {
+                        if (experiencesResult.data.length == 0) {
+                            myexperiences_boxElement.innerHTML = `
+                            <div class="content-row experiencies">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>
+                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        } else {
+                            myexperiences_boxElement.innerHTML = this.experiences(
+                                experiencesResult
+                            );
+                        }
+                    });
+            });
+        },
 
-        allExperiencesOrderByVote: function () {},
+        allExperiencesOrderByVote: function () {
+            let allexperiences_boxElement = document.getElementById(
+                "allexperiences-box"
+            );
+            controller
+                .getAllExperiencesOrderedByVote()
+                .then((experiencesResult) => {
+                    if (experiencesResult.data.length == 0) {
+                        allexperiences_boxElement.innerHTML = `
+                        <div class="content-row experiencies">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>
+                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else {
+                        allexperiences_boxElement.innerHTML = this.experiences(
+                            experiencesResult
+                        );
+                    }
+                });
+        },
 
         experiences: function (experiencesResult) {
             let htmlString = `
