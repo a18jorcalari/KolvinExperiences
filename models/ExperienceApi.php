@@ -142,10 +142,10 @@ else if ($_REQUEST['query'] == 9) {
     $respuesta = $experience->selectOrderedByVote();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 12) {
-    $respuesta = $experience->selectByUserByDate($_REQUEST['id_user']);
+    $respuesta = $experience->selectByUserByDate($_REQUEST['user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 13) {
-    $respuesta = $experience->selectByUserByVote($_REQUEST['id_user']);
+    $respuesta = $experience->selectByUserByVote($_REQUEST['user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 14) {
     $respuesta = $experience->selectByCategory($_REQUEST['category']);

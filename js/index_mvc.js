@@ -99,7 +99,7 @@ $(function () {
         selectAllExperiencesByUserByCategory: function (id_user, id_category) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 8,
+                    query: 9,
                     user: id_user,
                     category: id_category,
                 },
@@ -108,21 +108,21 @@ $(function () {
         selectAllExperiencesOrderedByDate: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 9,
+                    query: 10,
                 },
             });
         },
         selectAllExperiencesOrderedByVote: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 10,
+                    query: 11,
                 },
             });
         },
         selectAllExperiencesByUserOrderedByDate: function (id_user) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 11,
+                    query: 12,
                     user: id_user,
                 },
             });
@@ -130,8 +130,17 @@ $(function () {
         selectAllExperiencesByUserOrderedByVote: function (id_user) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
-                    query: 12,
+                    query: 13,
                     user: id_user,
+                },
+            });
+        },
+
+        selectAllExperiencesByCategory: function (id_category) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 14,
+                    category: id_category,
                 },
             });
         },
@@ -413,7 +422,7 @@ $(function () {
                 "button[idcat]",
                 function () {
                     console.log($(this).attr("idcat"));
-                    view.allExperiencesFilterCategory();
+                    view.allExperiencesFilterCategory($(this).attr("idcat"));
                     view.myExperiencesFilterCategory($(this).attr("idcat"));
                 }
             );
@@ -424,9 +433,8 @@ $(function () {
                 "click",
                 "#orderDateAsc",
                 function () {
-                    console.log($(this).attr("idcat"));
                     view.allExperiencesOrderByDate();
-                    view.myExperiencesOrderByDate($(this).attr("idcat"));
+                    view.myExperiencesOrderByDate();
                 }
             );
 
@@ -434,9 +442,8 @@ $(function () {
                 "click",
                 "#orderVoteAsc",
                 function () {
-                    console.log($(this).attr("idcat"));
                     view.allExperiencesOrderByVote();
-                    view.myExperiencesOrderByVote($(this).attr("idcat"));
+                    view.myExperiencesOrderByVote();
                 }
             );
         },
@@ -462,7 +469,7 @@ $(function () {
             );
         },
         getAllExperiencesByCategory: function (id_category) {
-            return model.selectAllExperiencesByUserByCategory(id_category);
+            return model.selectAllExperiencesByCategory(id_category);
         },
 
         getAllExperiencesByUserOrderedByDate: function (id_user) {
@@ -966,12 +973,14 @@ $(function () {
             );
             controller.getUserLogged().then((userResult) => {
                 console.log(userResult);
+                console.log(idCategory);
                 controller
                     .getAllExperiencesByUserByCategory(
                         userResult.data[0].id_user,
                         idCategory
                     )
                     .then((experiencesResult) => {
+                        console.log(experiencesResult);
                         if (experiencesResult.data.length == 0) {
                             myexperiences_boxElement.innerHTML = `
                             <div class="content-row experiencies">
@@ -1000,10 +1009,8 @@ $(function () {
             controller
                 .getAllExperiencesByCategory(idCategory)
                 .then((experiencesResult) => {
-                    console.log(
-                        experiencesResult,
-                        this.allExperiencesDefault.name
-                    );
+                    console.log(experiencesResult);
+
                     if (experiencesResult.data.length == 0) {
                         allexperiences_boxElement.innerHTML = `
                         <div class="content-row experiencies">
@@ -1023,15 +1030,14 @@ $(function () {
                 });
         },
 
-        myExperiencesOrderByDate: function (idCategory) {
+        myExperiencesOrderByDate: function () {
             let myexperiences_boxElement = document.getElementById(
                 "myexperiences-box"
             );
             controller.getUserLogged().then((userResult) => {
                 controller
                     .getAllExperiencesByUserOrderedByDate(
-                        userResult[0].id_user,
-                        idCategory
+                        userResult.data[0].id_user
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
@@ -1080,15 +1086,14 @@ $(function () {
                 });
         },
 
-        myExperiencesOrderByVote: function (idCategory) {
+        myExperiencesOrderByVote: function () {
             let myexperiences_boxElement = document.getElementById(
                 "myexperiences-box"
             );
             controller.getUserLogged().then((userResult) => {
                 controller
                     .getAllExperiencesByUserOrderedByVote(
-                        userResult[0].id_user,
-                        idCategory
+                        userResult.data[0].id_user
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
