@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset-utf-8");
 error_reporting(-1);
 ini_set('display_errors', 'On');
-session_start();
+
 require_once('Experience.php');
 
 $experience = new Experience();
@@ -16,15 +16,12 @@ if ($_REQUEST['query'] == 0) {
 //select por usuario
 else if ($_REQUEST['query'] == 1) {
     $respuesta = $experience->selectByUser($_REQUEST['user']);
-    echo json_encode($respuesta);
+    print_r($respuesta);
 }
 //crear la experiencia
 else if ($_REQUEST['query'] == 2) {
 
-    //He modficado esto para que funcione sin unos datos. 
-
     $insertExperience = array(
-        "query" => $_REQUEST['query'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
 
@@ -42,40 +39,36 @@ else if ($_REQUEST['query'] == 2) {
         "state" => "publicada",
         "id_category" => 1,
         "location" => "asdasd1",
-        "image" => ""
+        "image" => "asdasdasd2"
 
 
     );
-    //Esto comentado porque no es necesario comprobar que está repetido.
-
-    // foreach ($experience->selectExistsExperience($insertExperience) as $value) {
-    // if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
-    // else {
-    $experience->insert($insertExperience);
-    echo json_encode("Experiencia subida correctamente");
-    // }
-    // }
+    foreach ($experience->selectExistsExperience($insertExperience) as $value) {
+        if ($value == 1) echo "No se pueden repetir las experiencias";
+        else {
+            $experience->insert($insertExperience);
+            echo "Experiencia subida correctamente";
+        }
+    }
 }
 //modificar la experiencia
 else if ($_REQUEST['query'] == 3) {
 
     $updateExperience = array(
-        "query" => $_REQUEST['query'],
         "id_experience" => $_REQUEST['id_experience'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-        // "created" => $_REQUEST['created'],
-        // "state" => $_REQUEST['state'],
-        // "id_category" => $_REQUEST['id_category'],
-        // "location" => $_REQUEST['location'],
-        // "image" => $_REQUEST['image']
+        "created" => $_REQUEST['created'],
+        "state" => $_REQUEST['state'],
+        "id_category" => $_REQUEST['id_category'],
+        "query" => $_REQUEST['query'],
+        "location" => $_REQUEST['location'],
+        "image" => $_REQUEST['image']
     );
-    $experience->update($updateExperience);
-    echo json_encode("Experiencia modificada correctamente");
-    // foreach ($experience->update($updateExperience) as $key => $value) {
-    //     if ($value == 1)  echo "Algo ha salido mal";
-    //     else echo "Estado modificado correctamente";
-    // }
+    foreach ($experience->update($updateExperience) as $key => $value) {
+        if ($value == 1)  echo "Algo ha salido mal";
+        else echo "Estado modificado correctamente";
+    }
 }
 //cambiar el estado
 else if ($_REQUEST['query'] == 4) {
@@ -85,7 +78,7 @@ else if ($_REQUEST['query'] == 4) {
         "state" => $_REQUEST['state']
     );
     foreach ($experience->updateState($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha salido mal";
+        if ($value == 1)  echo "Algo ha slido mal";
         else echo "Estado modificado correctamente";
     }
 }
@@ -98,9 +91,9 @@ else if ($_REQUEST['query'] == 5) {
         "rate_n" => $_REQUEST['rate_n']
     );
 
-    foreach ($experience->updateRate($updateExperience) as $key => $value) {
-        if ($value == 1)  echo json_encode("Se ha valorado correctamente");
-        else echo json_encode("Algo ha salido mal");
+    foreach ($experience->$experience->updateRate($updateExperience) as $key => $value) {
+        if ($value == 1)  echo "Algo ha slido mal";
+        else echo "Se ha valorado correctamente";
     }
 }
 //reportar
@@ -111,34 +104,22 @@ else if ($_REQUEST['query'] == 6) {
         "reported" => $_REQUEST['reported'],
     );
 
-    foreach ($experience->updateReport($updateExperience) as $key => $value) {
-        if ($value == 1)  echo json_encode("Se ha reportado correctamente");
-        else echo json_encode("Algo ha salido mal");
+    foreach ($experience->$experience->updateReport($updateExperience) as $key => $value) {
+        if ($value == 1)  echo "Algo ha slido mal";
+        else echo "Se ha reportado correctamente";
     }
 }
 //eliminar
 else if ($_REQUEST['query'] == 7) {
     $experience->delete($_REQUEST['id_experience']);
 
-    foreach ($experience->selectById2($_REQUEST['id_experience']) as $key => $value) {
-        if ($value == 1)  echo json_encode("Algo ha salido mal");
-        else echo json_encode("Se ha eliminado correctamente");
+    foreach ($experience->selectById($_REQUEST['id_experience']) as $key => $value) {
+        if ($value == 1)  echo "Algo ha slido mal";
+        else echo "Se ha eliminado correctamente";
     }
 }
 //Select experience by id
 else if ($_REQUEST['query'] == 8) {
-    $respuesta = $experience->selectByUserByCategory($_REQUEST['user'], $_REQUEST['category']);
-    echo json_encode($respuesta);
-} elseif ($_REQUEST['query'] == 9) {
-    $respuesta = $experience->selectOrderedByDate();
-    echo json_encode($respuesta);
-} elseif ($_REQUEST['query'] == 10) {
-    $respuesta = $experience->selectByVote();
-    echo json_encode($respuesta);
-} elseif ($_REQUEST['query'] == 11) {
-    $respuesta = $experience->selectByUserByDate($_REQUEST['id_user']);
-    echo json_encode($respuesta);
-} elseif ($_REQUEST['query'] == 12) {
-    $respuesta = $experience->selectByUserByVote($_REQUEST['id_user']);
+    $respuesta = $experience->selectById($_REQUEST['id_experience']);
     echo json_encode($respuesta);
 }

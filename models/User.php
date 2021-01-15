@@ -19,20 +19,19 @@ class User extends DBAbstractModel {
 	}
 
 	/*function __destruct() {
-    unset ($this);
-    }*/
+	unset ($this);
+  }*/
+
 
 	public function select() {
 		$this->query = "SELECT * FROM User";
 		$this->get_results_from_query();
 		for ($i = 0; $i < count($this->rows); $i++) {
 			$resultSet[] = $this->rows[$i];
-			//json_encode($this->get_results_from_query());
+			json_encode($this->get_results_from_query());
 		}
 
-		foreach ($resultSet as $property => $value) {
-			echo $value["name"] . "<br>";
-		}
+		return $resultSet;
 	}
 
 	public function selectByUserName($id_user = "") {
