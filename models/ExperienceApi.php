@@ -24,6 +24,7 @@ else if($_REQUEST['query']==2){
     $insertExperience= array(
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
+<<<<<<< Updated upstream
         "created" => $_REQUEST['created'],
         "id_user" => $_REQUEST['id_user'],
         "state" => $_REQUEST['state'],
@@ -31,6 +32,24 @@ else if($_REQUEST['query']==2){
         "query" => $_REQUEST['query'],
         "location" => $_REQUEST['location'],
         "image" => $_REQUEST['image']
+=======
+
+        // "created" => $_REQUEST['created'],
+        // "id_user" => $_REQUEST['id_user'],
+        // "state" => $_REQUEST['state'],
+        // "id_category" => $_REQUEST['id_category'],
+        // "location" => $_REQUEST['location'],
+        // "image" => $_REQUEST['image']
+
+        //Esta es la version que funciona
+
+        //Created borrado
+        "id_user" => $_SESSION["id_user"],
+        "state" => "publicada",
+        "id_category" => 1,
+        "location" => "asdasd1",
+        "image" => "asdasdasd2"
+>>>>>>> Stashed changes
 
 
     );
@@ -43,7 +62,11 @@ else if($_REQUEST['query']==2){
 //modificar la experiencia
 else if($_REQUEST['query']==3){
 
+<<<<<<< Updated upstream
     $updateExperience= array(
+=======
+    $updateExperience = array(
+>>>>>>> Stashed changes
         "id_experience" => $_REQUEST['id_experience'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
@@ -54,8 +77,13 @@ else if($_REQUEST['query']==3){
         "location" => $_REQUEST['location'],
         "image" => $_REQUEST['image']
     );
+<<<<<<< Updated upstream
     foreach($experience->update($updateExperience) as $key => $value){
         if($value==1)  echo "Algo ha slido mal";
+=======
+    foreach ($experience->update($updateExperience) as $key => $value) {
+        if ($value == 1)  echo "Algo ha salido mal";
+>>>>>>> Stashed changes
         else echo "Estado modificado correctamente";
     }
 }
@@ -107,8 +135,16 @@ else if($_REQUEST['query']==7){
         else echo "Se ha eliminado correctamente";
     }
 }
+<<<<<<< Updated upstream
 
 
 
 
 ?>
+=======
+//Select experience by id
+else if ($_REQUEST['query'] == 8) {
+    $respuesta = $experience->selectById($_REQUEST['id_experience']);
+    echo json_encode($respuesta);
+}
+>>>>>>> Stashed changes

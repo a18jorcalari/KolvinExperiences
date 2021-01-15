@@ -68,6 +68,18 @@ if($_REQUEST['query']==4){
     }
 
 
+<<<<<<< Updated upstream
+=======
+//Select by id user
+if ($_REQUEST['query'] == 5) {
+    $respuesta = $user->selectByUserName($_REQUEST['user']);
+    echo json_encode($respuesta);
+}
+
+//Select 
+if ($_REQUEST['query'] == 6) {
+    echo json_encode($user->select());
+>>>>>>> Stashed changes
 }
 
 
