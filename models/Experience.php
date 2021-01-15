@@ -154,15 +154,54 @@ class Experience extends DBAbstractModel {
 		return $this->rows[0];
 	}
 
-	public function selectByUserByCategory() {
+	public function selectByUserByCategory($id_user, $id_category) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' AND id_category='$id_category';";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
+	}
+
+	public function selectByCategory($id_category) {
+		$this->query = "SELECT * FROM Experience WHERE id_category='$id_category';";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
 	}
 
 	public function selectOrderedByDate() {
+		$this->query = "SELECT * FROM Experience ORDER BY created;";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
 	}
-	public function selectByVote() {
+	public function selectOrderedByVote() {
+		$this->query = "SELECT * FROM Experience ORDER BY rate_p;";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
 	}
-	public function selectByUserByDate() {
+	public function selectByUserByDate($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created;";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
 	}
-	public function selectByUserByVote() {
+	public function selectByUserByVote($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p;";
+		$this->get_results_from_query();
+		for ($i = 0; $i < count($this->rows); $i++)
+			$resultSet[] = $this->rows[$i];
+
+		return $resultSet;
 	}
 }

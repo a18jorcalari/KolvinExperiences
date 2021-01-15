@@ -407,6 +407,40 @@ $(function () {
                 });
         },
 
+        filterCategory: function () {
+            $("#dropdowns-experiences").on(
+                "click",
+                "button[idcat]",
+                function () {
+                    console.log($(this).attr("idcat"));
+                    view.allExperiencesFilterCategory();
+                    view.myExperiencesFilterCategory($(this).attr("idcat"));
+                }
+            );
+        },
+
+        orderExperiences: function () {
+            $("#dropdowns-experiences").on(
+                "click",
+                "#orderDateAsc",
+                function () {
+                    console.log($(this).attr("idcat"));
+                    view.allExperiencesOrderByDate();
+                    view.myExperiencesOrderByDate($(this).attr("idcat"));
+                }
+            );
+
+            $("#dropdowns-experiences").on(
+                "click",
+                "#orderVoteAsc",
+                function () {
+                    console.log($(this).attr("idcat"));
+                    view.allExperiencesOrderByVote();
+                    view.myExperiencesOrderByVote($(this).attr("idcat"));
+                }
+            );
+        },
+
         //GETS
 
         getUserLogged: function () {
@@ -421,11 +455,14 @@ $(function () {
             return model.selectAllExperiencesByUser(userResult);
         },
 
-        getAllExperiencesByUserCategory: function (id_user, id_category) {
+        getAllExperiencesByUserByCategory: function (id_user, id_category) {
             return model.selectAllExperiencesByUserByCategory(
                 id_user,
                 id_category
             );
+        },
+        getAllExperiencesByCategory: function (id_category) {
+            return model.selectAllExperiencesByUserByCategory(id_category);
         },
 
         getAllExperiencesByUserOrderedByDate: function (id_user) {
@@ -526,6 +563,8 @@ $(function () {
             controller.enableEditExperience();
             controller.modifyExperience();
             controller.logout();
+            controller.filterCategory();
+            controller.orderExperiences();
         },
 
         userNoLogged: function () {
@@ -803,7 +842,7 @@ $(function () {
                     index < categoriesResult.data.length;
                     index++
                 ) {
-                    htmlString += `<button class="dropdown-item" type="button">${categoriesResult.data[index].name}</button>`;
+                    htmlString += `<button class="dropdown-item" type="button" idcat="${categoriesResult.data[index].id_category}">${categoriesResult.data[index].name}</button>`;
                 }
 
                 htmlString += `
@@ -815,9 +854,9 @@ $(function () {
                                             Ordenar
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdown2">
-                                            <button class="dropdown-item" type="button">Por fecha ascendente</button>
+                                            <button id="orderDateAsc" class="dropdown-item" type="button">Por fecha ascendente</button>
                                             <button class="dropdown-item" type="button">Por fecha descendente</button>
-                                            <button class="dropdown-item" type="button">Por votacion ascendente</button>
+                                            <button id="orderVoteAsc" class="dropdown-item" type="button">Por votacion ascendente</button>
                                             <button class="dropdown-item" type="button">Por votacion descendente</button>
                                         </div>
                                     </div>
@@ -926,9 +965,10 @@ $(function () {
                 "myexperiences-box"
             );
             controller.getUserLogged().then((userResult) => {
+                console.log(userResult);
                 controller
-                    .getAllExperiencesByUserCategory(
-                        userResult[0].data.id_user,
+                    .getAllExperiencesByUserByCategory(
+                        userResult.data[0].id_user,
                         idCategory
                     )
                     .then((experiencesResult) => {

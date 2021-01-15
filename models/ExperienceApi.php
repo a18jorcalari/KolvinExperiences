@@ -129,19 +129,25 @@ else if ($_REQUEST['query'] == 7) {
 else if ($_REQUEST['query'] == 8) {
     $respuesta = $experience->selectById($_REQUEST['id_experience']);
     echo json_encode($respuesta);
-} else if ($_REQUEST['query'] == 9) {
+}
+
+//FILTER
+else if ($_REQUEST['query'] == 9) {
     $respuesta = $experience->selectByUserByCategory($_REQUEST['user'], $_REQUEST['category']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 10) {
     $respuesta = $experience->selectOrderedByDate();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 11) {
-    $respuesta = $experience->selectByVote();
+    $respuesta = $experience->selectOrderedByVote();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 12) {
     $respuesta = $experience->selectByUserByDate($_REQUEST['id_user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 13) {
     $respuesta = $experience->selectByUserByVote($_REQUEST['id_user']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 14) {
+    $respuesta = $experience->selectByCategory($_REQUEST['category']);
     echo json_encode($respuesta);
 }
