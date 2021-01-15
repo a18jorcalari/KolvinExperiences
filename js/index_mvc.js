@@ -607,12 +607,14 @@ $(function () {
         },
 
         addDropdowns: function () {
+            let dropdownContainerElement = document.getElementById(
+                "dropdowns-experiences"
+            );
+
+            dropdownContainerElement.innerHTML = `<span class="spinner-border"></span>`;
             //Añade los tabs de mis experiencias o todas las experiencias.
             controller.getAllCategories().then((categoriesResult) => {
                 console.log(categoriesResult);
-                let dropdownContainerElement = document.getElementById(
-                    "dropdowns-experiences"
-                );
 
                 let htmlString = `
                                 <div class="d-flex">
