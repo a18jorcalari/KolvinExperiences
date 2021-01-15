@@ -51,11 +51,28 @@ $(function () {
             });
         },
 
+        removeUser: function (id_user) {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 4,
+                    idUser: id_user,
+                },
+            });
+        },
+
         selectUserById: function (newIdUser) {
             return axios.get("models/usersApi.php", {
                 params: {
                     query: 5,
                     user: newIdUser,
+                },
+            });
+        },
+
+        selectUsers: function () {
+            return axios.get("models/usersApi.php", {
+                params: {
+                    query: 6,
                 },
             });
         },
@@ -209,6 +226,15 @@ $(function () {
             return axios.get("models/CategoryApi.php", {
                 params: {
                     query: 4,
+                },
+            });
+        },
+
+        insertCategory: function (name) {
+            return axios.get("models/CategoryApi.php", {
+                params: {
+                    query: 0,
+                    name: name,
                 },
             });
         },
@@ -434,10 +460,18 @@ $(function () {
             return model.selectAllCategories();
         },
 
+        getAllUsers: function () {
+            return model.selectUsers();
+        },
+
         //SETS
 
         setNewUser: function (id_user, name, password, email) {
             return model.insertUser(id_user, name, password, email);
+        },
+
+        setDeleteUser: function (id_user) {
+            return model.removeUser(id_user);
         },
 
         setUpdateAccount: function (newIdUser, newName, newPassword, newEmail) {
@@ -471,29 +505,26 @@ $(function () {
         setUpdateState: function () {
             return model.updateState();
         },
+
+        setNewCategory: function (name) {
+            return model.insertCategory(name);
+        },
     };
 
     var view = {
         init: function () {
             controller.decideUserView();
-
             controller.login();
-
             controller.register();
-
             controller.openModalModifyAccount();
             controller.modifyAccount();
-
             controller.addExperience();
-
             controller.showExperienceDetail();
             controller.deleteAnExperience();
             controller.reportExperience();
             controller.voteExperience();
-
             controller.enableEditExperience();
             controller.modifyExperience();
-
             controller.logout();
         },
 
@@ -573,25 +604,166 @@ $(function () {
             //Sustituye en navbar a modo user logged
             //Eliminar li de admin para normal user
             let nav_optionsElement = document.getElementById("nav-options");
+            navCategory = "";
+            navReports = "";
             navOptionHtml = "";
 
             //Aqui cambiarlo por type de bd
             if (result.data[0].type == 2) {
-                navOptionHtml += `
+                //hago esto por que si no, no puedo poner los event listeners, cuando pongamos esto en su sitio lo dejamos como antes :)
+                nav_optionsElement.innerHTML = `
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#modal-adminpanel" href="#">Panel de administrador</span></a>
+                    <a id="adminPanel" class="nav-link" data-toggle="modal" data-target="#modal-adminpanel" href="#">Panel de administrador</span></a>
                 </li>`;
+
+                //////CATEGORY///////
+                //creo el input con el boton de crear para añadir nuevas categorias
+                navCategory +=
+                    "<div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='newCategory'>" +
+                    "<button class='btn btn-secondary' type='button' id='createCategory'>Crear</button></div><div id='categorias'><ul class='list-group'>";
+
+                //aqui se crea la lista de experiencias con el boton de eliminar(no es funcional) y se añade el event listener del boton de crear
+                controller.getAllCategories().then((getAllCategoriesResult) => {
+                    for (i = 0; i < getAllCategoriesResult.data.length; i++) {
+                        navCategory +=
+                            "<li class='list-group-item'>" +
+                            getAllCategoriesResult.data[i].id_category +
+                            " " +
+                            getAllCategoriesResult.data[i].name +
+                            "</li>";
+                    }
+                    document.getElementById("categories").innerHTML =
+                        "</ul></div>" + navCategory;
+
+                    document
+                        .getElementById("createCategory")
+                        .addEventListener("click", function () {
+                            controller
+                                .setNewCategory(
+                                    document.getElementById("newCategory").value
+                                )
+                                .then((setNewCategoryResult) => {
+                                    controller
+                                        .getAllCategories()
+                                        .then((getAllCategoriesResult2) => {
+                                            navCategory =
+                                                "<ul class='list-group'>";
+                                            for (
+                                                i = 0;
+                                                i <
+                                                getAllCategoriesResult2.data
+                                                    .length;
+                                                i++
+                                            ) {
+                                                navCategory +=
+                                                    "<li class='list-group-item'>" +
+                                                    getAllCategoriesResult2
+                                                        .data[i].id_category +
+                                                    " " +
+                                                    getAllCategoriesResult2
+                                                        .data[i].name +
+                                                    "</li>";
+                                            }
+                                            document.getElementById(
+                                                "categorias"
+                                            ).innerHTML = navCategory + "</ul>";
+                                        });
+                                });
+                        });
+                });
             }
+
+            /*view.experienceDetailModal(idExpClick);
+                        $("#modal-detail").modal("show");*/
+            //////REPORTES//////
+            controller.getAllExperiences().then((getAllExperiencesResult) => {
+                data = getAllExperiencesResult.data;
+                modalReportsContent =
+                    "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Título</th><th scope='col'>Reportes</th><th scope='col'> </th></tr></thead><tbody>";
+                for (i = 0; i < data.length; i++) {
+                    modalReportsContent +=
+                        "<tr id='" +
+                        data[i].id_experience +
+                        "'><th scope='row'>" +
+                        data[i].id_experience +
+                        "</th><td> " +
+                        data[i].title +
+                        "</td><td> reports: " +
+                        data[i].reported +
+                        "</td><td><button  class ='deleteExperienceReport btn btn-secondary'>Eliminar</button></td></tr>";
+                }
+                modalReportsContent += "</tbody></table>";
+                document.getElementById(
+                    "reports"
+                ).innerHTML = modalReportsContent;
+                botonesEliminar = document.getElementsByClassName(
+                    "deleteExperienceReport"
+                );
+                for (i = 0; i < botonesEliminar.length; i++) {
+                    botonesEliminar[i].addEventListener("click", function () {
+                        controller
+                            .setDeleteExperience(
+                                this.parentElement.parentElement.id
+                            )
+                            .then((setDeleteCategoryResult) => {
+                                alert(setDeleteCategoryResult.data);
+                                if (
+                                    setDeleteCategoryResult.data ==
+                                    "Se ha eliminado correctamente"
+                                )
+                                    this.parentElement.parentElement.parentNode.removeChild(
+                                        this.parentElement.parentElement
+                                    );
+                            });
+                    });
+                }
+            });
+
+            ////USUARIOS/////
+            controller.getAllUsers().then((getAllUsersResult) => {
+                data = getAllUsersResult.data;
+                console.log(getAllUsersResult);
+                modalUsersContent =
+                    "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Nombre</th><th scope='col'></th></tr></thead><tbody>";
+
+                for (i = 0; i < data.length; i++)
+                    modalUsersContent +=
+                        "<tr id='" +
+                        data[i].id_user +
+                        "'><th scope='row'>" +
+                        data[i].id_user +
+                        "</th><td>" +
+                        data[i].name +
+                        "</td><td><button class ='deleteUser btn btn-secondary'>Dar de baja</button></td><tr>";
+
+                document.getElementById("users").innerHTML =
+                    modalUsersContent + "</tbody></table>";
+                botonesEliminar = document.getElementsByClassName("deleteUser");
+
+                for (i = 0; i < botonesEliminar.length; i++) {
+                    botonesEliminar[i].addEventListener("click", function (e) {
+                        controller
+                            .setDeleteUser(this.parentElement.parentElement.id)
+                            .then((setDeleteUserResult) => {
+                                alert(setDeleteUserResult.data);
+                                //if(setDeleteUserResult.data=="Usuario eliminado correctamente")
+                                this.parentElement.parentElement.parentNode.removeChild(
+                                    this.parentElement.parentElement
+                                );
+                            });
+                    });
+                }
+            });
 
             navOptionHtml += `
             <li class="nav-item">
-                <a id="useraccount-link" class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
+                <a class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
             </li>
             <li class="nav-item">
                 <a id="logout" class="nav-link" href="#">Logout</span></a>
             </li>`;
 
-            nav_optionsElement.innerHTML = navOptionHtml;
+            nav_optionsElement.innerHTML += navOptionHtml;
         },
 
         headerUserNoLogged: function () {
@@ -607,12 +779,13 @@ $(function () {
         },
 
         addDropdowns: function () {
+            //Añade los tabs de mis experiencias o todas las experiencias.
             let dropdownContainerElement = document.getElementById(
                 "dropdowns-experiences"
             );
 
             dropdownContainerElement.innerHTML = `<span class="spinner-border"></span>`;
-            //Añade los tabs de mis experiencias o todas las experiencias.
+
             controller.getAllCategories().then((categoriesResult) => {
                 console.log(categoriesResult);
 
