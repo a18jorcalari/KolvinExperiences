@@ -166,23 +166,50 @@ class Experience extends DBAbstractModel {
 		return $this->rows;
 	}
 
-	public function selectOrderedByDate() {
-		$this->query = "SELECT * FROM Experience ORDER BY created;";
+	public function selectOrderedByDateAsc() {
+		$this->query = "SELECT * FROM Experience ORDER BY created ASC;";
 		$this->get_results_from_query();
 		return $this->rows;
 	}
-	public function selectOrderedByVote() {
-		$this->query = "SELECT * FROM Experience ORDER BY rate_p;";
+	public function selectOrderedByVoteAsc() {
+		// $this->query = "SELECT * FROM Experience ORDER BY rate_p DESC, rate_n ASC;";
+		$this->query = "SELECT * FROM Experience ORDER BY (rate_p - rate_n) ASC;";
+		// ABS(numberA - numberB) DESC
 		$this->get_results_from_query();
 		return $this->rows;
 	}
-	public function selectByUserByDate($id_user) {
-		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created;";
+	public function selectByUserByDateAsc($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created ASC;";
 		$this->get_results_from_query();
 		return $this->rows;
 	}
-	public function selectByUserByVote($id_user) {
-		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p;";
+	public function selectByUserByVoteAsc($id_user) {
+		// $this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p DESC, rate_n ASC;";
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY (rate_p - rate_n) ASC;";
+		$this->get_results_from_query();
+
+		return $this->rows;
+	}
+
+	public function selectOrderedByDateDesc() {
+		$this->query = "SELECT * FROM Experience ORDER BY created DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectOrderedByVoteDesc() {
+		// $this->query = "SELECT * FROM Experience ORDER BY rate_p ASC, rate_n DESC;";
+		$this->query = "SELECT * FROM Experience ORDER BY (rate_p - rate_n) DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByDateDesc($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByVoteDesc($id_user) {
+		// $this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p ASC, rate_n DESC;";
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY (rate_p - rate_n) DESC;";
 		$this->get_results_from_query();
 
 		return $this->rows;

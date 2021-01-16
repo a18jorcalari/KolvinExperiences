@@ -42,7 +42,7 @@ else if ($_REQUEST['query'] == 2) {
         "state" => "publicada",
         "id_category" => 1,
         "location" => "asdasd1",
-        "image" => ""
+        "image" => "https://picsum.photos/300/200"
 
 
     );
@@ -136,18 +136,30 @@ else if ($_REQUEST['query'] == 9) {
     $respuesta = $experience->selectByUserByCategory($_REQUEST['user'], $_REQUEST['category']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 10) {
-    $respuesta = $experience->selectOrderedByDate();
+    $respuesta = $experience->selectOrderedByDateAsc();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 11) {
-    $respuesta = $experience->selectOrderedByVote();
+    $respuesta = $experience->selectOrderedByVoteAsc();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 12) {
-    $respuesta = $experience->selectByUserByDate($_REQUEST['user']);
+    $respuesta = $experience->selectByUserByDateAsc($_REQUEST['user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 13) {
-    $respuesta = $experience->selectByUserByVote($_REQUEST['user']);
+    $respuesta = $experience->selectByUserByVoteAsc($_REQUEST['user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 14) {
     $respuesta = $experience->selectByCategory($_REQUEST['category']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 15) {
+    $respuesta = $experience->selectOrderedByDateDesc();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 16) {
+    $respuesta = $experience->selectOrderedByVoteDesc();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 17) {
+    $respuesta = $experience->selectByUserByDateDesc($_REQUEST['user']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 18) {
+    $respuesta = $experience->selectByUserByVoteDesc($_REQUEST['user']);
     echo json_encode($respuesta);
 }
