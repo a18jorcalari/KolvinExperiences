@@ -23,11 +23,7 @@ class Category extends DBAbstractModel {
 	public function selectById($id_category = "") {
 		$this->query = "SELECT * FROM Category WHERE id_category='$id_category'";
 		$this->get_results_from_query();
-		for ($i = 0; $i < count($this->rows); $i++) {
-			$resultSet[] = $this->rows[$i];
-			json_encode($this->get_results_from_query());
-		}
-		return $resultSet;
+		return $this->rows;
 	}
 
 	//FUNCIONA

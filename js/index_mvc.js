@@ -177,12 +177,21 @@ $(function () {
 
         //HASTA AQUI
 
-        insertExperience: function (title, description) {
+        insertExperience: function (
+            title,
+            description,
+            category,
+            latitud,
+            longitud
+        ) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
                     query: 2,
                     title: title,
                     description: description,
+                    id_category: category,
+                    latitud: latitud,
+                    longitud: longitud,
                 },
             });
         },
@@ -279,6 +288,15 @@ $(function () {
             });
         },
 
+        selectCategoryById: function (id_category) {
+            return axios.get("models/CategoryApi.php", {
+                params: {
+                    query: 3,
+                    id_category: id_category,
+                },
+            });
+        },
+
         //LOGOUT
         logout: function () {
             axios.get("models/logoutApi.php");
@@ -324,7 +342,7 @@ $(function () {
         },
 
         openModalModifyAccount: function () {
-            $("#nav-options").on("click", "#useraccount-link", function () {
+            $("#nav-options").on("click", "#showModalUseraccount", function () {
                 view.setModalModifyAccountInput();
             });
         },
@@ -574,6 +592,10 @@ $(function () {
             return model.selectExperienceById(expId);
         },
 
+        getCategoryById: function (id_category) {
+            return model.selectCategoryById(id_category);
+        },
+
         getAllCategories: function () {
             return model.selectAllCategories();
         },
@@ -600,8 +622,20 @@ $(function () {
             model.logout();
         },
 
-        setNewExperience: function (title, description) {
-            return model.insertExperience(title, description);
+        setNewExperience: function (
+            title,
+            description,
+            category,
+            latitud,
+            longitud
+        ) {
+            return model.insertExperience(
+                title,
+                description,
+                category,
+                latitud,
+                longitud
+            );
         },
 
         setDeleteExperience: function (id_experience) {
@@ -878,7 +912,7 @@ $(function () {
 
             navOptionHtml += `
             <li class="nav-item">
-                <a class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
+                <a id="showModalUseraccount" class="nav-link" data-toggle="modal" data-target="#modal-useraccount" href="#">Bienvenido, ${result.data[0].id_user}</span></a>
             </li>
             <li class="nav-item">
                 <a id="logout" class="nav-link" href="#">Logout</span></a>
@@ -1008,9 +1042,13 @@ $(function () {
                         myexperiences_boxElement.innerHTML = this.experiences(
                             getAllExperiencesByUserResult
                         );
+                        // view.setCategoryName();
                     }
                 });
         },
+        // setCategoryName: function () {
+        //     $("div[catid]");
+        // },
 
         allExperiencesDefault: function () {
             let allexperiences_boxElement = document.getElementById(
@@ -1333,39 +1371,43 @@ $(function () {
             <div class="content-row experiencies">
                 <div class="row">`;
             for (let i = 0; i < experiencesResult.data.length; i++) {
+                // controller
+                //     .getCategoryById(experiencesResult.data[i].id_category)
+                //     .then((categoryResult) => {
+                // console.log(categoryResult);
                 let timeStampJson = experiencesResult.data[i].created;
-                var d = new Date(Date.parse(timeStampJson));
 
                 htmlString += `
-                    <div class="col-xs-12 col-sm-6 col-md-4 card-container">
-                        <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}">
-
-                            <img src="${experiencesResult.data[i].image}" alt="Paris" style="width: 100%; height: 200px;">
-                            <div class="card-body">
-                                <h5 class="card-title">${experiencesResult.data[i].title}</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col container-fluid">
-                                        <small class="text-muted">${timeStampJson}</small>
-                                    </div>
-                                    <div class="col text-right">
-                                        <small class="text-muted">PP:${experiencesResult.data[i].rate_p}</small>
-                                    </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 card-container">
+                            <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}">
+    
+                                <img src="${experiencesResult.data[i].image}" alt="Paris" style="width: 100%; height: 200px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${experiencesResult.data[i].title}</h5>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">Categoría: ${experiencesResult.data[i].id_category}</small>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col container-fluid">
+                                            <small class="text-muted">${timeStampJson}</small>
+                                        </div>
+                                        <div class="col text-right">
+                                            <small class="text-muted">PP:${experiencesResult.data[i].rate_p}</small>
+                                        </div>
                                     </div>
-                                    <div class="col text-right">
-                                        <small class="text-muted">PN:${experiencesResult.data[i].rate_n}</small>
+                                    <div class="row">
+                                        <div class="col">
+                                            <small catid="${experiencesResult.data[i].id_category}" class="text-muted">Categoría: ${experiencesResult.data[i].id_category}</small>
+                                        </div>
+                                        <div class="col text-right">
+                                            <small class="text-muted">PN:${experiencesResult.data[i].rate_n}</small>
+                                        </div>
                                     </div>
+    
                                 </div>
-
                             </div>
-                        </div>
-                    </div>   
-                    `;
+                        </div>   
+                        `;
+                // });
             }
 
             htmlString += `      
@@ -1542,23 +1584,35 @@ $(function () {
             let description = document.getElementById(
                 "modal-addExperience-desc"
             ).value;
-            console.log(title, description);
+            let category = document.getElementById("selCategory").value;
+            let latitud = document.getElementById("latitud").value;
+            let longitud = document.getElementById("longitud").value;
 
-            controller.setNewExperience(title, description).then((result) => {
-                console.log(result);
-                if (result.data == "Experiencia subida correctamente") {
-                    // alert("Añadido");
-                    swal({
-                        title: "¡Bien hecho!",
-                        text: "Has añadido correctamente una experiencia.",
-                        icon: "success",
-                    });
-                    $("#modal-addExperience").modal("hide");
-                    view.userLogged();
-                } else {
-                    alert("No añadido");
-                }
-            });
+            console.log(title, description, category, latitud, longitud);
+
+            controller
+                .setNewExperience(
+                    title,
+                    description,
+                    category,
+                    latitud,
+                    longitud
+                )
+                .then((result) => {
+                    console.log(result);
+                    if (result.data == "Experiencia subida correctamente") {
+                        // alert("Añadido");
+                        swal({
+                            title: "¡Bien hecho!",
+                            text: "Has añadido correctamente una experiencia.",
+                            icon: "success",
+                        });
+                        $("#modal-addExperience").modal("hide");
+                        view.userLogged();
+                    } else {
+                        alert("No añadido");
+                    }
+                });
         },
 
         setCategoriesOption: function () {

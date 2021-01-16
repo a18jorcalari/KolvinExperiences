@@ -53,11 +53,12 @@ class Experience extends DBAbstractModel {
 		$id_category = $experience['id_category'];
 		$id_user = $experience['id_user'];
 		$state = $experience['state'];
-		$location = $experience['location'];
+		$latitud = $experience['latitud'];
+		$longitud = $experience['longitud'];
 		$image = $experience['image'];
 
-		$this->query = "INSERT INTO Experience (title, description, created, id_category, id_user, state, location, image)
-                VALUES ('$title','$description', CURRENT_TIMESTAMP(), $id_category, '$id_user', '$state', '$location' , '$image')";
+		$this->query = "INSERT INTO Experience (title, description, created, id_category, id_user, state, latitud, longitud, image)
+                VALUES ('$title','$description', CURRENT_TIMESTAMP(), $id_category, '$id_user', '$state', '$latitud' , '$longitud' ,'$image')";
 		$this->execute_single_query();
 	}
 

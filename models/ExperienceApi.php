@@ -27,34 +27,17 @@ else if ($_REQUEST['query'] == 2) {
         "query" => $_REQUEST['query'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-
-        // "created" => $_REQUEST['created'],
-        // "id_user" => $_REQUEST['id_user'],
-        // "state" => $_REQUEST['state'],
-        // "id_category" => $_REQUEST['id_category'],
-        // "location" => $_REQUEST['location'],
-        // "image" => $_REQUEST['image']
-
-        //Esta es la version que funciona
-
-        //Created borrado
         "id_user" => $_SESSION["id_user"],
         "state" => "publicada",
-        "id_category" => 1,
-        "location" => "asdasd1",
+        "id_category" => $_REQUEST['id_category'],
+        "latitud" => $_REQUEST['latitud'],
+        "longitud" => $_REQUEST['longitud'],
         "image" => "https://picsum.photos/300/200"
 
 
     );
-    //Esto comentado porque no es necesario comprobar que está repetido.
-
-    // foreach ($experience->selectExistsExperience($insertExperience) as $value) {
-    // if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
-    // else {
     $experience->insert($insertExperience);
     echo json_encode("Experiencia subida correctamente");
-    // }
-    // }
 }
 //modificar la experiencia
 else if ($_REQUEST['query'] == 3) {
