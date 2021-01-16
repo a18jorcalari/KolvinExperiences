@@ -383,10 +383,12 @@ $(function () {
                         //unicamente al usuario que pertenece
                         let idUserClick = $(this).attr("userid");
                         let idExpClick = $(this).attr("expid");
+                        let idCatClick = $(this).attr("catid");
 
                         controller.setAttributesExperienceDetail(
                             idUserClick,
                             idExpClick,
+                            idCatClick,
                             userLoggedResult
                         );
 
@@ -400,6 +402,7 @@ $(function () {
         setAttributesExperienceDetail: function (
             idUserClick,
             idExpClick,
+            idCatClick,
             userLoggedResult
         ) {
             if (idUserClick == userLoggedResult.data[0].id_user) {
@@ -409,10 +412,10 @@ $(function () {
                 view.removeEditExperienceButton();
                 view.removeDeleteExperienceButton();
             }
-
             view.addReportExperienceButton(idExpClick);
-
             view.setAttributeVote(idExpClick);
+            view.setAttributeCategory(idCatClick);
+            view.setAttributeMaps(idExpClick);
         },
 
         deleteAnExperience: function () {
@@ -426,6 +429,16 @@ $(function () {
             );
         },
 
+        showMaps: function () {
+            $("#modal-detail-button-maps-container").on(
+                "click",
+                "#modal-detail-button-maps",
+                function () {
+                    console.log($(this).attr("expid"));
+                    view.experienceMaps($(this).attr("expid"));
+                }
+            );
+        },
         reportExperience: function () {
             $("#modal-detail-button-report-container").on(
                 "click",
@@ -674,6 +687,7 @@ $(function () {
             controller.openModalAddExperience();
             controller.showExperienceDetail();
             controller.deleteAnExperience();
+            controller.showMaps();
             controller.reportExperience();
             controller.voteExperience();
             controller.enableEditExperience();
@@ -1379,7 +1393,7 @@ $(function () {
 
                 htmlString += `
                         <div class="col-xs-12 col-sm-6 col-md-4 card-container">
-                            <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}">
+                            <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}" catid="${experiencesResult.data[i].id_category}">
     
                                 <img src="${experiencesResult.data[i].image}" alt="Paris" style="width: 100%; height: 200px;">
                                 <div class="card-body">
@@ -1749,6 +1763,10 @@ $(function () {
                 });
         },
 
+        experienceMaps: function (idExp) {
+            controller.getExperienceById(idExp).then((experienceResult) => {});
+        },
+
         upvote: function (id_experience) {
             controller
                 .getExperienceById(id_experience)
@@ -1956,6 +1974,33 @@ $(function () {
                 "modal-detail-downvote"
             );
             downvoteButton.setAttribute("expid", idExpClick);
+        },
+
+        setAttributeCategory: function (id_category) {
+            controller.getCategoryById(id_category).then((categoryResult) => {
+                let categoryElement = document.getElementById(
+                    "modal-detail-category-container"
+                );
+                categoryElement.innerHTML = `<button
+                                                    type="button"
+                                                    class="btn">Categoría: 
+                                                    ${categoryResult.data[0].name}
+                                            </button>`;
+            });
+        },
+
+        setAttributeMaps: function (idExp) {
+            let mapsElement = document.getElementById(
+                "modal-detail-button-maps-container"
+            );
+            mapsElement.innerHTML = `<button
+                                        id="modal-detail-button-maps"
+                                        type="button"
+                                        class="btn"
+                                        expid="${idExp}"
+                                    >
+                                        Maps
+                                    </button>`;
         },
     };
 
