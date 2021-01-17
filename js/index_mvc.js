@@ -912,6 +912,7 @@ $(function () {
                 modalReportsContent =
                     "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Título</th><th scope='col'>Reportes</th><th scope='col'> </th></tr></thead><tbody>";
                 for (i = 0; i < data.length; i++) {
+                    if(data[i].reported>0)
                     modalReportsContent +=
                         "<tr id='" +
                         data[i].id_experience +
@@ -921,7 +922,8 @@ $(function () {
                         data[i].title +
                         "</td><td> reports: " +
                         data[i].reported +
-                        "</td><td><button  class ='deleteExperienceReport btn btn-secondary'>Eliminar</button></td></tr>";
+                        "</td><td><button  class ='deleteExperienceReport btn btn-secondary'>Eliminar</button>"+
+                        " <button  class ='cleanExperienceReport btn btn-secondary'>Limpiar</button></td></tr>";
                 }
                 modalReportsContent += "</tbody></table>";
                 document.getElementById(
@@ -929,6 +931,9 @@ $(function () {
                 ).innerHTML = modalReportsContent;
                 botonesEliminar = document.getElementsByClassName(
                     "deleteExperienceReport"
+                );
+                botonesLimpiar = document.getElementsByClassName(
+                    "cleanExperienceReport"
                 );
                 for (i = 0; i < botonesEliminar.length; i++) {
                     botonesEliminar[i].addEventListener("click", function () {
@@ -942,6 +947,21 @@ $(function () {
                                     setDeleteCategoryResult.data ==
                                     "Se ha eliminado correctamente"
                                 )
+                                    this.parentElement.parentElement.parentNode.removeChild(
+                                        this.parentElement.parentElement
+                                    );
+                            });
+                    });
+                }
+                for (i = 0; i < botonesLimpiar.length; i++) {
+                    botonesLimpiar[i].addEventListener("click", function () {
+                        controller
+                            .setUpdateReport(
+                                this.parentElement.parentElement.id, 0
+                            )
+                            .then((setUpdateReportResult) => {
+                                alert(setUpdateReportResult.data);
+                                //if (setCleanCategoryResult.data =="Se ha eliminado correctamente")
                                     this.parentElement.parentElement.parentNode.removeChild(
                                         this.parentElement.parentElement
                                     );
