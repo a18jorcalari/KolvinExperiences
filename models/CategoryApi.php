@@ -25,7 +25,7 @@ if ($_REQUEST['query'] == 0) {
     }
     if($check==0){
         $category->update($_REQUEST['name'], $_REQUEST['id_category']);
-        echo "Categoria modificada correctamente";
+        echo true;
     }
 } else if ($_REQUEST['query'] == 2) {
 

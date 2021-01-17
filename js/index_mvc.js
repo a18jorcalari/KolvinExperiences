@@ -644,11 +644,11 @@ $(function () {
                 controller.getAllCategories().then((getAllCategoriesResult) => {
                     for (i = 0; i < getAllCategoriesResult.data.length; i++) {
                         navCategory +=
-                            "<li class='list-group-item'>" +
+                            "<li class='list-group-item'><p id="+getAllCategoriesResult.data[i].id_category+"Text>" +
                             getAllCategoriesResult.data[i].id_category +
                             " " +
                             getAllCategoriesResult.data[i].name +
-                            "<div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='"+getAllCategoriesResult.data[i].id_category+"Input'>" +
+                            "</p><div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='"+getAllCategoriesResult.data[i].id_category+"Input'>" +
                             "<button class='btn btn-secondary updateCategory ' type='button' id='"+getAllCategoriesResult.data[i].id_category+"'>Actualizar</button></div>"
                             "</li>";
                     }
@@ -660,10 +660,15 @@ $(function () {
                         botones[i].addEventListener("click", function(e){
                             id=e.target.id;
                             newName=document.getElementById(`${id}Input`).value;
-                            alert(newName + id);
+                            document.getElementById(`${id}Input`).value="";
                             if(newName!=""){
                                 controller.setUpdateCategory(id, newName).then((setUpdateCategoryResult) => {
-                                    alert(setUpdateCategoryResult.data);
+                                    alert(setUpdateCategoryResult.data)
+                                   if(setUpdateCategoryResult.data==1){ 
+                                       alert("Categoria modificada correctamente")
+                                       document.getElementById(`${id}Text`).textContent=id+" "+newName;
+                                    }
+                                   else console.log("xd")
                                 })
                             }
                             else{alert("Introduce un nuevo nombre")}

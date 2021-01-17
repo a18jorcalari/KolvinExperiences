@@ -44,7 +44,7 @@ class Category extends DBAbstractModel {
 
 
 	public function update($name = "", $id_category = "") {
-		$this->query = "UPDATE SET Category name='$name' WHERE id_category='$id_category'";
+		$this->query = "UPDATE Category SET name='$name' WHERE id_category=$id_category";
 		$this->execute_single_query($this->query);
 	}
 
