@@ -27,34 +27,17 @@ else if ($_REQUEST['query'] == 2) {
         "query" => $_REQUEST['query'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-
-        // "created" => $_REQUEST['created'],
-        // "id_user" => $_REQUEST['id_user'],
-        // "state" => $_REQUEST['state'],
-        // "id_category" => $_REQUEST['id_category'],
-        // "location" => $_REQUEST['location'],
-        // "image" => $_REQUEST['image']
-
-        //Esta es la version que funciona
-
-        //Created borrado
         "id_user" => $_SESSION["id_user"],
         "state" => "publicada",
-        "id_category" => 1,
-        "location" => "asdasd1",
-        "image" => ""
+        "id_category" => $_REQUEST['id_category'],
+        "latitud" => $_REQUEST['latitud'],
+        "longitud" => $_REQUEST['longitud'],
+        "image" => "https://picsum.photos/300/200"
 
 
     );
-    //Esto comentado porque no es necesario comprobar que está repetido.
-
-    // foreach ($experience->selectExistsExperience($insertExperience) as $value) {
-    // if ($value == 1) echo json_encode("No se pueden repetir las experiencias");
-    // else {
     $experience->insert($insertExperience);
     echo json_encode("Experiencia subida correctamente");
-    // }
-    // }
 }
 //modificar la experiencia
 else if ($_REQUEST['query'] == 3) {
@@ -64,10 +47,10 @@ else if ($_REQUEST['query'] == 3) {
         "id_experience" => $_REQUEST['id_experience'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-        // "created" => $_REQUEST['created'],
         // "state" => $_REQUEST['state'],
-        // "id_category" => $_REQUEST['id_category'],
-        // "location" => $_REQUEST['location'],
+        "id_category" => $_REQUEST['id_category'],
+        "latitud" => $_REQUEST['latitud'],
+        "longitud" => $_REQUEST['longitud'],
         // "image" => $_REQUEST['image']
     );
     $experience->update($updateExperience);
@@ -129,19 +112,37 @@ else if ($_REQUEST['query'] == 7) {
 else if ($_REQUEST['query'] == 8) {
     $respuesta = $experience->selectById($_REQUEST['id_experience']);
     echo json_encode($respuesta);
-} else if ($_REQUEST['query'] == 9) {
+}
+
+//FILTER
+else if ($_REQUEST['query'] == 9) {
     $respuesta = $experience->selectByUserByCategory($_REQUEST['user'], $_REQUEST['category']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 10) {
-    $respuesta = $experience->selectOrderedByDate();
+    $respuesta = $experience->selectOrderedByDateAsc();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 11) {
-    $respuesta = $experience->selectByVote();
+    $respuesta = $experience->selectOrderedByVoteAsc();
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 12) {
-    $respuesta = $experience->selectByUserByDate($_REQUEST['id_user']);
+    $respuesta = $experience->selectByUserByDateAsc($_REQUEST['user']);
     echo json_encode($respuesta);
 } elseif ($_REQUEST['query'] == 13) {
-    $respuesta = $experience->selectByUserByVote($_REQUEST['id_user']);
+    $respuesta = $experience->selectByUserByVoteAsc($_REQUEST['user']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 14) {
+    $respuesta = $experience->selectByCategory($_REQUEST['category']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 15) {
+    $respuesta = $experience->selectOrderedByDateDesc();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 16) {
+    $respuesta = $experience->selectOrderedByVoteDesc();
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 17) {
+    $respuesta = $experience->selectByUserByDateDesc($_REQUEST['user']);
+    echo json_encode($respuesta);
+} elseif ($_REQUEST['query'] == 18) {
+    $respuesta = $experience->selectByUserByVoteDesc($_REQUEST['user']);
     echo json_encode($respuesta);
 }

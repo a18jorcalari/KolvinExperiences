@@ -4,28 +4,28 @@ require_once('DBAbstractModel.php');
 //require_once('enums/type.php');
 
 class Experience extends DBAbstractModel {
-  public $id_experience;
-  public $title;
-  public $description;
-  public $reported;
-  public $created;
-  public $id_category;
-  public $id_user;
-  public $state;
-  public $image;
-  public $location;
-  public $rate_p;
-  public $rate_n;
-  
-  function __construct() {
-    $this->db_name = "a16joeigljim_pr";
-    }
-  
-  function __toString() {
-    return "(" . $this->id_user . ", " . $this->name . ", " . $this->password . ", " . $this->type . ", " . $this->email .")";
-  }
-  
-  /*function __destruct() {
+	public $id_experience;
+	public $title;
+	public $description;
+	public $reported;
+	public $created;
+	public $id_category;
+	public $id_user;
+	public $state;
+	public $image;
+	public $location;
+	public $rate_p;
+	public $rate_n;
+
+	function __construct() {
+		$this->db_name = "a16joeigljim_pr";
+	}
+
+	function __toString() {
+		return "(" . $this->id_user . ", " . $this->name . ", " . $this->password . ", " . $this->type . ", " . $this->email . ")";
+	}
+
+	/*function __destruct() {
     unset ($this);
     }*/
 
@@ -53,11 +53,12 @@ class Experience extends DBAbstractModel {
 		$id_category = $experience['id_category'];
 		$id_user = $experience['id_user'];
 		$state = $experience['state'];
-		$location = $experience['location'];
+		$latitud = $experience['latitud'];
+		$longitud = $experience['longitud'];
 		$image = $experience['image'];
 
-		$this->query = "INSERT INTO Experience (title, description, created, id_category, id_user, state, location, image)
-                VALUES ('$title','$description', CURRENT_TIMESTAMP(), $id_category, '$id_user', '$state', '$location' , '$image')";
+		$this->query = "INSERT INTO Experience (title, description, created, id_category, id_user, state, latitud, longitud, image)
+                VALUES ('$title','$description', CURRENT_TIMESTAMP(), $id_category, '$id_user', '$state', '$latitud' , '$longitud' ,'$image')";
 		$this->execute_single_query();
 	}
 
@@ -68,10 +69,12 @@ class Experience extends DBAbstractModel {
 		$title = $experience['title'];
 		$description = $experience['description'];
 		$id_category = $experience['id_category'];
-		$location = $experience['location'];
-		$image = $experience['image'];
+		$latitud = $experience['latitud'];
+		$longitud = $experience['longitud'];
+		// $image = $experience['image'];
 
-		$this->query = "UPDATE Experience SET id_category='$id_category', title='$title' ,description='$description', id_category = '$id_category', location = '$location', image = '$image' WHERE id_experience='$id_experience'";
+		// $this->query = "UPDATE Experience SET id_category='$id_category', title='$title' ,description='$description', id_category = '$id_category', location = '$location', image = '$image' WHERE id_experience='$id_experience'";
+		$this->query = "UPDATE Experience SET title='$title' ,description='$description',id_category = '$id_category', latitud = '$latitud', longitud = '$longitud' WHERE id_experience='$id_experience'";
 		$this->execute_single_query($this->query);
 
 		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND title ='$title' AND title='$title' AND description='$description' AND id_category='$id_category' AND location='$location' AND image='$image') ";
@@ -151,5 +154,66 @@ class Experience extends DBAbstractModel {
 		// $this->query = "SELECT * FROM Experience WHERE id_experience ='$id_Experience'";
 		$this->get_results_from_query();
 		return $this->rows[0];
+	}
+
+	public function selectByUserByCategory($id_user, $id_category) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' AND id_category='$id_category';";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+
+	public function selectByCategory($id_category) {
+		$this->query = "SELECT * FROM Experience WHERE id_category='$id_category';";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+
+	public function selectOrderedByDateAsc() {
+		$this->query = "SELECT * FROM Experience ORDER BY created ASC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectOrderedByVoteAsc() {
+		// $this->query = "SELECT * FROM Experience ORDER BY rate_p DESC, rate_n ASC;";
+		$this->query = "SELECT * FROM Experience ORDER BY (rate_p - rate_n) ASC;";
+		// ABS(numberA - numberB) DESC
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByDateAsc($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created ASC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByVoteAsc($id_user) {
+		// $this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p DESC, rate_n ASC;";
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY (rate_p - rate_n) ASC;";
+		$this->get_results_from_query();
+
+		return $this->rows;
+	}
+
+	public function selectOrderedByDateDesc() {
+		$this->query = "SELECT * FROM Experience ORDER BY created DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectOrderedByVoteDesc() {
+		// $this->query = "SELECT * FROM Experience ORDER BY rate_p ASC, rate_n DESC;";
+		$this->query = "SELECT * FROM Experience ORDER BY (rate_p - rate_n) DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByDateDesc($id_user) {
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY created DESC;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+	public function selectByUserByVoteDesc($id_user) {
+		// $this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY rate_p ASC, rate_n DESC;";
+		$this->query = "SELECT * FROM Experience WHERE id_user='$id_user' ORDER BY (rate_p - rate_n) DESC;";
+		$this->get_results_from_query();
+
+		return $this->rows;
 	}
 }
