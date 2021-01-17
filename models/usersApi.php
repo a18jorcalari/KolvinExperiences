@@ -92,6 +92,8 @@ if ($_REQUEST['query'] == 4) {
             echo "Usuario eliminado correctamente";
         }
     }
+}
+
 
 //Select by id user
 if ($_REQUEST['query'] == 5) {
@@ -102,5 +104,4 @@ if ($_REQUEST['query'] == 5) {
 //Select 
 if ($_REQUEST['query'] == 6) {
     echo json_encode($user->select());
-
 }

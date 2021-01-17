@@ -221,6 +221,19 @@ $(function () {
             });
         },
 
+        updateCategory: function (
+            id_category,
+            name
+        ) {
+            return axios.get("models/CategoryApi.php", {
+                params: {
+                    query: 1,
+                    name: name,
+                    id_category: id_category,
+                },
+            });
+        },
+
         //CATEGORIES
         selectAllCategories: function () {
             return axios.get("models/CategoryApi.php", {
@@ -463,6 +476,7 @@ $(function () {
         getAllUsers: function () {
             return model.selectUsers();
         },
+
         //SETS
 
         setNewUser: function (id_user, name, password, email) {
@@ -504,32 +518,31 @@ $(function () {
         setUpdateState: function () {
             return model.updateState();
         },
+
         setNewCategory: function (name) {
             return model.insertCategory(name);
         },
+
+        setUpdateCategory: function (id_category, name) {
+            return model.updateCategory(id_category, name);
+        },
+
     };
 
     var view = {
         init: function () {
             controller.decideUserView();
-
             controller.login();
-
             controller.register();
-
             controller.openModalModifyAccount();
             controller.modifyAccount();
-
             controller.addExperience();
-
             controller.showExperienceDetail();
             controller.deleteAnExperience();
             controller.reportExperience();
             controller.voteExperience();
-
             controller.enableEditExperience();
             controller.modifyExperience();
-
             controller.logout();
         },
 
@@ -624,21 +637,44 @@ $(function () {
                 //////CATEGORY///////
                 //creo el input con el boton de crear para añadir nuevas categorias
                 navCategory +=
-                    "<div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='newCategory'>" +
+                    "<label>Crear Categoria</label><div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='newCategory'>" +
                     "<button class='btn btn-secondary' type='button' id='createCategory'>Crear</button></div><div id='categorias'><ul class='list-group'>";
 
                 //aqui se crea la lista de experiencias con el boton de eliminar(no es funcional) y se añade el event listener del boton de crear
                 controller.getAllCategories().then((getAllCategoriesResult) => {
                     for (i = 0; i < getAllCategoriesResult.data.length; i++) {
                         navCategory +=
-                            "<li class='list-group-item'>" +
+                            "<li class='list-group-item'><p id="+getAllCategoriesResult.data[i].id_category+"Text>" +
                             getAllCategoriesResult.data[i].id_category +
                             " " +
                             getAllCategoriesResult.data[i].name +
+                            "</p><div class='input-group mb-3'><input type='text' class='form-control' placeholder='' id='"+getAllCategoriesResult.data[i].id_category+"Input'>" +
+                            "<button class='btn btn-secondary updateCategory ' type='button' id='"+getAllCategoriesResult.data[i].id_category+"'>Actualizar</button></div>"
                             "</li>";
                     }
                     document.getElementById("categories").innerHTML =
                         "</ul></div>" + navCategory;
+
+                    let botones = document.getElementsByClassName("updateCategory");
+                    for(i=0; i<botones.length; i++ ){
+                        botones[i].addEventListener("click", function(e){
+                            id=e.target.id;
+                            newName=document.getElementById(`${id}Input`).value;
+                            document.getElementById(`${id}Input`).value="";
+                            if(newName!=""){
+                                controller.setUpdateCategory(id, newName).then((setUpdateCategoryResult) => {
+                                    alert(setUpdateCategoryResult.data)
+                                   if(setUpdateCategoryResult.data==1){ 
+                                       alert("Categoria modificada correctamente")
+                                       document.getElementById(`${id}Text`).textContent=id+" "+newName;
+                                    }
+                                   else console.log("xd")
+                                })
+                            }
+                            else{alert("Introduce un nuevo nombre")}
+                        })
+                    }
+
 
                     document
                         .getElementById("createCategory")
@@ -647,7 +683,7 @@ $(function () {
                                 .setNewCategory(
                                     document.getElementById("newCategory").value
                                 )
-                                .then((setNewCategoryResult) => {
+                                .then(() => {
                                     controller
                                         .getAllCategories()
                                         .then((getAllCategoriesResult2) => {
@@ -705,7 +741,7 @@ $(function () {
                     "deleteExperienceReport"
                 );
                 for (i = 0; i < botonesEliminar.length; i++) {
-                    botonesEliminar[i].addEventListener("click", function (e) {
+                    botonesEliminar[i].addEventListener("click", function () {
                         controller
                             .setDeleteExperience(
                                 this.parentElement.parentElement.id
@@ -727,6 +763,7 @@ $(function () {
             ////USUARIOS/////
             controller.getAllUsers().then((getAllUsersResult) => {
                 data = getAllUsersResult.data;
+                console.log(getAllUsersResult);
                 modalUsersContent =
                     "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Nombre</th><th scope='col'></th></tr></thead><tbody>";
 
@@ -784,11 +821,14 @@ $(function () {
 
         addDropdowns: function () {
             //Añade los tabs de mis experiencias o todas las experiencias.
+            let dropdownContainerElement = document.getElementById(
+                "dropdowns-experiences"
+            );
+
+            dropdownContainerElement.innerHTML = `<span class="spinner-border"></span>`;
+
             controller.getAllCategories().then((categoriesResult) => {
                 console.log(categoriesResult);
-                let dropdownContainerElement = document.getElementById(
-                    "dropdowns-experiences"
-                );
 
                 let htmlString = `
                                 <div class="d-flex">
@@ -1555,6 +1595,7 @@ $(function () {
                 </button>
                 `;
         },
+
         remove_addExperience_button: function () {
             document.getElementById(
                 "container-button-addExperience"
@@ -1592,6 +1633,7 @@ $(function () {
                                 Editar
                             </button>`;
         },
+
         removeEditExperienceButton: function () {
             document.getElementById(
                 "modal-detail-button-edit-container"
