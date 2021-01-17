@@ -55,6 +55,21 @@ class User extends DBAbstractModel {
 		$this->query = "INSERT INTO User (id_user, name, password, type, email)
                 VALUES ('$id_user','$name', '$password', $type, '$email')";
 		$this->execute_single_query();
+		if($this){
+			echo'
+			<script>
+			 alert("Se ha registrado correctamente");
+			 window.location="../index.html";
+			</script> 
+			 ';
+		}else {
+			echo'
+			<script>
+			 alert("Inténtalo de nuevo, usuario no almacenado");
+			 window.location="../index.html";
+			</script> 
+			 ';
+		}
 	}
 
 
