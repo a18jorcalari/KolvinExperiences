@@ -47,10 +47,10 @@ else if ($_REQUEST['query'] == 3) {
         "id_experience" => $_REQUEST['id_experience'],
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
-        // "created" => $_REQUEST['created'],
         // "state" => $_REQUEST['state'],
-        // "id_category" => $_REQUEST['id_category'],
-        // "location" => $_REQUEST['location'],
+        "id_category" => $_REQUEST['id_category'],
+        "latitud" => $_REQUEST['latitud'],
+        "longitud" => $_REQUEST['longitud'],
         // "image" => $_REQUEST['image']
     );
     $experience->update($updateExperience);

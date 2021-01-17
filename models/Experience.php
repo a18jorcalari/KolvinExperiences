@@ -68,12 +68,13 @@ class Experience extends DBAbstractModel {
 		$id_experience = $experience['id_experience'];
 		$title = $experience['title'];
 		$description = $experience['description'];
-		// $id_category = $experience['id_category'];
-		// $location = $experience['location'];
+		$id_category = $experience['id_category'];
+		$latitud = $experience['latitud'];
+		$longitud = $experience['longitud'];
 		// $image = $experience['image'];
 
 		// $this->query = "UPDATE Experience SET id_category='$id_category', title='$title' ,description='$description', id_category = '$id_category', location = '$location', image = '$image' WHERE id_experience='$id_experience'";
-		$this->query = "UPDATE Experience SET title='$title' ,description='$description' WHERE id_experience='$id_experience'";
+		$this->query = "UPDATE Experience SET title='$title' ,description='$description',id_category = '$id_category', latitud = '$latitud', longitud = '$longitud' WHERE id_experience='$id_experience'";
 		$this->execute_single_query($this->query);
 
 		// $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND title ='$title' AND description='$description' AND id_category='$id_category' AND location='$location' AND image='$image') ";

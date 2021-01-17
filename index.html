@@ -452,6 +452,32 @@
                                     ></div> -->
                                 </div>
                             </div>
+                            <div id="modal-detail-location-container">
+                                <!-- <div class="row">
+                                    <div class="col-6">
+                                        <div>
+                                            <label for="modal-detail-latitud"
+                                                >Latitud:</label
+                                            >
+                                            <input
+                                                id="modal-detail-latitud"
+                                                class="form-control"
+                                                type="text"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="modal-detail-longitud"
+                                            >Longitud:</label
+                                        >
+                                        <input
+                                            id="modal-detail-longitud"
+                                            class="form-control"
+                                            type="text"
+                                        />
+                                    </div>
+                                </div> -->
+                            </div>
                             <div class="clearfix">
                                 <div class="d-flex float-left">
                                     <div
@@ -462,13 +488,15 @@
                                     <div
                                         id="modal-detail-button-maps-container"
                                     >
-                                        <button
+                                        <!-- <button
                                             id="modal-detail-button-maps"
                                             type="button"
                                             class="btn"
+                                            data-toggle="modal"
+                                            data-target="#modelMaps"
                                         >
                                             Maps
-                                        </button>
+                                        </button> -->
                                     </div>
                                     <div
                                         id="modal-detail-button-saveEdited-container"
@@ -571,13 +599,13 @@
                                 ></select>
                             </div>
                             <div class="form-group">
-                                <label for="selCategory">Latitud:</label>
+                                <label for="latitud">Latitud:</label>
                                 <input
                                     id="latitud"
                                     class="form-control"
                                     type="text"
                                 />
-                                <label for="selCategory">Longitud:</label>
+                                <label for="longitud">Longitud:</label>
                                 <input
                                     id="longitud"
                                     class="form-control"
@@ -594,6 +622,51 @@
                         >
                             Añadir
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Maps-->
+        <div
+            class="modal fade"
+            id="modelMaps"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="modelTitleId"
+            aria-hidden="true"
+            style="z-index: 1060"
+        >
+            <div
+                class="modal-dialog modal-xl modal-dialog-centered"
+                role="document"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ubicación</h5>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div style="width: 100%" id="maps-container">
+                                <!-- <iframe
+                                    width="100%"
+                                    height="600"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    marginheight="0"
+                                    marginwidth="0"
+                                    src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=41.37680849123348,%202.1423339843750004+(Ubicaci%C3%B3n)&amp;t=k&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                                ></iframe> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

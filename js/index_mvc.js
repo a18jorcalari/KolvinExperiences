@@ -248,11 +248,11 @@ $(function () {
         updateExperience: function (
             id_experience,
             title,
-            description
-            // created,
+            description,
             // state,
-            // id_category,
-            // location,
+            id_category,
+            longitud,
+            latitud
             // image
         ) {
             return axios.get("models/ExperienceApi.php", {
@@ -261,10 +261,10 @@ $(function () {
                     id_experience: id_experience,
                     title: title,
                     description: description,
-                    // created: created,
                     // state: state,
-                    // id_category: id_category,
-                    // location: location,
+                    id_category: id_category,
+                    latitud: latitud,
+                    longitud: longitud,
                     // image: image,
                 },
             });
@@ -416,6 +416,11 @@ $(function () {
             view.setAttributeVote(idExpClick);
             view.setAttributeCategory(idCatClick);
             view.setAttributeMaps(idExpClick);
+            view.removeSaveEditExperienceButton();
+            let locationContainer = document.getElementById(
+                "modal-detail-location-container"
+            );
+            locationContainer.innerHTML = ``;
         },
 
         deleteAnExperience: function () {
@@ -655,8 +660,22 @@ $(function () {
             return model.deleteExperience(id_experience);
         },
 
-        setUpdateExperience: function (id_experience, title, description) {
-            return model.updateExperience(id_experience, title, description);
+        setUpdateExperience: function (
+            id_experience,
+            title,
+            description,
+            id_category,
+            longitud,
+            latitud
+        ) {
+            return model.updateExperience(
+                id_experience,
+                title,
+                description,
+                id_category,
+                longitud,
+                latitud
+            );
         },
 
         setUpdateReport: function (id_experience, reported) {
@@ -1670,23 +1689,93 @@ $(function () {
             let description = document.getElementById(
                 "modal-detail-description"
             );
+            //Esta parte para se cambiará a editor enriquecido
             titulo.setAttribute("contenteditable", true);
             description.setAttribute("contenteditable", true);
+            //
+
+            //una funcion
+            controller.getAllCategories().then((categoriesResult) => {
+                console.log(categoriesResult);
+                let selCategoryElement = document.getElementById(
+                    "modal-detail-category-container"
+                );
+                let htmlString = `
+                <select
+                    class="form-control"
+                    id="modal-detail-category"
+                >`;
+
+                for (let i = 0; i < categoriesResult.data.length; i++) {
+                    htmlString += `<option value="${categoriesResult.data[i].id_category}">${categoriesResult.data[i].name}</option>`;
+                }
+                htmlString += `</select>`;
+                selCategoryElement.innerHTML = htmlString;
+            });
+            //Otra funcion
+            let locationContainer = document.getElementById(
+                "modal-detail-location-container"
+            );
+            locationContainer.innerHTML = `<div class="row">
+                <div class="col-6">
+                    <div>
+                        <label for="modal-detail-latitud"
+                            >Latitud:</label
+                        >
+                        <input
+                            id="modal-detail-latitud"
+                            class="form-control"
+                            type="text"
+                        />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label for="modal-detail-longitud"
+                        >Longitud:</label
+                    >
+                    <input
+                        id="modal-detail-longitud"
+                        class="form-control"
+                        type="text"
+                    />
+                </div>
+            </div>`;
+
+            controller.getExperienceById(expid).then((experienceResult) => {
+                let latitudElement = document.getElementById(
+                    "modal-detail-latitud"
+                );
+                let longitudElement = document.getElementById(
+                    "modal-detail-longitud"
+                );
+
+                latitudElement.value = `${experienceResult.data.latitud}`;
+                longitudElement.value = `${experienceResult.data.longitud}`;
+            });
 
             view.addSaveEditExperienceButton(expid);
         },
 
         experienceModified: function (expId) {
-            let titulo = document.getElementById("modal-detail-title");
+            let titulo = document.getElementById("modal-detail-title")
+                .innerHTML;
             let description = document.getElementById(
                 "modal-detail-description"
-            );
+            ).innerHTML;
+            let latitud = document.getElementById("modal-detail-latitud").value;
+            let longitud = document.getElementById("modal-detail-longitud")
+                .value;
+            let id_categoria = document.getElementById("modal-detail-category")
+                .value;
 
             controller
                 .setUpdateExperience(
                     expId,
-                    titulo.innerHTML,
-                    description.innerHTML
+                    titulo,
+                    description,
+                    id_categoria,
+                    longitud,
+                    latitud
                 )
                 .then((updateResult) => {
                     console.log(updateResult);
@@ -1700,16 +1789,23 @@ $(function () {
                                 "Has modifacado correctamente una experiencia.",
                             icon: "success",
                         });
+
+                        //Esto se modificara
                         let titulo = document.getElementById(
                             "modal-detail-title"
                         );
                         let description = document.getElementById(
                             "modal-detail-description"
                         );
+
                         titulo.setAttribute("contenteditable", false);
                         description.setAttribute("contenteditable", false);
-                        view.removeSaveEditExperienceButton();
-                        view.addEditExperienceButton();
+                        //
+
+                        $("#modal-detail").modal("hide");
+                        // view.removeSaveEditExperienceButton();
+                        // view.addEditExperienceButton();
+
                         view.userLogged();
                     } else {
                         alert("ERROR");
@@ -1764,7 +1860,19 @@ $(function () {
         },
 
         experienceMaps: function (idExp) {
-            controller.getExperienceById(idExp).then((experienceResult) => {});
+            controller.getExperienceById(idExp).then((experienceResult) => {
+                console.log(experienceResult);
+                document.getElementById("maps-container").innerHTML = `
+                <iframe
+                    width="100%"
+                    height="600"
+                    frameborder="0"
+                    scrolling="no"
+                    marginheight="0"
+                    marginwidth="0"
+                    src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=${experienceResult.data.latitud},%20${experienceResult.data.longitud}+(Ubicaci%C3%B3n)&amp;t=k&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                ></iframe>`;
+            });
         },
 
         upvote: function (id_experience) {
@@ -1997,6 +2105,8 @@ $(function () {
                                         id="modal-detail-button-maps"
                                         type="button"
                                         class="btn"
+                                        data-toggle="modal"
+                                        data-target="#modelMaps"
                                         expid="${idExp}"
                                     >
                                         Maps
