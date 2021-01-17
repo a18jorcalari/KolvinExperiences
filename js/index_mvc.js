@@ -95,7 +95,6 @@ $(function () {
                 },
             });
         },
-        //FALTA HACER EN PHP
         selectAllExperiencesByUserByCategory: function (id_user, id_category) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -174,8 +173,6 @@ $(function () {
                 },
             });
         },
-
-        //HASTA AQUI
 
         insertExperience: function (
             title,
@@ -297,7 +294,6 @@ $(function () {
             });
         },
 
-        //LOGOUT
         logout: function () {
             axios.get("models/logoutApi.php");
         },
@@ -310,7 +306,6 @@ $(function () {
 
         decideUserView: function () {
             model.userIsLogged().then((result) => {
-                console.log(result, this.decideUserView.name);
                 if (result.data == true) {
                     view.userLogged();
                 } else {
@@ -323,7 +318,7 @@ $(function () {
             document
                 .getElementById("modal-login-button")
                 .addEventListener("click", function () {
-                    view.loginModal();
+                    view.login();
                 });
         },
 
@@ -337,13 +332,13 @@ $(function () {
             document
                 .getElementById("modal-register-button")
                 .addEventListener("click", function () {
-                    view.registerModal();
+                    view.register();
                 });
         },
 
         openModalModifyAccount: function () {
             $("#nav-options").on("click", "#showModalUseraccount", function () {
-                view.setModalModifyAccountInput();
+                view.setValuesInModifyAccountModal();
             });
         },
 
@@ -351,7 +346,7 @@ $(function () {
             document
                 .getElementById("modal-useraccount-button")
                 .addEventListener("click", function () {
-                    view.modifyAccountModal();
+                    view.modifyAccount();
                 });
         },
 
@@ -360,7 +355,7 @@ $(function () {
                 "click",
                 "#button-addExperience-showModal",
                 function () {
-                    view.setCategoriesOption();
+                    view.setCategoriesOptionInAddExperience();
                 }
             );
         },
@@ -369,7 +364,7 @@ $(function () {
             document
                 .getElementById("modal-addExperience-button")
                 .addEventListener("click", function () {
-                    view.addExperienceModal();
+                    view.addExperience();
                 });
         },
 
@@ -385,37 +380,37 @@ $(function () {
                         let idExpClick = $(this).attr("expid");
                         let idCatClick = $(this).attr("catid");
 
-                        controller.setAttributesExperienceDetail(
+                        controller.setAttributesButtonsValuesInExperienceDetail(
                             idUserClick,
                             idExpClick,
                             idCatClick,
                             userLoggedResult
                         );
 
-                        view.experienceDetailModal(idExpClick);
                         $("#modal-detail").modal("show");
                     }
                 );
             });
         },
 
-        setAttributesExperienceDetail: function (
+        setAttributesButtonsValuesInExperienceDetail: function (
             idUserClick,
             idExpClick,
             idCatClick,
             userLoggedResult
         ) {
             if (idUserClick == userLoggedResult.data[0].id_user) {
-                view.addEditExperienceButton(idExpClick);
-                view.addDeleteExperienceButton(idExpClick);
+                view.setEditExperienceButton(idExpClick);
+                view.setDeleteExperienceButton(idExpClick);
             } else {
                 view.removeEditExperienceButton();
                 view.removeDeleteExperienceButton();
             }
-            view.addReportExperienceButton(idExpClick);
+            view.setValuesInExperienceDetailModal(idExpClick);
+            view.setReportExperienceButton(idExpClick);
             view.setAttributeVote(idExpClick);
-            view.setAttributeCategory(idCatClick);
-            view.setAttributeMaps(idExpClick);
+            view.setButtonCategory(idCatClick);
+            view.setButtonMaps(idExpClick);
             view.removeSaveEditExperienceButton();
             let locationContainer = document.getElementById(
                 "modal-detail-location-container"
@@ -439,17 +434,16 @@ $(function () {
                 "click",
                 "#modal-detail-button-maps",
                 function () {
-                    console.log($(this).attr("expid"));
-                    view.experienceMaps($(this).attr("expid"));
+                    view.setIframeMaps($(this).attr("expid"));
                 }
             );
         },
+
         reportExperience: function () {
             $("#modal-detail-button-report-container").on(
                 "click",
                 "#modal-detail-button-report",
                 function () {
-                    console.log($(this).attr("expid"));
                     view.experienceReported($(this).attr("expid"));
                 }
             );
@@ -472,7 +466,6 @@ $(function () {
                 "click",
                 "#modal-detail-button-saveEdited",
                 function () {
-                    console.log($(this).attr("expid"));
                     view.experienceModified($(this).attr("expid"));
                 }
             );
@@ -498,7 +491,6 @@ $(function () {
                 "click",
                 "button[idcat]",
                 function () {
-                    console.log($(this).attr("idcat"));
                     view.allExperiencesFilterCategory($(this).attr("idcat"));
                     view.myExperiencesFilterCategory($(this).attr("idcat"));
                 }
@@ -528,7 +520,7 @@ $(function () {
                 "click",
                 "#orderDateDesc",
                 function () {
-                    view.allExperiencesOrderByDateDesc();
+                    view.setAllExperiencesOrderByDateDesc();
                     view.myExperiencesOrderByDateDesc();
                 }
             );
@@ -537,8 +529,8 @@ $(function () {
                 "click",
                 "#orderVoteDesc",
                 function () {
-                    view.allExperiencesOrderByVoteDesc();
-                    view.myExperiencesOrderByVoteDesc();
+                    view.setAllExperiencesOrderByVoteDesc();
+                    view.setMyExperiencesOrderByVoteDesc();
                 }
             );
         },
@@ -698,94 +690,94 @@ $(function () {
     var view = {
         init: function () {
             controller.decideUserView();
+
             controller.login();
             controller.register();
+
+            controller.filterCategory();
+            controller.orderExperiences();
+
             controller.openModalModifyAccount();
             controller.modifyAccount();
+
             controller.addExperience();
             controller.openModalAddExperience();
+
             controller.showExperienceDetail();
             controller.deleteAnExperience();
             controller.showMaps();
             controller.reportExperience();
             controller.voteExperience();
+
             controller.enableEditExperience();
             controller.modifyExperience();
+
             controller.logout();
-            controller.filterCategory();
-            controller.orderExperiences();
         },
 
         userNoLogged: function () {
             controller.getAllExperiences().then((getAllExperiencesResult) => {
-                console.log(
-                    getAllExperiencesResult.data,
-                    this.userNoLogged.name
-                );
-
                 this.headerUserNoLogged();
-
-                let cards_tabs_experiencesElement = document.getElementById(
-                    "cards-tabs-experiences"
+                this.removeDropdownsFilterOrder();
+                this.setCardsTabsExperiencesUserNoLogged(
+                    getAllExperiencesResult
                 );
-                let htmlString = `
-                    <div class="content-row experiencies">
-                        <div class="row">`;
-                for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
-                    let timeStampJson = getAllExperiencesResult.data[i].created;
-                    var d = new Date(Date.parse(timeStampJson));
-                    htmlString += `
-                            <div class="col-sm-12 col-lg-4 card-container">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${
-                                            getAllExperiencesResult.data[i]
-                                                .title
-                                        }</h5>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                    </div>
-                                </div>
-                            </div>   
-                            `;
-                }
-
-                htmlString += `
-                        </div> 
-                    </div>`;
-
-                cards_tabs_experiencesElement.innerHTML = htmlString;
+                this.removeAddExperienceButton();
             });
+        },
+
+        setCardsTabsExperiencesUserNoLogged: function (
+            getAllExperiencesResult
+        ) {
+            let cards_tabs_experiencesElement = document.getElementById(
+                "cards-tabs-experiences"
+            );
+            let htmlString = `
+                <div class="content-row experiencies">
+                    <div class="row">`;
+            for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
+                let timeStampJson = getAllExperiencesResult.data[i].created;
+                var d = new Date(Date.parse(timeStampJson));
+                htmlString += `
+                        <div class="col-sm-12 col-lg-4 card-container">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${
+                                        getAllExperiencesResult.data[i].title
+                                    }</h5>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                </div>
+                            </div>
+                        </div>   
+                        `;
+            }
+
+            htmlString += `
+                    </div> 
+                </div>`;
+
+            cards_tabs_experiencesElement.innerHTML = htmlString;
         },
 
         userLogged: function () {
             controller.getUserLogged().then((getUserLoggedResult) => {
-                console.log(getUserLoggedResult, this.userLogged.name);
-
                 this.userLoggedRender(getUserLoggedResult);
             });
         },
 
         userLoggedRender: function (result) {
-            /************ NORMAL USER VIEW ******************/
-
             this.headerLogged(result);
+            this.setDropdownsFilterOrder();
+            this.setCardsTabsExperiencesUserLogged(result);
+            this.setAddExperiencesButton();
+        },
 
-            this.addDropdowns();
-
-            this.addTabExperiences();
-
-            //CARDS USER EXPERIENCES
-
-            //My experiences
+        setCardsTabsExperiencesUserLogged: function (result) {
+            this.setTabExperiences();
             this.myExperiencesDefault(result);
-
-            //All experiences
             this.allExperiencesDefault();
-
-            //Boton de añadir experiencia
-            this.add_addExperiences_button();
         },
 
         headerLogged: function (result) {
@@ -966,7 +958,7 @@ $(function () {
                 `;
         },
 
-        addDropdowns: function () {
+        setDropdownsFilterOrder: function () {
             //Añade los tabs de mis experiencias o todas las experiencias.
             let dropdownContainerElement = document.getElementById(
                 "dropdowns-experiences"
@@ -1015,7 +1007,7 @@ $(function () {
             });
         },
 
-        addTabExperiences: function () {
+        setTabExperiences: function () {
             let dropdownContainerElement = document.getElementById(
                 "cards-tabs-experiences"
             );
@@ -1056,32 +1048,17 @@ $(function () {
             controller
                 .getAllExperiencesByUser(userResult)
                 .then((getAllExperiencesByUserResult) => {
-                    console.log(
-                        getAllExperiencesByUserResult,
-                        this.myExperiencesDefault.name
-                    );
                     if (getAllExperiencesByUserResult.data.length == 0) {
-                        myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                        myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        myexperiences_boxElement.innerHTML = this.experiences(
+                        myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             getAllExperiencesByUserResult
                         );
-                        // view.setCategoryName();
                     }
                 });
         },
-        // setCategoryName: function () {
-        //     $("div[catid]");
-        // },
 
         allExperiencesDefault: function () {
             let allexperiences_boxElement = document.getElementById(
@@ -1094,19 +1071,11 @@ $(function () {
                     this.allExperiencesDefault.name
                 );
                 if (getAllExperiencesResult.data.length == 0) {
-                    allexperiences_boxElement.innerHTML = `
-                        <div class="content-row experiencies">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p>
-                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>`;
+                    allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                        "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                    );
                 } else {
-                    allexperiences_boxElement.innerHTML = this.experiences(
+                    allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                         getAllExperiencesResult
                     );
                 }
@@ -1126,20 +1095,12 @@ $(function () {
                         idCategory
                     )
                     .then((experiencesResult) => {
-                        console.log(experiencesResult);
                         if (experiencesResult.data.length == 0) {
-                            myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                            myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                                "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                            );
                         } else {
-                            myexperiences_boxElement.innerHTML = this.experiences(
+                            myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                                 experiencesResult
                             );
                         }
@@ -1158,18 +1119,11 @@ $(function () {
                     console.log(experiencesResult);
 
                     if (experiencesResult.data.length == 0) {
-                        allexperiences_boxElement.innerHTML = `
-                        <div class="content-row experiencies">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p>
-                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                    </p>
-                                </div>
-                            </div>
-                        </div>`;
+                        allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        allexperiences_boxElement.innerHTML = this.experiences(
+                        allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             experiencesResult
                         );
                     }
@@ -1187,18 +1141,11 @@ $(function () {
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
-                            myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                            myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                                "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                            );
                         } else {
-                            myexperiences_boxElement.innerHTML = this.experiences(
+                            myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                                 experiencesResult
                             );
                         }
@@ -1214,18 +1161,11 @@ $(function () {
                 .getAllExperiencesOrderedByDateAsc()
                 .then((experiencesResult) => {
                     if (experiencesResult.data.length == 0) {
-                        allexperiences_boxElement.innerHTML = `
-                    <div class="content-row experiencies">
-                        <div class="row">
-                            <div class="col-12">
-                                <p>
-                                    Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                </p>
-                            </div>
-                        </div>
-                    </div>`;
+                        allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        allexperiences_boxElement.innerHTML = this.experiences(
+                        allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             experiencesResult
                         );
                     }
@@ -1243,18 +1183,11 @@ $(function () {
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
-                            myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                            myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                                "Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?"
+                            );
                         } else {
-                            myexperiences_boxElement.innerHTML = this.experiences(
+                            myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                                 experiencesResult
                             );
                         }
@@ -1270,18 +1203,11 @@ $(function () {
                 .getAllExperiencesOrderedByVoteAsc()
                 .then((experiencesResult) => {
                     if (experiencesResult.data.length == 0) {
-                        allexperiences_boxElement.innerHTML = `
-                        <div class="content-row experiencies">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p>
-                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                    </p>
-                                </div>
-                            </div>
-                        </div>`;
+                        allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        allexperiences_boxElement.innerHTML = this.experiences(
+                        allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             experiencesResult
                         );
                     }
@@ -1298,18 +1224,11 @@ $(function () {
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
-                            myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                            myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                                "Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?"
+                            );
                         } else {
-                            myexperiences_boxElement.innerHTML = this.experiences(
+                            myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                                 experiencesResult
                             );
                         }
@@ -1317,7 +1236,7 @@ $(function () {
             });
         },
 
-        allExperiencesOrderByDateDesc: function () {
+        setAllExperiencesOrderByDateDesc: function () {
             let allexperiences_boxElement = document.getElementById(
                 "allexperiences-box"
             );
@@ -1325,25 +1244,18 @@ $(function () {
                 .getAllExperiencesOrderedByDateDesc()
                 .then((experiencesResult) => {
                     if (experiencesResult.data.length == 0) {
-                        allexperiences_boxElement.innerHTML = `
-                    <div class="content-row experiencies">
-                        <div class="row">
-                            <div class="col-12">
-                                <p>
-                                    Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                </p>
-                            </div>
-                        </div>
-                    </div>`;
+                        allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        allexperiences_boxElement.innerHTML = this.experiences(
+                        allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             experiencesResult
                         );
                     }
                 });
         },
 
-        myExperiencesOrderByVoteDesc: function () {
+        setMyExperiencesOrderByVoteDesc: function () {
             let myexperiences_boxElement = document.getElementById(
                 "myexperiences-box"
             );
@@ -1354,18 +1266,11 @@ $(function () {
                     )
                     .then((experiencesResult) => {
                         if (experiencesResult.data.length == 0) {
-                            myexperiences_boxElement.innerHTML = `
-                            <div class="content-row experiencies">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>
-                                            Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>`;
+                            myexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                                "Vaya... Parece que no tienes experiencias creadas. ¿Por que no pruebas a crear una?"
+                            );
                         } else {
-                            myexperiences_boxElement.innerHTML = this.experiences(
+                            myexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                                 experiencesResult
                             );
                         }
@@ -1373,7 +1278,7 @@ $(function () {
             });
         },
 
-        allExperiencesOrderByVoteDesc: function () {
+        setAllExperiencesOrderByVoteDesc: function () {
             let allexperiences_boxElement = document.getElementById(
                 "allexperiences-box"
             );
@@ -1381,66 +1286,65 @@ $(function () {
                 .getAllExperiencesOrderedByVoteDesc()
                 .then((experiencesResult) => {
                     if (experiencesResult.data.length == 0) {
-                        allexperiences_boxElement.innerHTML = `
-                        <div class="content-row experiencies">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p>
-                                        Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?
-                                    </p>
-                                </div>
-                            </div>
-                        </div>`;
+                        allexperiences_boxElement.innerHTML = this.noResultsMessageHtml(
+                            "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
+                        );
                     } else {
-                        allexperiences_boxElement.innerHTML = this.experiences(
+                        allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                             experiencesResult
                         );
                     }
                 });
         },
 
-        experiences: function (experiencesResult) {
+        noResultsMessageHtml: function (message) {
+            return `
+                <div class="content-row experiencies">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>
+                                ${message}
+                            </p>
+                        </div>
+                    </div>
+                </div>`;
+        },
+
+        setExperiencesGrid: function (experiencesResult) {
             let htmlString = `
             <div class="content-row experiencies">
                 <div class="row">`;
             for (let i = 0; i < experiencesResult.data.length; i++) {
-                // controller
-                //     .getCategoryById(experiencesResult.data[i].id_category)
-                //     .then((categoryResult) => {
-                // console.log(categoryResult);
-                let timeStampJson = experiencesResult.data[i].created;
-
                 htmlString += `
-                        <div class="col-xs-12 col-sm-6 col-md-4 card-container">
-                            <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}" catid="${experiencesResult.data[i].id_category}">
-    
-                                <img src="${experiencesResult.data[i].image}" alt="Paris" style="width: 100%; height: 200px;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${experiencesResult.data[i].title}</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="row">
-                                        <div class="col container-fluid">
-                                            <small class="text-muted">${timeStampJson}</small>
-                                        </div>
-                                        <div class="col text-right">
-                                            <small class="text-muted">PP:${experiencesResult.data[i].rate_p}</small>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <small catid="${experiencesResult.data[i].id_category}" class="text-muted">Categoría: ${experiencesResult.data[i].id_category}</small>
-                                        </div>
-                                        <div class="col text-right">
-                                            <small class="text-muted">PN:${experiencesResult.data[i].rate_n}</small>
-                                        </div>
-                                    </div>
-    
-                                </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 card-container">
+                        <div class="card h-100" expid="${experiencesResult.data[i].id_experience}" userid="${experiencesResult.data[i].id_user}" catid="${experiencesResult.data[i].id_category}">
+
+                            <img src="${experiencesResult.data[i].image}" alt="Paris" style="width: 100%; height: 200px;">
+                            <div class="card-body">
+                                <h5 class="card-title">${experiencesResult.data[i].title}</h5>
                             </div>
-                        </div>   
-                        `;
-                // });
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col container-fluid">
+                                        <small class="text-muted">${experiencesResult.data[i].created}</small>
+                                    </div>
+                                    <div class="col text-right">
+                                        <small class="text-muted">PP:${experiencesResult.data[i].rate_p}</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <small catid="${experiencesResult.data[i].id_category}" class="text-muted">Categoría: ${experiencesResult.data[i].id_category}</small>
+                                    </div>
+                                    <div class="col text-right">
+                                        <small class="text-muted">PN:${experiencesResult.data[i].rate_n}</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>   
+                    `;
             }
 
             htmlString += `      
@@ -1450,37 +1354,19 @@ $(function () {
             return htmlString;
         },
 
-        // MODALS
-
-        loginModal: function () {
+        login: function () {
             let user_id = document.getElementById("modal-login-username").value;
             let password = document.getElementById("modal-login-password")
                 .value;
 
-            console.log(
-                user_id,
-                Object.keys({ user_id })[0],
-                this.loginModal.name
-            );
-
-            console.log(
-                password,
-                Object.keys({ password })[0],
-                this.loginModal.name
-            );
-
             controller.getUserLogin(user_id, password).then((loginResult) => {
-                console.log(loginResult, this.loginModal.name);
-
-                // Si las credenciales son correctas
                 if (loginResult.data != false) {
-                    //Funcion que sirve para esconder el modal con la id login.
                     $("#modal-login").modal("hide");
                     //LoggedRender
 
-                    this.userLoggedRender(loginResult);
-                    this.add_addExperiences_button();
-
+                    // this.userLoggedRender(loginResult);
+                    // this.setAddExperiencesButton();
+                    controller.decideUserView();
                     //Alert
                     swal({
                         title: "¡Bien hecho!",
@@ -1493,7 +1379,7 @@ $(function () {
             });
         },
 
-        registerModal: function () {
+        register: function () {
             //Si el usuario se ha creado correctamente hacer esto:
             let id_user = document.getElementById("modal-register-username")
                 .value;
@@ -1502,31 +1388,10 @@ $(function () {
                 .value;
             let email = document.getElementById("modal-register-email").value;
 
-            console.log(
-                id_user,
-                Object.keys({ id_user })[0],
-                this.registerModal.name
-            );
-            console.log(
-                name,
-                Object.keys({ name })[0],
-                this.registerModal.name
-            );
-            console.log(
-                password,
-                Object.keys({ password })[0],
-                this.registerModal.name
-            );
-            console.log(
-                email,
-                Object.keys({ email })[0],
-                this.registerModal.name
-            );
-
             controller
                 .setNewUser(id_user, name, password, email)
                 .then((newUserResult) => {
-                    console.log(newUserResult, this.registerModal.name);
+                    console.log(newUserResult, this.register.name);
 
                     if (
                         newUserResult.data == "Usuario registrado correctamente"
@@ -1541,12 +1406,12 @@ $(function () {
                             icon: "success",
                         });
                     } else {
-                        alert(newUserResult.data);
+                        alert("Usuario no creado");
                     }
                 });
         },
 
-        modifyAccountModal: function () {
+        modifyAccount: function () {
             let idUserInput = document.getElementById(
                 "modal-useraccount-username"
             );
@@ -1561,57 +1426,28 @@ $(function () {
             let newPassword = passwordInput.value;
             let newEmail = emailInput.value;
 
-            console.log(
-                newIdUser,
-                Object.keys({ newIdUser })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newName,
-                Object.keys({ newName })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newPassword,
-                Object.keys({ newPassword })[0],
-                this.modifyAccountModal.name
-            );
-            console.log(
-                newEmail,
-                Object.keys({ newEmail })[0],
-                this.modifyAccountModal.name
-            );
-
             controller
                 .setUpdateAccount(newIdUser, newName, newPassword, newEmail)
                 .then((updateUserResult) => {
-                    console.log(this.modifyAccountModal.name, updateUserResult);
-
                     if (updateUserResult.data == "ok") {
                         $("#modal-useraccount").modal("hide");
-
-                        // let userResult = controller.getUserById(newIdUser);
-                        controller.getUserById(newIdUser).then((userResult) => {
-                            console.log(
-                                view.modifyAccountModal.name,
-                                userResult
-                            );
-                            view.userLoggedRender(userResult);
-
-                            swal({
-                                title: "¡Bien hecho!",
-                                text:
-                                    "Has actualizado tu información correctamente.",
-                                icon: "success",
-                            });
+                        // controller.getUserById(newIdUser).then((userResult) => {
+                        // view.userLoggedRender(userResult);
+                        controller.decideUserView();
+                        swal({
+                            title: "¡Bien hecho!",
+                            text:
+                                "Has actualizado tu información correctamente.",
+                            icon: "success",
                         });
+                        // });
                     } else {
                         alert(updateUserResult.data);
                     }
                 });
         },
 
-        addExperienceModal: function () {
+        addExperience: function () {
             let title = document.getElementById("modal-addExperience-title")
                 .value;
             let description = document.getElementById(
@@ -1620,8 +1456,6 @@ $(function () {
             let category = document.getElementById("selCategory").value;
             let latitud = document.getElementById("latitud").value;
             let longitud = document.getElementById("longitud").value;
-
-            console.log(title, description, category, latitud, longitud);
 
             controller
                 .setNewExperience(
@@ -1634,21 +1468,20 @@ $(function () {
                 .then((result) => {
                     console.log(result);
                     if (result.data == "Experiencia subida correctamente") {
-                        // alert("Añadido");
                         swal({
                             title: "¡Bien hecho!",
                             text: "Has añadido correctamente una experiencia.",
                             icon: "success",
                         });
                         $("#modal-addExperience").modal("hide");
-                        view.userLogged();
+                        controller.decideUserView();
                     } else {
                         alert("No añadido");
                     }
                 });
         },
 
-        setCategoriesOption: function () {
+        setCategoriesOptionInAddExperience: function () {
             let selCategoryElement = document.getElementById("selCategory");
             let htmlString = "";
             controller.getAllCategories().then((categoriesResult) => {
@@ -1660,10 +1493,8 @@ $(function () {
             });
         },
 
-        experienceDetailModal: function (expId) {
+        setValuesInExperienceDetailModal: function (expId) {
             controller.getExperienceById(expId).then((experienceResult) => {
-                console.log(this.experienceDetailModal, experienceResult);
-
                 let titulo = document.getElementById("modal-detail-title");
                 titulo.innerHTML = experienceResult.data.title;
                 let fecha = document.getElementById("modal-detail-date");
@@ -1685,16 +1516,22 @@ $(function () {
         },
 
         experienceModifying: function (expid) {
+            //Esta parte para se cambiará a editor enriquecido
             let titulo = document.getElementById("modal-detail-title");
             let description = document.getElementById(
                 "modal-detail-description"
             );
-            //Esta parte para se cambiará a editor enriquecido
             titulo.setAttribute("contenteditable", true);
             description.setAttribute("contenteditable", true);
             //
 
-            //una funcion
+            view.setSelectCategoriesInDetailModal();
+            view.setLatitudLongitudInputs();
+            view.setLatitudLongitudValues(expid);
+            view.setSaveExperienceModifiedButton(expid);
+        },
+
+        setSelectCategoriesInDetailModal: function () {
             controller.getAllCategories().then((categoriesResult) => {
                 console.log(categoriesResult);
                 let selCategoryElement = document.getElementById(
@@ -1712,7 +1549,9 @@ $(function () {
                 htmlString += `</select>`;
                 selCategoryElement.innerHTML = htmlString;
             });
-            //Otra funcion
+        },
+
+        setLatitudLongitudInputs: function () {
             let locationContainer = document.getElementById(
                 "modal-detail-location-container"
             );
@@ -1740,7 +1579,9 @@ $(function () {
                     />
                 </div>
             </div>`;
+        },
 
+        setLatitudLongitudValues: function (expid) {
             controller.getExperienceById(expid).then((experienceResult) => {
                 let latitudElement = document.getElementById(
                     "modal-detail-latitud"
@@ -1752,8 +1593,6 @@ $(function () {
                 latitudElement.value = `${experienceResult.data.latitud}`;
                 longitudElement.value = `${experienceResult.data.longitud}`;
             });
-
-            view.addSaveEditExperienceButton(expid);
         },
 
         experienceModified: function (expId) {
@@ -1797,16 +1636,13 @@ $(function () {
                         let description = document.getElementById(
                             "modal-detail-description"
                         );
-
                         titulo.setAttribute("contenteditable", false);
                         description.setAttribute("contenteditable", false);
                         //
 
                         $("#modal-detail").modal("hide");
-                        // view.removeSaveEditExperienceButton();
-                        // view.addEditExperienceButton();
 
-                        view.userLogged();
+                        controller.decideUserView();
                     } else {
                         alert("ERROR");
                     }
@@ -1859,7 +1695,7 @@ $(function () {
                 });
         },
 
-        experienceMaps: function (idExp) {
+        setIframeMaps: function (idExp) {
             controller.getExperienceById(idExp).then((experienceResult) => {
                 console.log(experienceResult);
                 document.getElementById("maps-container").innerHTML = `
@@ -1879,7 +1715,6 @@ $(function () {
             controller
                 .getExperienceById(id_experience)
                 .then((experienceResult) => {
-                    console.log(experienceResult);
                     let rateP = parseInt(experienceResult.data.rate_p) + 1;
                     let rateN = parseInt(experienceResult.data.rate_n);
 
@@ -1914,10 +1749,8 @@ $(function () {
             controller
                 .getExperienceById(id_experience)
                 .then((experienceResult) => {
-                    console.log(experienceResult);
                     let rateP = parseInt(experienceResult.data.rate_p);
                     let rateN = parseInt(experienceResult.data.rate_n) + 1;
-
                     controller
                         .setUpdateRate(
                             experienceResult.data.id_experience,
@@ -1945,9 +1778,8 @@ $(function () {
                 });
         },
 
-        setModalModifyAccountInput: function () {
+        setValuesInModifyAccountModal: function () {
             controller.getUserLogged().then((userResult) => {
-                console.log(userResult);
                 let idUserInput = document.getElementById(
                     "modal-useraccount-username"
                 );
@@ -1967,25 +1799,23 @@ $(function () {
         },
 
         logout: function () {
-            console.log(this.logout.name, "Boton logout");
-
             controller.setLogout();
-
-            console.log(this.logout.name, "Usuario logout");
             //Alert
             swal({
                 title: "¡Bien hecho!",
                 text: "Has guardado cerrado tu sesión correctamente.",
                 icon: "success",
             });
-            this.userNoLogged();
-            document.getElementById("dropdowns-experiences").innerHTML = "";
-            this.remove_addExperience_button();
+
+            //Actualizar vista
+            controller.decideUserView();
         },
 
-        //BUTTONS
+        removeDropdownsFilterOrder: function () {
+            document.getElementById("dropdowns-experiences").innerHTML = "";
+        },
 
-        add_addExperiences_button: function () {
+        setAddExperiencesButton: function () {
             document.getElementById(
                 "container-button-addExperience"
             ).innerHTML = `
@@ -1999,13 +1829,13 @@ $(function () {
                 `;
         },
 
-        remove_addExperience_button: function () {
+        removeAddExperienceButton: function () {
             document.getElementById(
                 "container-button-addExperience"
             ).innerHTML = "";
         },
 
-        addDeleteExperienceButton: function (idExp) {
+        setDeleteExperienceButton: function (idExp) {
             document.getElementById(
                 "modal-detail-button-delete-container"
             ).innerHTML = `<button
@@ -2024,7 +1854,7 @@ $(function () {
             ).innerHTML = "";
         },
 
-        addEditExperienceButton: function (idExp) {
+        setEditExperienceButton: function (idExp) {
             document.getElementById(
                 "modal-detail-button-edit-container"
             ).innerHTML = `<button
@@ -2043,7 +1873,7 @@ $(function () {
             ).innerHTML = "";
         },
 
-        addSaveEditExperienceButton: function (expid) {
+        setSaveExperienceModifiedButton: function (expid) {
             document.getElementById(
                 "modal-detail-button-saveEdited-container"
             ).innerHTML = `<button
@@ -2062,7 +1892,7 @@ $(function () {
             ).innerHTML = "";
         },
 
-        addReportExperienceButton: function (idExp) {
+        setReportExperienceButton: function (idExp) {
             document.getElementById(
                 "modal-detail-button-report-container"
             ).innerHTML = `<button
@@ -2075,16 +1905,7 @@ $(function () {
                             </button>`;
         },
 
-        setAttributeVote: function (idExpClick) {
-            let upvoteButton = document.getElementById("modal-detail-upvote");
-            upvoteButton.setAttribute("expid", idExpClick);
-            let downvoteButton = document.getElementById(
-                "modal-detail-downvote"
-            );
-            downvoteButton.setAttribute("expid", idExpClick);
-        },
-
-        setAttributeCategory: function (id_category) {
+        setButtonCategory: function (id_category) {
             controller.getCategoryById(id_category).then((categoryResult) => {
                 let categoryElement = document.getElementById(
                     "modal-detail-category-container"
@@ -2097,20 +1918,29 @@ $(function () {
             });
         },
 
-        setAttributeMaps: function (idExp) {
+        setButtonMaps: function (idExp) {
             let mapsElement = document.getElementById(
                 "modal-detail-button-maps-container"
             );
             mapsElement.innerHTML = `<button
-                                        id="modal-detail-button-maps"
-                                        type="button"
-                                        class="btn"
-                                        data-toggle="modal"
-                                        data-target="#modelMaps"
-                                        expid="${idExp}"
-                                    >
-                                        Maps
-                                    </button>`;
+            id="modal-detail-button-maps"
+            type="button"
+            class="btn"
+            data-toggle="modal"
+            data-target="#modelMaps"
+            expid="${idExp}"
+            >
+            Maps
+            </button>`;
+        },
+        //Attributes
+        setAttributeVote: function (idExpClick) {
+            let upvoteButton = document.getElementById("modal-detail-upvote");
+            upvoteButton.setAttribute("expid", idExpClick);
+            let downvoteButton = document.getElementById(
+                "modal-detail-downvote"
+            );
+            downvoteButton.setAttribute("expid", idExpClick);
         },
     };
 
