@@ -49,6 +49,7 @@ class User extends DBAbstractModel {
 	public function insert($userData = array()) {
 		$id_user = $userData['id_user'];
 		$password = $userData['password'];
+		$password = hash('sha512', $password);
 		$type = $userData['type'];
 		$name = $userData['name'];
 		$email = $userData['email'];
