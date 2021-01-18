@@ -156,7 +156,7 @@ elseif ($_REQUEST['query'] == 19) {
 //update imagen
 elseif ($_REQUEST['query'] == 20) {
     foreach ($experience->updateImage($_REQUEST['id_experience'], $_REQUEST['image']) as $key => $value) {
-        if ($value == 1)  echo json_encode("Se ha valorado correctamente");
+        if ($value == 1)  echo json_encode("Se ha update correctamente");
         else echo json_encode("Algo ha salido mal");
     }
 }

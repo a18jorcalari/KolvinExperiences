@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $uploadOk = 0;
     }
     // Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
+    // if (file_exists($target_file)) {
+    //     // echo "Sorry, file already exists.";
+    //     $uploadOk = 0;
+    // }
 
     // Check file size
     if ($_FILES["file"]["size"] > 500000) {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        echo json_encode(false);
+        echo json_encode("Error conocido");
 
         // echo "Sorry, your file was not uploaded.";
         // if everything is ok, try to upload file
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo json_encode($target_file);
         } else {
             // echo "Sorry, there was an error uploading your file.";
-            echo json_encode(false);
+            echo json_encode("Error desconocio. Problema con el labs");
         }
     }
 }
