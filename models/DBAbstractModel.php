@@ -24,7 +24,7 @@ abstract class DBAbstractModel {
 
   private function open_connection() {
     $this->conn = new mysqli(self::$db_host, self::$db_user, self::$db_pass, $this->db_name);
-  }
+  
 
   private function close_connection() {
     $this->conn->close();

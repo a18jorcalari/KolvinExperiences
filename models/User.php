@@ -50,12 +50,14 @@ class User extends DBAbstractModel {
 	public function insert($userData = array()) {
 		$id_user = $userData['id_user'];
 		$password = $userData['password'];
+		//$password = hash('sha512', $password);
 		$type = $userData['type'];
 		$name = $userData['name'];
 		$email = $userData['email'];
 		$this->query = "INSERT INTO User (id_user, name, password, type, email)
                 VALUES ('$id_user','$name', '$password', $type, '$email')";
 		$this->execute_single_query();
+	
 	}
 
 
