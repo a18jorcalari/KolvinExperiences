@@ -21,7 +21,7 @@ if ($_REQUEST['query'] == 0) {
 if ($_REQUEST['query'] == 1) {
     $respuesta = $user->selectByUserName($_REQUEST['user']);
     if ($respuesta != null) {
-        if ($_REQUEST['user'] == $respuesta[0]["id_user"] && $_REQUEST['password'] == $respuesta[0]["password"]) {
+        if ($_REQUEST['user'] == $respuesta[0]["id_user"] && hash('sha512', $_REQUEST['password']) == $respuesta[0]["password"]) {
             $_SESSION["id_user"] = $respuesta[0]["id_user"];
             echo (json_encode($respuesta));
         } else {
@@ -38,7 +38,7 @@ if ($_REQUEST['query'] == 2) {
     $updateUser = array(
         "id_user" => $_REQUEST['newIdUser'],
         "name" => $_REQUEST['newName'],
-        "password" => $_REQUEST['newPassword'],
+        "password" => hash('sha512', $_REQUEST['newPassword']),
         "type" => $_REQUEST['newType'],
         "email" => $_REQUEST['newEmail'],
         "oldIdUser" => $_SESSION["id_user"],
@@ -63,7 +63,7 @@ if ($_REQUEST['query'] == 3) {
     $insertUser = array(
         "id_user" => $_REQUEST['idUser'],
         "name" => $_REQUEST['name'],
-        "password" => $_REQUEST['password'],
+        "password" => hash('sha512', $_REQUEST['password']),
         "type" => $_REQUEST['type'],
         "email" => $_REQUEST['email'],
         "query" => $_REQUEST['query']

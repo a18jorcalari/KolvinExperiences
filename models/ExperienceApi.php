@@ -70,7 +70,6 @@ else if ($_REQUEST['query'] == 4) {
     );
     $experience->updateState($updateExperience);
     echo true;
-    
 }
 //valorar
 else if ($_REQUEST['query'] == 5) {
