@@ -204,7 +204,7 @@ $(function () {
         },
 
         updateState: function (id_experience, state) {
-            console.log(`${id_experience} ${state}`)
+            console.log(`${id_experience} ${state}`);
             return axios.get("models/ExperienceApi.php", {
                 params: {
                     query: 4,
@@ -473,14 +473,10 @@ $(function () {
                 view.setEditExperienceButton(idExpClick);
                 view.setDeleteExperienceButton(idExpClick);
                 controller.getExperienceById(idExpClick).then((result) => {
-                    if(result.data.state=="esbozo")
+                    if (result.data.state == "esbozo")
                         view.setUpdateStateButton(idExpClick);
-                    else
-                        view.removeUpdateStateButton();
-
-                })
-
-
+                    else view.removeUpdateStateButton();
+                });
             } else {
                 view.removeEditExperienceButton();
                 view.removeDeleteExperienceButton();
@@ -492,17 +488,29 @@ $(function () {
             view.setButtonCategory(idCatClick);
             view.setButtonMaps(idExpClick);
             view.removeSaveEditExperienceButton();
+
+            // let descContainer = document.getElementById(
+            //     "modal-detail-description-container"
+            // );
+
+            // descContainer.innerHTML = `<textarea
+            //                                 name="editor-editExp"
+            //                                 id="modal-detail-description"
+            //                             >
+            //                             </textarea>`;
+            // CKEDITOR.replace("editor-editExp");
+
             let locationContainer = document.getElementById(
                 "modal-detail-location-container"
             );
             locationContainer.innerHTML = ``;
+
             let modifyContainer = document.getElementById(
                 "form-modifyImage-container"
             );
             modifyContainer.innerHTML = ``;
         },
 
-        
         updateStateExperience: function () {
             $("#modal-detail-button-update-state-container").on(
                 "click",
@@ -1016,18 +1024,18 @@ $(function () {
                 modalReportsContent =
                     "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Título</th><th scope='col'>Reportes</th><th scope='col'> </th></tr></thead><tbody>";
                 for (i = 0; i < data.length; i++) {
-                    if(data[i].reported>0)
-                    modalReportsContent +=
-                        "<tr id='" +
-                        data[i].id_experience +
-                        "'><th scope='row'>" +
-                        data[i].id_experience +
-                        "</th><td> " +
-                        data[i].title +
-                        "</td><td> reports: " +
-                        data[i].reported +
-                        "</td><td><button  class ='deleteExperienceReport btn btn-secondary'>Eliminar</button>"+
-                        " <button  class ='cleanExperienceReport btn btn-secondary'>Limpiar</button></td></tr>";
+                    if (data[i].reported > 0)
+                        modalReportsContent +=
+                            "<tr id='" +
+                            data[i].id_experience +
+                            "'><th scope='row'>" +
+                            data[i].id_experience +
+                            "</th><td> " +
+                            data[i].title +
+                            "</td><td> reports: " +
+                            data[i].reported +
+                            "</td><td><button  class ='deleteExperienceReport btn btn-secondary'>Eliminar</button>" +
+                            " <button  class ='cleanExperienceReport btn btn-secondary'>Limpiar</button></td></tr>";
                 }
                 modalReportsContent += "</tbody></table>";
                 document.getElementById(
@@ -1061,14 +1069,15 @@ $(function () {
                     botonesLimpiar[i].addEventListener("click", function () {
                         controller
                             .setUpdateReport(
-                                this.parentElement.parentElement.id, 0
+                                this.parentElement.parentElement.id,
+                                0
                             )
                             .then((setUpdateReportResult) => {
                                 alert(setUpdateReportResult.data);
                                 //if (setCleanCategoryResult.data =="Se ha eliminado correctamente")
-                                    this.parentElement.parentElement.parentNode.removeChild(
-                                        this.parentElement.parentElement
-                                    );
+                                this.parentElement.parentElement.parentNode.removeChild(
+                                    this.parentElement.parentElement
+                                );
                             });
                     });
                 }
@@ -1250,12 +1259,16 @@ $(function () {
                         "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
                     );
                 } else {
-                    for(let i=0; i<getAllExperiencesResult.data.length; i++){
-                        if(getAllExperiencesResult.data[i].state=="esbozo"){
+                    for (
+                        let i = 0;
+                        i < getAllExperiencesResult.data.length;
+                        i++
+                    ) {
+                        if (getAllExperiencesResult.data[i].state == "esbozo") {
                             getAllExperiencesResult.data.splice(i, 1);
                             i--;
                         }
-                        console.log(i)
+                        console.log(i);
                     }
                     allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                         getAllExperiencesResult
@@ -1632,15 +1645,17 @@ $(function () {
         addExperience: function () {
             let title = document.getElementById("modal-addExperience-title")
                 .value;
-            let description = document.getElementById(
-                "modal-addExperience-desc"
-            ).value;
+            // let description = document.getElementById(
+            //     "modal-addExperience-desc"
+            // ).value;
+            let description = CKEDITOR.instances.modaladdExperiencedesc.getData();
             let category = document.getElementById("selCategory").value;
             let latitud = document.getElementById("latitud").value;
             let longitud = document.getElementById("longitud").value;
-            
-            if(document.getElementById("checkEsbozo").checked) state = "esbozo";
-            else state = "publicada"
+
+            if (document.getElementById("checkEsbozo").checked)
+                state = "esbozo";
+            else state = "publicada";
 
             controller
                 .setNewExperience(
@@ -1738,10 +1753,12 @@ $(function () {
                 upvote.innerHTML = experienceResult.data.rate_p;
                 let downvote = document.getElementById("modal-detail-downvote");
                 downvote.innerHTML = experienceResult.data.rate_n;
+
                 let description = document.getElementById(
                     "modal-detail-description"
                 );
                 description.innerHTML = experienceResult.data.description;
+
                 let image = document.getElementById("modal-detail-image");
                 image.innerHTML = `<img src="${experienceResult.data.image}" style="
                     width: 100%;
@@ -1753,12 +1770,12 @@ $(function () {
         experienceModifying: function (expid) {
             //Esta parte para se cambiará a editor enriquecido
             let titulo = document.getElementById("modal-detail-title");
+            titulo.setAttribute("contenteditable", true);
+
             let description = document.getElementById(
                 "modal-detail-description"
             );
-            titulo.setAttribute("contenteditable", true);
             description.setAttribute("contenteditable", true);
-            //
 
             view.setSelectCategoriesInDetailModal();
             view.setLatitudLongitudInputs();
