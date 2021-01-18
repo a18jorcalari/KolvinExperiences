@@ -547,7 +547,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form
+                            id="form-addExperience"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
                             <div class="form-group">
                                 <label
                                     for="modal-addExperience-title"
@@ -592,6 +596,14 @@
                                     type="text"
                                 />
                             </div>
+                            <!-- <div class="form-group">
+                                <input type="file" name="file" id="file" />
+                                <input
+                                    type="submit"
+                                    value="Upload File"
+                                    name="submit"
+                                />
+                            </div> -->
                         </form>
                     </div>
                     <div class="modal-footer">
