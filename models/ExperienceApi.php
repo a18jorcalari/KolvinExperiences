@@ -28,7 +28,8 @@ else if ($_REQUEST['query'] == 2) {
         "title" => $_REQUEST['title'],
         "description" => $_REQUEST['description'],
         "id_user" => $_SESSION["id_user"],
-        "state" => "publicada",
+
+        "state" => $_REQUEST["state"],
         "id_category" => $_REQUEST['id_category'],
         "latitud" => $_REQUEST['latitud'],
         "longitud" => $_REQUEST['longitud'],
@@ -67,10 +68,9 @@ else if ($_REQUEST['query'] == 4) {
         "id_experience" => $_REQUEST['id_experience'],
         "state" => $_REQUEST['state']
     );
-    foreach ($experience->updateState($updateExperience) as $key => $value) {
-        if ($value == 1)  echo "Algo ha salido mal";
-        else echo "Estado modificado correctamente";
-    }
+    $experience->updateState($updateExperience);
+    echo true;
+    
 }
 //valorar
 else if ($_REQUEST['query'] == 5) {

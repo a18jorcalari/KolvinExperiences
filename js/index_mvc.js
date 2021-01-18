@@ -179,13 +179,15 @@ $(function () {
             description,
             category,
             latitud,
-            longitud
+            longitud,
+            state
         ) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
                     query: 2,
                     title: title,
                     description: description,
+                    state: state,
                     id_category: category,
                     latitud: latitud,
                     longitud: longitud,
@@ -194,6 +196,7 @@ $(function () {
         },
 
         updateState: function (id_experience, state) {
+            console.log(`${id_experience} ${state}`)
             return axios.get("models/ExperienceApi.php", {
                 params: {
                     query: 4,
@@ -412,9 +415,19 @@ $(function () {
             if (idUserClick == userLoggedResult.data[0].id_user) {
                 view.setEditExperienceButton(idExpClick);
                 view.setDeleteExperienceButton(idExpClick);
+                controller.getExperienceById(idExpClick).then((result) => {
+                    if(result.data.state=="esbozo")
+                        view.setUpdateStateButton(idExpClick);
+                    else
+                        view.removeUpdateStateButton();
+
+                })
+
+
             } else {
                 view.removeEditExperienceButton();
                 view.removeDeleteExperienceButton();
+                view.removeUpdateStateButton();
             }
             view.setValuesInExperienceDetailModal(idExpClick);
             view.setReportExperienceButton(idExpClick);
@@ -426,6 +439,18 @@ $(function () {
                 "modal-detail-location-container"
             );
             locationContainer.innerHTML = ``;
+        },
+
+        
+        updateStateExperience: function () {
+            $("#modal-detail-button-update-state-container").on(
+                "click",
+                "#modal-detail-button-update-state",
+                function () {
+                    console.log($(this).attr("expid"));
+                    view.experienceStateUpdated($(this).attr("expid"));
+                }
+            );
         },
 
         deleteAnExperience: function () {
@@ -647,14 +672,16 @@ $(function () {
             description,
             category,
             latitud,
-            longitud
+            longitud,
+            state
         ) {
             return model.insertExperience(
                 title,
                 description,
                 category,
                 latitud,
-                longitud
+                longitud,
+                state
             );
         },
 
@@ -688,8 +715,8 @@ $(function () {
             return model.updateRate(id_experience, rate_p, rate_n);
         },
 
-        setUpdateState: function () {
-            return model.updateState();
+        setUpdateState: function (id_category, state) {
+            return model.updateState(id_category, state);
         },
 
         setNewCategory: function (name) {
@@ -719,6 +746,8 @@ $(function () {
 
             controller.showExperienceDetail();
             controller.deleteAnExperience();
+            controller.updateStateExperience();
+
             controller.showMaps();
             controller.reportExperience();
             controller.voteExperience();
@@ -1146,6 +1175,13 @@ $(function () {
                         "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crear una?"
                     );
                 } else {
+                    for(let i=0; i<getAllExperiencesResult.data.length; i++){
+                        if(getAllExperiencesResult.data[i].state=="esbozo"){
+                            getAllExperiencesResult.data.splice(i, 1);
+                            i--;
+                        }
+                        console.log(i)
+                    }
                     allexperiences_boxElement.innerHTML = this.setExperiencesGrid(
                         getAllExperiencesResult
                     );
@@ -1527,6 +1563,9 @@ $(function () {
             let category = document.getElementById("selCategory").value;
             let latitud = document.getElementById("latitud").value;
             let longitud = document.getElementById("longitud").value;
+            
+            if(document.getElementById("checkEsbozo").checked) state = "esbozo";
+            else state = "publicada"
 
             controller
                 .setNewExperience(
@@ -1534,7 +1573,8 @@ $(function () {
                     description,
                     category,
                     latitud,
-                    longitud
+                    longitud,
+                    state
                 )
                 .then((result) => {
                     console.log(result);
@@ -1737,6 +1777,23 @@ $(function () {
             });
         },
 
+        experienceStateUpdated: function (expId) {
+            controller.setUpdateState(expId, "publicada").then((result) => {
+                console.log(result.data);
+                if (result.data == 1) {
+                    view.userLogged();
+                    $("#modal-detail").modal("hide");
+                    swal({
+                        title: "¡Bien hecho!",
+                        text: "Estado modificado correctamente.",
+                        icon: "success",
+                    });
+                } else {
+                    alert("ERROR");
+                }
+            });
+        },
+
         experienceReported: function (id_experience) {
             controller
                 .getExperienceById(id_experience)
@@ -1906,6 +1963,19 @@ $(function () {
             ).innerHTML = "";
         },
 
+        setUpdateStateButton: function (idExp) {
+            document.getElementById(
+                "modal-detail-button-update-state-container"
+            ).innerHTML = `<button
+                                id="modal-detail-button-update-state"
+                                type="button"
+                                class="btn"
+                                expid="${idExp}"
+                            >
+                                Publicar
+                            </button>`;
+        },
+
         setDeleteExperienceButton: function (idExp) {
             document.getElementById(
                 "modal-detail-button-delete-container"
@@ -1922,6 +1992,11 @@ $(function () {
         removeDeleteExperienceButton: function () {
             document.getElementById(
                 "modal-detail-button-delete-container"
+            ).innerHTML = "";
+        },
+        removeUpdateStateButton: function () {
+            document.getElementById(
+                "modal-detail-button-update-state-container"
             ).innerHTML = "";
         },
 
