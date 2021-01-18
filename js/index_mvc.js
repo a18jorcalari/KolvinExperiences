@@ -79,6 +79,14 @@ $(function () {
 
         //EXPERIENCES
 
+        selectLastExperienceInserted: function () {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 19,
+                },
+            });
+        },
+
         selectAllExperiences: function () {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -227,6 +235,16 @@ $(function () {
             });
         },
 
+        updateImage: function (id_experience, url_image) {
+            return axios.get("models/ExperienceApi.php", {
+                params: {
+                    query: 20,
+                    id_experience: id_experience,
+                    image: url_image,
+                },
+            });
+        },
+
         deleteExperience: function (id_experience) {
             return axios.get("models/ExperienceApi.php", {
                 params: {
@@ -307,6 +325,22 @@ $(function () {
             });
         },
 
+        uploadImage: function (formData, id_experience) {
+            return axios({
+                method: "post",
+                url:
+                    "http://labs.iam.cat/~a18jorcalari/ProyectoViajes/uploadFile.php",
+                data: formData,
+                header: {
+                    Accept: "application/json",
+                    "Content-Type": "multipart/form-data",
+                },
+                params: {
+                    id_experience: id_experience,
+                },
+            });
+        },
+
         logout: function () {
             axios.get("models/logoutApi.php");
         },
@@ -363,6 +397,22 @@ $(function () {
                 });
         },
 
+        modifyImage: function () {
+            $("#form-modifyImage-container").on(
+                "submit",
+                "#form-modifyImage-form",
+                function (e) {
+                    console.log($(this).attr("expid"));
+                    e.preventDefault();
+                    //Para el file
+                    let file = document.querySelector("#file-modifyImage");
+                    let formData = new FormData();
+                    formData.append("file", file.files[0]);
+                    view.uploadImage(formData, $(this).attr("expid"));
+                }
+            );
+        },
+
         openModalAddExperience: function () {
             $("#container-button-addExperience").on(
                 "click",
@@ -374,9 +424,16 @@ $(function () {
         },
 
         addExperience: function () {
+            // document
+            //     .getElementById("modal-addExperience-button")
+            //     .addEventListener("click", function () {
+            //         e.preventDefault();
+            //         view.addExperience();
+            //     });
             document
-                .getElementById("modal-addExperience-button")
-                .addEventListener("click", function () {
+                .getElementById("form-addExperience")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
                     view.addExperience();
                 });
         },
@@ -439,6 +496,10 @@ $(function () {
                 "modal-detail-location-container"
             );
             locationContainer.innerHTML = ``;
+            let modifyContainer = document.getElementById(
+                "form-modifyImage-container"
+            );
+            modifyContainer.innerHTML = ``;
         },
 
         
@@ -576,6 +637,10 @@ $(function () {
             return model.selectUserLogged();
         },
 
+        getLastExperienceInserted: function () {
+            return model.selectLastExperienceInserted();
+        },
+
         getAllExperiences: function () {
             return model.selectAllExperiences();
         },
@@ -707,6 +772,10 @@ $(function () {
             );
         },
 
+        updateImageUrl: function (id_experience, url_image) {
+            return model.updateImage(id_experience, url_image);
+        },
+
         setUpdateReport: function (id_experience, reported) {
             return model.updateReport(id_experience, reported);
         },
@@ -726,6 +795,10 @@ $(function () {
         setUpdateCategory: function (id_category, name) {
             return model.updateCategory(id_category, name);
         },
+
+        uploadImage: function (formData, id_experience) {
+            return model.uploadImage(formData, id_experience);
+        },
     };
 
     var view = {
@@ -733,6 +806,7 @@ $(function () {
             controller.decideUserView();
 
             controller.login();
+
             controller.register();
 
             controller.filterCategory();
@@ -754,6 +828,7 @@ $(function () {
 
             controller.enableEditExperience();
             controller.modifyExperience();
+            controller.modifyImage();
 
             controller.logout();
         },
@@ -1585,10 +1660,59 @@ $(function () {
                             icon: "success",
                         });
                         $("#modal-addExperience").modal("hide");
-                        controller.decideUserView();
+                        //Para obtener ultima experiencia
+                        controller
+                            .getLastExperienceInserted()
+                            .then((experienceResult) => {
+                                console.log(experienceResult);
+
+                                //Para el file
+                                let file = document.querySelector("#file");
+                                let formData = new FormData();
+                                formData.append("file", file.files[0]);
+
+                                view.uploadImage(
+                                    formData,
+                                    experienceResult.data[0].id_experience
+                                );
+                            });
                     } else {
                         alert("No añadido");
                     }
+                });
+        },
+
+        uploadImage: function (formData, id_experience) {
+            //AQUI EMPIEZA LA MOVIDA
+
+            //Para subir imagen
+            controller
+                .uploadImage(formData, id_experience)
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data != false) {
+                        controller
+                            .updateImageUrl(id_experience, response.data)
+                            .then((result) => {
+                                console.log(result);
+                                swal({
+                                    title: "¡Bien hecho!",
+                                    text: "Imagen subida correctamente.",
+                                    icon: "success",
+                                });
+
+                                $("#modal-detail").modal("hide");
+
+                                document.getElementById("modal-detail").click();
+
+                                controller.decideUserView();
+                            });
+                    } else {
+                        alert(response);
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
                 });
         },
 
@@ -1640,6 +1764,7 @@ $(function () {
             view.setLatitudLongitudInputs();
             view.setLatitudLongitudValues(expid);
             view.setSaveExperienceModifiedButton(expid);
+            view.setFormModifyImageButton(expid);
         },
 
         setSelectCategoriesInDetailModal: function () {
@@ -2036,6 +2161,34 @@ $(function () {
             document.getElementById(
                 "modal-detail-button-saveEdited-container"
             ).innerHTML = "";
+        },
+
+        setFormModifyImageButton: function (expid) {
+            document.getElementById(
+                "form-modifyImage-container"
+            ).innerHTML = `<form
+                                id="form-modifyImage-form"
+                                enctype="multipart/form-data"
+                                expid="${expid}"
+                            >
+                                <input
+                                    type="file"
+                                    name="file"
+                                    id="file-modifyImage"
+                                />
+                                <input
+                                    id="modal-addExperience-button"
+                                    type="submit"
+                                    value="SUBMIT"
+                                    name="submit"
+                                    
+                                />
+                            </form>`;
+        },
+
+        removeModifyImageButton: function () {
+            document.getElementById("form-modifyImage-container").innerHTML =
+                "";
         },
 
         setReportExperienceButton: function (idExp) {

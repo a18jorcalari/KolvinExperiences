@@ -458,6 +458,24 @@
                                     </div>
                                 </div> -->
                             </div>
+                            <div id="form-modifyImage-container">
+                                <!-- <form
+                                    id="form-modifyImage"
+                                    enctype="multipart/form-data"
+                                >
+                                    <input
+                                        type="file"
+                                        name="file"
+                                        id="file-modifyImage"
+                                    />
+                                    <input
+                                        id="modal-addExperience-button"
+                                        type="submit"
+                                        value="SUBMIT"
+                                        name="submit"
+                                    />
+                                </form> -->
+                            </div>
                             <div class="clearfix">
                                 <div class="d-flex float-left">
                                     <div
@@ -525,16 +543,16 @@
                                         </button>
                                     </div>
                                     <div
-                                    id="modal-detail-button-update-state-container"
-                                >
-                                    <!-- <button
+                                        id="modal-detail-button-update-state-container"
+                                    >
+                                        <!-- <button
                                         id="modal-detail-button-update-state"
                                         type="button"
                                         class="btn"
                                     >
                                         Editar
                                     </button> -->
-                                </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -558,8 +576,8 @@
                             &times;
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <form>
+                    <form id="form-addExperience" enctype="multipart/form-data">
+                        <div class="modal-body">
                             <div class="form-group">
                                 <label
                                     for="modal-addExperience-title"
@@ -606,23 +624,42 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkEsbozo" checked>
-                                    <label class="form-check-label" for="flexCheckChecked">
-                                      Esbozo
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        value=""
+                                        id="checkEsbozo"
+                                        checked
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="flexCheckChecked"
+                                    >
+                                        Esbozo
                                     </label>
-                                  </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            id="modal-addExperience-button"
-                            type="button"
-                            class="btn btn-primary btn-block btn-lg"
-                        >
-                            Añadir
-                        </button>
-                    </div>
+
+                            <div class="form-group">
+                                <input type="file" name="file" id="file" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- <button
+                                id="modal-addExperience-button"
+                                type="button"
+                                class="btn btn-primary btn-block btn-lg"
+                            >
+                                Añadir
+                            </button> -->
+                            <input
+                                id="modal-addExperience-button"
+                                type="submit"
+                                value="SUBMIT"
+                                name="submit"
+                            />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -702,12 +739,11 @@
         <!-- HERO -->
         <div class="jumbotron jumbotron-fluid hero">
             <div class="container">
-                <div id="titulo">
+                <!-- <div id="titulo">
                     Kolvin Experiencies
                 </div>
-                <div id="fotos">
-
-            </div> 
+                <div id="fotos"> -->
+            </div>
         </div>
 
         <!-- CONTENT -->
