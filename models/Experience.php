@@ -76,7 +76,8 @@ class Experience extends DBAbstractModel {
 		$this->query = "UPDATE Experience SET title='$title' ,description='$description',id_category = '$id_category', latitud = '$latitud', longitud = '$longitud' WHERE id_experience='$id_experience'";
 		$this->execute_single_query($this->query);
 
-		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND title ='$title' AND title='$title' AND description='$description' AND id_category='$id_category' AND location='$location' AND image='$image') ";
+		// $this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND title ='$title' AND description='$description' AND id_category='$id_category' AND location='$location' AND image='$image') ";
+		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND title ='$title' AND description='$description' AND id_category='$id_category' AND longitud='$longitud' AND latitud='$latitud') ";
 		$this->get_results_from_query();
 		return $this->rows[0];
 	}
@@ -214,5 +215,22 @@ class Experience extends DBAbstractModel {
 		$this->get_results_from_query();
 
 		return $this->rows;
+	}
+
+	public function selectLastAdded() {
+		$this->query = "SELECT * FROM Experience ORDER BY id_experience DESC LIMIT 1;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+
+	public function updateImage($id_experience, $image) {
+
+		$this->query = "UPDATE Experience SET image='$image' WHERE id_experience='$id_experience'";
+		$this->execute_single_query($this->query);
+
+		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND image='$image') ";
+		$this->get_results_from_query();
+
+		return $this->rows[0];
 	}
 }

@@ -146,3 +146,17 @@ else if ($_REQUEST['query'] == 9) {
     $respuesta = $experience->selectByUserByVoteDesc($_REQUEST['user']);
     echo json_encode($respuesta);
 }
+
+//Select ultima experiencia añadida
+elseif ($_REQUEST['query'] == 19) {
+    $respuesta = $experience->selectLastAdded();
+    echo json_encode($respuesta);
+}
+
+//update imagen
+elseif ($_REQUEST['query'] == 20) {
+    foreach ($experience->updateImage($_REQUEST['id_experience'], $_REQUEST['image']) as $key => $value) {
+        if ($value == 1)  echo json_encode("Se ha update correctamente");
+        else echo json_encode("Algo ha salido mal");
+    }
+}
