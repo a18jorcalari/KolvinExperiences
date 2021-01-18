@@ -48,21 +48,21 @@
     0%{
         width: 800px;
         height:193px;
-        background: url(/img/ciudadazulKolvin.png);
+        background: url(../img/ciudadazulKolvin.png);
     }
     50%{
         width: 800px;
         height:193px;
-        background: url(/img/ciudadnaranjaKolvin.png);
+        background: url(../img/ciudadnaranjaKolvin.png);
     }
     80%{
         width: 800px;
         height:193px;
-        background: url(/img/ciudadverdeKolvin.png);
+        background: url(../img/ciudadverdeKolvin.png);
     }
     100%{
         width: 800px;
         height:193px;
-        background: url(/img/ciudadrojaKolvin.png);
+        background: url(../img/ciudadrojaKolvin.png);
     }
 }
