@@ -342,7 +342,7 @@ $(function () {
         },
 
         logout: function () {
-            axios.get("models/logoutApi.php");
+            return axios.get("models/logoutApi.php");
         },
     };
 
@@ -737,7 +737,7 @@ $(function () {
         },
 
         setLogout: function () {
-            model.logout();
+            return model.logout();
         },
 
         setNewExperience: function (
@@ -2069,16 +2069,17 @@ $(function () {
         },
 
         logout: function () {
-            controller.setLogout();
-            //Alert
-            swal({
-                title: "¡Bien hecho!",
-                text: "Has guardado cerrado tu sesión correctamente.",
-                icon: "success",
-            });
+            controller.setLogout().then(() => {
+                swal({
+                    title: "¡Bien hecho!",
+                    text: "Has guardado cerrado tu sesión correctamente.",
+                    icon: "success",
+                });
 
-            //Actualizar vista
-            controller.decideUserView();
+                //Actualizar vista
+                controller.decideUserView();
+            });
+            //Alert
         },
 
         removeDropdownsFilterOrder: function () {
