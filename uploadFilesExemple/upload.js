@@ -2,6 +2,7 @@
 const url = "uploadFile.php";
 const form = document.querySelector("#form");
 // form-addExperience
+
 // Listen form submit
 form.addEventListener("submit", (e) => {
     // evitar que es desencadeni l'acció predeterminada

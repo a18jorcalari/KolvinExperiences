@@ -217,4 +217,21 @@ class Experience extends DBAbstractModel {
 
 		return $this->rows;
 	}
+
+	public function selectLastAdded() {
+		$this->query = "SELECT * FROM Experience ORDER BY id_experience DESC LIMIT 1;";
+		$this->get_results_from_query();
+		return $this->rows;
+	}
+
+	public function updateImage($id_experience, $image) {
+
+		$this->query = "UPDATE Experience SET image='$image' WHERE id_experience='$id_experience'";
+		$this->execute_single_query($this->query);
+
+		$this->query = "SELECT EXISTS(SELECT * FROM Experience WHERE id_experience ='$id_experience' AND image='$image') ";
+		$this->get_results_from_query();
+
+		return $this->rows[0];
+	}
 }

@@ -371,9 +371,16 @@ $(function () {
         },
 
         addExperience: function () {
+            // document
+            //     .getElementById("modal-addExperience-button")
+            //     .addEventListener("click", function () {
+            //         e.preventDefault();
+            //         view.addExperience();
+            //     });
             document
-                .getElementById("modal-addExperience-button")
-                .addEventListener("click", function () {
+                .getElementById("form-addExperience")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
                     view.addExperience();
                 });
         },
@@ -1529,6 +1536,65 @@ $(function () {
                     } else {
                         alert("No añadido");
                     }
+                });
+
+            const url = "uploadFile.php";
+            let file = document.querySelector("#file");
+            let formData = new FormData();
+            formData.append("file", file.files[0]);
+
+            //Para obtener ultima id
+            axios
+                .get("models/ExperienceApi.php", {
+                    params: {
+                        query: 19,
+                    },
+                })
+                .then((experienceResult) => {
+                    console.log(experienceResult);
+                    //Para subir imagen
+                    axios({
+                        method: "post",
+                        url: url,
+                        data: formData,
+                        header: {
+                            Accept: "application/json",
+                            "Content-Type": "multipart/form-data",
+                        },
+                        params: {
+                            id_experience:
+                                experienceResult.data[0].id_experience,
+                        },
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                            if (response.data != false) {
+                                //Para update experience y poner sitio de ubicacion de la imagen
+                                axios
+                                    .get("models/ExperienceApi.php", {
+                                        params: {
+                                            query: 20,
+                                            id_experience:
+                                                experienceResult.data[0]
+                                                    .id_experience,
+                                            image: response.data,
+                                        },
+                                    })
+                                    .then((result) => {
+                                        swal({
+                                            title: "¡Bien hecho!",
+                                            text:
+                                                "Imagen subida correctamente.",
+                                            icon: "success",
+                                        });
+                                    });
+                            } else {
+                                alert("Error imagen");
+                            }
+                        })
+                        .catch(function (response) {
+                            console.log(response);
+                        });
                 });
         },
 
