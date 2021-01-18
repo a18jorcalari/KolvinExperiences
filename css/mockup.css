@@ -43,7 +43,81 @@
 --color-secundario: #535353;
 --color-terciario: #6E3667;*/
 }
+/* Animación*/
+#titulo{
+    left: 30px;
+    position: relative;
+    border-radius: 30px;
+    width: 200px;
+    height: 20px;
+    background-color: #ddd;
+    text-align: center;
+    -webkit-animation-name: animacion1;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: 3;
+    -webkit-animation-direction: alternate-reverse;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-delay: 1s;
+    
+}
+#titulo:hover{
+    -webkit-animation-play-state: paused;
 
+}
+@-webkit-keyframes animacion1{
+    from{
+        left: 30px;
+        background-color: #ddd;
+    }
+    to{
+        left: 100px;
+        background-color: yellowgreen;
+
+    }
+}
+#fotos{
+    width: 512px;
+    height: 512px;
+    animation-name: animacion2;
+    animation-duration: 5s;
+    animation-iteration-count: 2;
+    animation-play-state: running;
+    animation-direction: alternate-reverse;
+    -moz-animation-timing-function: linear;
+
+}
+#fotos:hover{
+   animation-play-state: paused;
+
+}
+@-webkit-keyframes animacion2{
+    0%{
+        width: 800px;
+        height:193px;
+        background: url(../img/ciudadazulKolvin.png);
+    }
+    50%{
+        width: 800px;
+        height:193px;
+        background: url(../img/ciudadnaranjaKolvin.png);
+    }
+    80%{
+        width: 800px;
+        height:193px;
+        background: url(../img/ciudadverdeKolvin.png);
+    }
+    100%{
+        width: 800px;
+        height:193px;
+        background: url(../img/ciudadrojaKolvin.png);
+    }
+}
+
+
+
+
+
+/* cuerpo web */
 
 
 .nav-colored {
