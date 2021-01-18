@@ -1,8 +1,21 @@
+
+
+/*variables color*/
+:root{
+    --color-primario: #0B3C5D;
+   --color-secundario: #328CC1;
+   --color-terciario: #D98310; 
+   
+   }
+
+
 .hero {
-    min-height: 50vh;
+    min-height: 20vh;
     /* put on top */
     position: relative;
     z-index: 1;
+    background-color: var(--color-primario);
+
   
 }
 
