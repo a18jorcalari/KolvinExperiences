@@ -439,27 +439,22 @@ $(function () {
         },
 
         showExperienceDetail: function () {
-            controller.getUserLogged().then(function (userLoggedResult) {
-                $("#cards-tabs-experiences").on(
-                    "click",
-                    "div[expid]",
-                    function () {
-                        //Este if sirve para poder mostrar los botones eliminar y editar en la experienciaa
-                        //unicamente al usuario que pertenece
-                        let idUserClick = $(this).attr("userid");
-                        let idExpClick = $(this).attr("expid");
-                        let idCatClick = $(this).attr("catid");
+            $("#cards-tabs-experiences").on("click", "div[expid]", function () {
+                //Este if sirve para poder mostrar los botones eliminar y editar en la experienciaa
+                //unicamente al usuario que pertenece
+                let idUserClick = $(this).attr("userid");
+                let idExpClick = $(this).attr("expid");
+                let idCatClick = $(this).attr("catid");
+                controller.getUserLogged().then(function (userLoggedResult) {
+                    controller.setAttributesButtonsValuesInExperienceDetail(
+                        idUserClick,
+                        idExpClick,
+                        idCatClick,
+                        userLoggedResult
+                    );
+                });
 
-                        controller.setAttributesButtonsValuesInExperienceDetail(
-                            idUserClick,
-                            idExpClick,
-                            idCatClick,
-                            userLoggedResult
-                        );
-
-                        $("#modal-detail").modal("show");
-                    }
-                );
+                $("#modal-detail").modal("show");
             });
         },
 
