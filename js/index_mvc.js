@@ -853,31 +853,40 @@ $(function () {
             let cards_tabs_experiencesElement = document.getElementById(
                 "cards-tabs-experiences"
             );
-            let htmlString = `
+            let htmlString = "";
+            console.log(getAllExperiencesResult);
+            if (getAllExperiencesResult.data.length == 0) {
+                htmlString += view.noResultsMessageHtml(
+                    "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crearte una cuenta y creas una?"
+                );
+            } else {
+                let htmlString = `
                 <div class="content-row experiencies">
                     <div class="row">`;
-            for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
-                let timeStampJson = getAllExperiencesResult.data[i].created;
-                var d = new Date(Date.parse(timeStampJson));
-                htmlString += `
-                        <div class="col-sm-12 col-lg-4 card-container">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">${
-                                        getAllExperiencesResult.data[i].title
-                                    }</h5>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
-                                </div>
-                            </div>
-                        </div>   
-                        `;
-            }
+                for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
+                    let timeStampJson = getAllExperiencesResult.data[i].created;
+                    var d = new Date(Date.parse(timeStampJson));
+                    htmlString += `
+                                    <div class="col-sm-12 col-lg-4 card-container">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${
+                                                    getAllExperiencesResult
+                                                        .data[i].title
+                                                }</h5>
+                                            </div>
+                                            <div class="card-footer">
+                                                <small class="text-muted">Created ${d.getDate()}-${d.getMonth()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}</small>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                    `;
+                }
 
-            htmlString += `
+                htmlString += `
                     </div> 
                 </div>`;
+            }
 
             cards_tabs_experiencesElement.innerHTML = htmlString;
         },
@@ -1873,7 +1882,7 @@ $(function () {
                         swal({
                             title: "¡Bien hecho!",
                             text:
-                                "Has modifacado correctamente una experiencia.",
+                                "Has modificado correctamente una experiencia.",
                             icon: "success",
                         });
 
@@ -2192,9 +2201,9 @@ $(function () {
                                 <input
                                     id="modal-addExperience-button"
                                     type="submit"
-                                    value="SUBMIT"
+                                    value="Modificar imagen"
                                     name="submit"
-                                    
+                                    class="btn btn-primary"
                                 />
                             </form>`;
         },

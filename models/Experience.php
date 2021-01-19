@@ -32,10 +32,7 @@ class Experience extends DBAbstractModel {
 	public function select() {
 		$this->query = "SELECT * FROM Experience";
 		$this->get_results_from_query();
-		for ($i = 0; $i < count($this->rows); $i++)
-			$resultSet[] = $this->rows[$i];
-
-		return $resultSet;
+		return $this->rows;
 	}
 
 	public function selectByUser($id_user = "") {
