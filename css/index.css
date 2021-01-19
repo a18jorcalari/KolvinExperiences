@@ -4,7 +4,7 @@
 :root{
     --color-primario: #0B3C5D;
    --color-secundario: #328CC1;
-   --color-terciario: #D98310; 
+   --color-terciario: #d47d0c; 
    
    }
 
@@ -116,4 +116,11 @@
         height:193px;
         background: url(../img/ciudadroja.png);
     }
+}
+.bienvenido{
+    color:var(--color-terciario);
+    text-align:center;
+    border:1px dotted #000;
+    padding-left: 20px;
+    padding-right: 20px;
 }
