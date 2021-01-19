@@ -124,3 +124,29 @@
     padding-left: 20px;
     padding-right: 20px;
 }
+/* footer*/
+#footer {
+    padding: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+
+#taulaFooter{
+    width: 100%;
+}
+#about{
+    bottom: 0;
+    text-align: center;
+    background-color: var(--color-primario);
+    color: black;
+}
+.Apartat{
+    font-size: 15px;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+.Contingut{
+    font-size: 11px;
+}
