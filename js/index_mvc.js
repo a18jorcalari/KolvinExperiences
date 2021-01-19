@@ -860,7 +860,7 @@ $(function () {
                     "Vaya... Parece que no existen experiencias. ¿Por que no pruebas a crearte una cuenta y creas una?"
                 );
             } else {
-                let htmlString = `
+                htmlString = `
                 <div class="content-row experiencies">
                     <div class="row">`;
                 for (let i = 0; i < getAllExperiencesResult.data.length; i++) {
